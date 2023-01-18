@@ -1,0 +1,29 @@
+{
+  "name": "andrewnovak-website",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start:api": "npm run start:dev --prefix api",
+    "start:client": "npm start --prefix client",
+    "start:all": "concurrently \"npm run start:api\" \"npm run start:client\"",
+    "install:api": "npm i --prefix api",
+    "install:client": "npm i --prefix client",
+    "install:all": "(npm i) && (npm run install:api) && (npm run install:client)",
+    "build:client": "npm run build --prefix client",
+    "cli": "npm run cli --prefix api"
+  },
+  "author": {
+    "name": "Andrew Novak",
+    "email": "contact@andrewnovak.co.uk"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrew-novak/andrewnovak-website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/andrew-novak/andrewnovak-website/issues"
+  },
+  "devDependencies": {
+    "concurrently": "^7.5.0"
+  }
+}
