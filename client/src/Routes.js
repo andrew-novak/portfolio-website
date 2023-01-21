@@ -12,8 +12,7 @@ import { retrieveIdToken } from "actions/admin/auth";
 import HomeScreen from "screens/HomeScreen";
 import ViewProjectScreen from "screens/ViewProjectScreen";
 import ContactScreen from "screens/ContactScreen";
-import CreateProjectScreen from "screens/CreateProjectScreen";
-import EditProjectScreen from "screens/EditProjectScreen";
+import ProjectSettingsScreen from "screens/ProjectSettingsScreen";
 import AdminLoginScreen from "screens/AdminLoginScreen";
 import NotFoundScreen from "screens/NotFoundScreen";
 
@@ -45,7 +44,7 @@ const Routes = ({ isLoggedIn, resetState, retrieveIdToken }) => {
         exact
         element={
           <AuthOnly isLoggedIn={isLoggedIn}>
-            <CreateProjectScreen />
+            <ProjectSettingsScreen />
           </AuthOnly>
         }
       />
@@ -54,7 +53,7 @@ const Routes = ({ isLoggedIn, resetState, retrieveIdToken }) => {
         exact
         element={
           <AuthOnly isLoggedIn={isLoggedIn}>
-            <EditProjectScreen />
+            <ProjectSettingsScreen />
           </AuthOnly>
         }
       />
@@ -73,7 +72,7 @@ const Routes = ({ isLoggedIn, resetState, retrieveIdToken }) => {
 };
 
 const mapState = (state) => {
-  const { isLoggedIn } = state.auth;
+  const { isLoggedIn } = state.adminAuth;
   return { isLoggedIn };
 };
 

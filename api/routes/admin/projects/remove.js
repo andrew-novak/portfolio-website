@@ -21,7 +21,9 @@ const failureMessage = "An error occurred during a product creation";
 
 const removeProjectRoute = async (req, res, next) => {
   console.log("############ req.body:", req.body);
-  const { projectId } = req.param;
+  console.log(req.params);
+  const { projectId } = req.params;
+  let projectTitle;
   try {
     const deletedProject = await Project.deleteOne({ id: projectId });
     if (!deletedProject) {
@@ -30,8 +32,9 @@ const removeProjectRoute = async (req, res, next) => {
         .status(400)
         .json({ message: projectNotFoundMessage(projectId) });
     }
+    projectTitle = deletedProject.title;
     await mediaDirs.removeProjectDir(projectId);
-    successLog(projectId, deletedProject.title);
+    successLog(projectId, projectTitle);
     res.status(200).json({});
   } catch (err) {
     failureLog(err);

@@ -1,14 +1,14 @@
 import axios from "axios";
 
-import { AUTH_SET_IS_LOGGED_IN } from "constants/actionTypes";
+import { ADMIN_AUTH_SET_IS_LOGGED_IN } from "constants/actionTypes";
 import { API_URL } from "constants/urls";
 
 export const retrieveIdToken = () => async (dispatch) => {
   const idToken = localStorage.getItem("idToken");
   if (idToken) {
-    return dispatch({ type: AUTH_SET_IS_LOGGED_IN, isLoggedIn: true });
+    return dispatch({ type: ADMIN_AUTH_SET_IS_LOGGED_IN, isLoggedIn: true });
   }
-  dispatch({ type: AUTH_SET_IS_LOGGED_IN, isLoggedIn: false });
+  dispatch({ type: ADMIN_AUTH_SET_IS_LOGGED_IN, isLoggedIn: false });
 };
 
 export const login =
@@ -22,7 +22,7 @@ export const login =
       if (response.data.idToken) {
         const idToken = response.data.idToken;
         localStorage.setItem("idToken", idToken);
-        dispatch({ type: AUTH_SET_IS_LOGGED_IN, isLoggedIn: true });
+        dispatch({ type: ADMIN_AUTH_SET_IS_LOGGED_IN, isLoggedIn: true });
         return redirect();
       }
       new Error("No id token");
@@ -34,5 +34,5 @@ export const login =
 
 export const logout = () => async (dispatch) => {
   localStorage.removeItem("idToken");
-  dispatch({ type: AUTH_SET_IS_LOGGED_IN, isLoggedIn: false });
+  dispatch({ type: ADMIN_AUTH_SET_IS_LOGGED_IN, isLoggedIn: false });
 };

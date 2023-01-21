@@ -1,18 +1,18 @@
 import { combineReducers } from "redux";
 
 import snackbar from "./snackbar";
+import adminAuth from "./adminAuth";
 import projects from "./projects";
 import project from "./project";
-import auth from "./auth";
-import projectCreateEdit from "./projectCreateEdit";
+import projectSettings from "./projectSettings";
 import { RESET_STATE } from "constants/actionTypes";
 
 const appReducer = combineReducers({
   snackbar,
+  adminAuth,
   projects,
   project,
-  auth,
-  projectCreateEdit,
+  projectSettings,
 });
 
 const rootReducer = (state, action) => {

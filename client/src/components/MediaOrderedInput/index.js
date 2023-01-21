@@ -4,10 +4,7 @@ import { useTheme } from "@mui/material/styles";
 import { connect } from "react-redux";
 
 //import useMediaDialog from "./MediaDialog/useMediaDialog";
-import {
-  mediaListSwapPlaces,
-  openMediaDialog,
-} from "actions/admin/projectCreateEdit";
+import { mediaListSwapPlaces, openMediaDialog } from "actions/admin/projects";
 import MediaDialogs from "./MediaDialogs";
 import MediaContainer from "./MediaContainer";
 import getMedia from "helpers/getMedia";
@@ -90,7 +87,7 @@ const MediaOrderedInput = ({
 };
 
 const mapState = (state) => {
-  const { mediaList } = state.projectCreateEdit;
+  const { mediaList } = state.projectSettings;
   return { mediaList };
 };
 

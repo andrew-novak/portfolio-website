@@ -24,8 +24,6 @@ const ProjectsGrid = ({ projects, cardHeightPercentRatio }) => {
         }
         const filename = project.mediaFilenames[0];
         const extension = filename ? filename.split(".").pop() : null;
-        console.log("extension:", extension);
-        console.log(shouldDisplayImage(extension));
 
         const selectImage = () => {
           const mediaUrl = getMedia.oneProjectFileUrl(

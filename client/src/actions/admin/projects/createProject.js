@@ -1,30 +1,32 @@
 import axios from "axios";
 
-import splitMedia from "helpers/splitMedia";
+import splitMediaList from "helpers/splitMediaList";
 import mediaBlobsToDataUrls from "helpers/mediaBlobsToDataUrls";
 import { API_URL } from "constants/urls";
+
+/*
+const validate = (title, description, mediaList) => (dispatch) => {
+  // client-side input validation:
+  if (!title) return dispatch(setErrorSnackbar("Title field cannot be empty."));
+  if (!description)
+    return dispatch(setErrorSnackbar("Description field cannot be empty."));
+};
+*/
 
 /*
 title - string
 description - string
 media - array of objects e.g. [
-  { serverFilename: "434576.jpg", clientBlob: null },
-  { serverFilename: null, clientBlob: "blob:http://...." },
+  { serverFilename: "434576.jpg", clientBlob: null, ...and some more props },
+  { serverFilename: null, clientBlob: "blob:http://....", and some more props },
 ]
 */
 const createProject = (title, description, mediaList) => async (dispatch) => {
-  /*
-    // client-side input validation:
-
-    if (!productName)
-      return dispatch(setErrorSnackbar("Title field cannot be empty."));
-    if (!description)
-      return dispatch(setErrorSnackbar("Description field cannot be empty."));
-    */
+  //dispatch(validate(title, description, mediaList));
 
   const idToken = localStorage.getItem("idToken");
 
-  const { clientBlobs } = splitMedia(mediaList);
+  const { clientBlobs = [] } = splitMediaList(mediaList);
   const mediaDataUrls = await mediaBlobsToDataUrls(clientBlobs);
 
   const response = await axios.post(
@@ -33,6 +35,10 @@ const createProject = (title, description, mediaList) => async (dispatch) => {
       title,
       description,
       mediaDataUrls,
+      /*mediaList: mediaList.map(({ serverFilename, clientLocalUrl }) => ({
+        serverFilename,
+        clientLocalUrl,
+      })),*/
     },
     {
       headers: { Authorization: "Bearer " + idToken },

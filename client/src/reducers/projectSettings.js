@@ -8,12 +8,17 @@ import {
 } from "constants/actionTypes";
 
 const initialState = {
+  id: null,
   title: "",
   description: "",
   mediaList: [
-    // examples:
-    // { serverFilename: "42342.jpg", clientLocalUrl: null, clientMimeType: null }
-    // { serverFilename: null, clientLocalUrl: "blob:http://...", clientMimeType: "image/png" }
+    /*
+    examples:
+    { serverFilename: "42342.jpg", clientLocalUrl: null, clientMimeType: null }
+    { serverFilename: null, clientLocalUrl: "blob:http://...", clientMimeType: "image/png" }
+    { serverFilename: null, clientLocalUrl: "blob:http://...", clientMimeType: "video/mp4",  }
+    serverFilename & clientLocalUrl are the only properties sent to server
+    */
   ],
   mediaDialog: {
     dialogViariant: null,
@@ -21,7 +26,7 @@ const initialState = {
   },
 };
 
-const projectCreateEdit = (state = initialState, action) => {
+const projectSettings = (state = initialState, action) => {
   switch (action.type) {
     case PROJECT_SET_TITLE:
       return {
@@ -82,4 +87,4 @@ const projectCreateEdit = (state = initialState, action) => {
   }
 };
 
-export default projectCreateEdit;
+export default projectSettings;

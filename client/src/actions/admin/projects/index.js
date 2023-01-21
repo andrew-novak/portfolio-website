@@ -8,3 +8,4 @@ export {
 } from "./mediaList";
 export { default as createProject } from "./createProject";
 export { default as editProject } from "./editProject";
+export { default as removeProject } from "./removeProject";

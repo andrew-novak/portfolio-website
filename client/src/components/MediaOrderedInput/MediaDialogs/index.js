@@ -5,7 +5,7 @@ import {
   closeMediaDialog,
   mediaListAdd,
   mediaListAddVideo,
-} from "actions/admin/projectCreateEdit";
+} from "actions/admin/projects";
 import DialogImageCrop from "./DialogImageCrop";
 import DialogVideoPreview from "./DialogVideoPreview";
 
@@ -56,7 +56,7 @@ const MediaDialogs = ({
 };
 
 const mapState = (state) => {
-  const { dialogVariant, file } = state.projectCreateEdit.mediaDialog;
+  const { dialogVariant, file } = state.projectSettings.mediaDialog;
   return { dialogVariant, file };
 };
 

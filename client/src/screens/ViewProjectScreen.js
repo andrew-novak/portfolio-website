@@ -9,6 +9,7 @@ import Carousel from "react-material-ui-carousel";
 import { connect } from "react-redux";
 
 import { getProject } from "actions/projects";
+import { removeProject } from "actions/admin/projects";
 import getMedia from "helpers/getMedia";
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
@@ -70,7 +71,12 @@ const Slider = ({ mediaUrls }) => {
   );
 };
 
-const ViewProjectScreen = ({ isLoggedIn, project, getProject }) => {
+const ViewProjectScreen = ({
+  isAdminMode,
+  project,
+  getProject,
+  removeProject,
+}) => {
   const theme = useTheme();
   const { projectId } = useParams();
   const navigate = useNavigate();
@@ -114,7 +120,7 @@ const ViewProjectScreen = ({ isLoggedIn, project, getProject }) => {
               }}
             >
               <Typography variant="h4">{project.title || ""}</Typography>
-              {isLoggedIn && (
+              {isAdminMode && (
                 <div>
                   <Button
                     startIcon={<EditIcon />}
@@ -122,7 +128,10 @@ const ViewProjectScreen = ({ isLoggedIn, project, getProject }) => {
                   >
                     Edit Project
                   </Button>
-                  <Button startIcon={<DeleteIcon />} onClick={() => null}>
+                  <Button
+                    startIcon={<DeleteIcon />}
+                    onClick={() => removeProject(projectId)}
+                  >
                     Remove Project
                   </Button>
                 </div>
@@ -141,9 +150,11 @@ const ViewProjectScreen = ({ isLoggedIn, project, getProject }) => {
 };
 
 const mapState = (state) => {
-  const { isLoggedIn } = state.auth;
+  const isAdminMode = state.adminAuth.isLoggedIn;
   const { project } = state;
-  return { isLoggedIn, project };
+  return { isAdminMode, project };
 };
 
-export default connect(mapState, { getProject })(ViewProjectScreen);
+export default connect(mapState, { getProject, removeProject })(
+  ViewProjectScreen
+);

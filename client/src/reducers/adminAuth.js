@@ -1,12 +1,12 @@
-import { AUTH_SET_IS_LOGGED_IN } from "constants/actionTypes";
+import { ADMIN_AUTH_SET_IS_LOGGED_IN } from "constants/actionTypes";
 
 const initialState = {
   isLoggedIn: false,
 };
 
-const auth = (state = initialState, action) => {
+const adminAuth = (state = initialState, action) => {
   switch (action.type) {
-    case AUTH_SET_IS_LOGGED_IN:
+    case ADMIN_AUTH_SET_IS_LOGGED_IN:
       return {
         ...state,
         isLoggedIn: action.isLoggedIn,
@@ -17,4 +17,4 @@ const auth = (state = initialState, action) => {
   }
 };
 
-export default auth;
+export default adminAuth;

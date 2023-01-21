@@ -26,7 +26,9 @@ function output example:
   ]
 }
 */
-const splitMedia = (mediaArray) => {
+const splitMediaList = (mediaList) => {
+  /*
+  Old:
   return mediaArray.reduce(
     (accumulator, obj) => {
       return {
@@ -34,8 +36,29 @@ const splitMedia = (mediaArray) => {
         clientBlobs: [...accumulator.clientBlobs, obj.clientBlob],
       };
     },
+    // default:
     { serverFilenames: [], clientBlobs: [] }
+  );
+  */
+  return mediaList.reduce(
+    (accumulator, obj, index) => {
+      for (let key of Object.keys(obj)) {
+        // Create the accumulator array property related
+        // to the key if it doesn't exist yet.
+        // The created array will be null-filled and with
+        // length equal to the length of mediaList.
+        // e.g. accumulator.serverFilenames = [null, null, null];
+        if (!accumulator[key + "s"]) {
+          accumulator[key + "s"] = new Array(mediaList.length).fill(null);
+        }
+
+        accumulator[key + "s"][index] = mediaList[index][key];
+        return accumulator;
+      }
+    },
+    // default accumulator:
+    {}
   );
 };
 
-export default splitMedia;
+export default splitMediaList;

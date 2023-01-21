@@ -10,8 +10,8 @@ import {
   setDescription,
   mediaListAdd,
   mediaListSwapPlaces,
-} from "actions/admin/projectCreateEdit";
-import createProject from "actions/admin/projectCreateEdit/createProject";
+  editProject,
+} from "actions/admin/project";
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
@@ -19,14 +19,15 @@ import Footer from "components/Footer";
 import MediaOrderedInput from "components/MediaOrderedInput";
 
 const EditProjectScreen = ({
+  id,
   title,
   description,
-  media,
+  mediaList,
   setTitle,
   setDescription,
   mediaListAdd,
   mediaListSwapPlaces,
-  createProject,
+  editProject,
 }) => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -63,13 +64,13 @@ const EditProjectScreen = ({
             />
             <Typography>Media:</Typography>
             <MediaOrderedInput
-              mediaArray={media}
+              mediaList={mediaList}
               mediaListAdd={mediaListAdd}
               mediaListSwapPlaces={mediaListSwapPlaces}
             />
             <Button
               startIcon={<CheckIcon />}
-              onClick={() => createProject(title, description, media)}
+              onClick={() => editProject(id, title, description, mediaList)}
             >
               Submit Changes
             </Button>
@@ -82,8 +83,8 @@ const EditProjectScreen = ({
 };
 
 const mapState = (state) => {
-  const { title, description, media } = state.projectCreateEdit;
-  return { title, description, media };
+  const { id, title, description, mediaList } = state.projectCreateEdit;
+  return { id, title, description, mediaList };
 };
 
 export default connect(mapState, {
@@ -91,5 +92,5 @@ export default connect(mapState, {
   setDescription,
   mediaListAdd,
   mediaListSwapPlaces,
-  createProject,
+  editProject,
 })(EditProjectScreen);

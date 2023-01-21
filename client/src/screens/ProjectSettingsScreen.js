@@ -5,25 +5,31 @@ import { Container, Button, Typography, TextField } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import { connect } from "react-redux";
 
-import createProject from "actions/admin/projectCreateEdit/createProject";
+import {
+  setTitle,
+  setDescription,
+  createProject,
+  editProject,
+} from "actions/admin/projects";
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
 import Footer from "components/Footer";
 import MediaOrderedInput from "components/MediaOrderedInput";
-import { setTitle, setDescription } from "actions/admin/projectCreateEdit";
 
-const CreateProjectScreen = ({
+const ProjectSettingsScreen = ({
+  id,
   title,
   description,
   mediaList,
   setTitle,
   setDescription,
   createProject,
+  editProject,
 }) => {
   const theme = useTheme();
   const navigate = useNavigate();
-
+  const isNewProject = !id;
   return (
     <Screen>
       <NavBar />
@@ -43,7 +49,9 @@ const CreateProjectScreen = ({
               gap: theme.spacing(3),
             }}
           >
-            <Typography variant="h3">New Project</Typography>
+            <Typography variant="h3">
+              {isNewProject ? "New Project" : "Edit Project"}
+            </Typography>
             <TextField
               label="Title"
               value={title}
@@ -60,7 +68,11 @@ const CreateProjectScreen = ({
             <MediaOrderedInput />
             <Button
               startIcon={<CheckIcon />}
-              onClick={() => createProject(title, description, mediaList)}
+              onClick={() =>
+                isNewProject
+                  ? createProject(title, description, mediaList)
+                  : editProject(id, title, description, mediaList)
+              }
             >
               Submit
             </Button>
@@ -73,12 +85,13 @@ const CreateProjectScreen = ({
 };
 
 const mapState = (state) => {
-  const { title, description, mediaList } = state.projectCreateEdit;
-  return { title, description, mediaList };
+  const { id, title, description, mediaList } = state.projectSettings;
+  return { id, title, description, mediaList };
 };
 
 export default connect(mapState, {
   setTitle,
   setDescription,
   createProject,
-})(CreateProjectScreen);
+  editProject,
+})(ProjectSettingsScreen);
