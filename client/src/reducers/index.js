@@ -17,7 +17,10 @@ const appReducer = combineReducers({
 
 const rootReducer = (state, action) => {
   if (action.type === RESET_STATE) {
-    state = undefined;
+    // Reset all state except snackbar
+    state = {
+      snackbar: state.snackbar,
+    };
   }
   return appReducer(state, action);
 };

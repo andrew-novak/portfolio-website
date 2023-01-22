@@ -53,14 +53,6 @@ const createProject =
 
     dispatch(setSuccessSnackbar("Project created"));
     onSuccessRedirect();
-
-    /*
-  const products = response.data.products.map((product) => ({
-    ...product,
-    displayedVariantIndex: 0,
-  }));
-  dispatch({ type: SET_PRODUCTS, products });
-  */
   };
 
 export default createProject;

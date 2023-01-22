@@ -38,13 +38,6 @@ const editProject = (id, title, description, mediaList) => async (dispatch) => {
       headers: { Authorization: "Bearer " + idToken },
     }
   );
-  /*
-  const products = response.data.products.map((product) => ({
-    ...product,
-    displayedVariantIndex: 0,
-  }));
-  dispatch({ type: SET_PRODUCTS, products });
-  */
 };
 
 export default editProject;
