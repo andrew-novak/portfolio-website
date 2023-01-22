@@ -11,7 +11,7 @@ const projectRemove = (id, onSuccessRedirect) => async (dispatch) => {
   });
 
   if (response.status !== 200) {
-    return dispatch(setErrorSnackbar("Project removal attempt failed"));
+    return dispatch(setErrorSnackbar("Project removal failed"));
   }
 
   dispatch(setSuccessSnackbar("Project removed"));

@@ -3,6 +3,7 @@ import axios from "axios";
 import splitMediaList from "helpers/splitMediaList";
 import mediaBlobsToDataUrls from "helpers/mediaBlobsToDataUrls";
 import { API_URL } from "constants/urls";
+import { setErrorSnackbar, setSuccessSnackbar } from "actions/snackbar";
 
 /*
 const validate = (title, description, mediaList) => (dispatch) => {
@@ -21,37 +22,45 @@ media - array of objects e.g. [
   { serverFilename: null, clientBlob: "blob:http://....", and some more props },
 ]
 */
-const createProject = (title, description, mediaList) => async (dispatch) => {
-  //dispatch(validate(title, description, mediaList));
+const createProject =
+  (title, description, mediaList, onSuccessRedirect) => async (dispatch) => {
+    //dispatch(validate(title, description, mediaList));
 
-  const idToken = localStorage.getItem("idToken");
+    const idToken = localStorage.getItem("idToken");
 
-  const { clientBlobs = [] } = splitMediaList(mediaList);
-  const mediaDataUrls = await mediaBlobsToDataUrls(clientBlobs);
+    const { clientBlobs = [] } = splitMediaList(mediaList);
+    const mediaDataUrls = await mediaBlobsToDataUrls(clientBlobs);
 
-  const response = await axios.post(
-    `${API_URL}/admin/projects`,
-    {
-      title,
-      description,
-      mediaDataUrls,
-      /*mediaList: mediaList.map(({ serverFilename, clientLocalUrl }) => ({
+    const response = await axios.post(
+      `${API_URL}/admin/projects`,
+      {
+        title,
+        description,
+        mediaDataUrls,
+        /*mediaList: mediaList.map(({ serverFilename, clientLocalUrl }) => ({
         serverFilename,
         clientLocalUrl,
       })),*/
-    },
-    {
-      headers: { Authorization: "Bearer " + idToken },
-    }
-  );
+      },
+      {
+        headers: { Authorization: "Bearer " + idToken },
+      }
+    );
 
-  /*
+    if (response.status !== 200) {
+      return dispatch(setErrorSnackbar("Project creation failed"));
+    }
+
+    dispatch(setSuccessSnackbar("Project created"));
+    onSuccessRedirect();
+
+    /*
   const products = response.data.products.map((product) => ({
     ...product,
     displayedVariantIndex: 0,
   }));
   dispatch({ type: SET_PRODUCTS, products });
   */
-};
+  };
 
 export default createProject;

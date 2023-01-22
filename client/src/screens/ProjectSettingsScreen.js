@@ -70,8 +70,12 @@ const ProjectSettingsScreen = ({
               startIcon={<CheckIcon />}
               onClick={() =>
                 isNewProject
-                  ? createProject(title, description, mediaList)
-                  : editProject(id, title, description, mediaList)
+                  ? createProject(title, description, mediaList, () =>
+                      navigate("/")
+                    )
+                  : editProject(id, title, description, mediaList, () =>
+                      navigate("/")
+                    )
               }
             >
               Submit
