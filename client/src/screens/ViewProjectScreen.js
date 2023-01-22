@@ -130,7 +130,9 @@ const ViewProjectScreen = ({
                   </Button>
                   <Button
                     startIcon={<DeleteIcon />}
-                    onClick={() => removeProject(projectId)}
+                    onClick={() =>
+                      removeProject(projectId, () => navigate("/"))
+                    }
                   >
                     Remove Project
                   </Button>

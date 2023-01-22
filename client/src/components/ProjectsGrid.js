@@ -15,34 +15,37 @@ import getVideoCover from "helpers/getVideoCover";
 
 const ProjectsGrid = ({ projects, cardHeightPercentRatio }) => {
   const navigate = useNavigate();
+
+  const selectImage = (project) => {
+    // No media:
+    if (project.mediaFilenames.length < 1) {
+      return null;
+    }
+
+    // Supported formats:
+    const filename = project.mediaFilenames[0];
+    const extension = filename ? filename.split(".").pop() : null;
+    const mediaUrl = getMedia.oneProjectFileUrl(
+      project.id,
+      project.mediaFilenames[0]
+    );
+    if (shouldDisplayImage(extension)) {
+      return mediaUrl;
+    }
+    if (shouldDisplayVideo(extension)) {
+      const coverFile = getVideoCover(mediaUrl);
+      const coverUrl = URL.createObjectURL(coverFile);
+      return coverUrl;
+    }
+
+    // Unsupported formats:
+    return "unsupportedFormat";
+  };
+
   return (
     <Grid container spacing={1}>
       {projects.map((project, index) => {
-        if (project.mediaFilenames.length < 1) {
-          // TODO: display 'no image' image later on
-          return null;
-        }
-        const filename = project.mediaFilenames[0];
-        const extension = filename ? filename.split(".").pop() : null;
-
-        const selectImage = () => {
-          const mediaUrl = getMedia.oneProjectFileUrl(
-            project.id,
-            project.mediaFilenames[0]
-          );
-          if (shouldDisplayImage(extension)) {
-            return mediaUrl;
-          }
-          if (shouldDisplayVideo(extension)) {
-            const coverFile = getVideoCover(mediaUrl);
-            const coverUrl = URL.createObjectURL(coverFile);
-            return coverUrl;
-          }
-          // the media file is neither an image nor a video
-          return "unsupportedFormat";
-        };
-        const image = selectImage();
-
+        const image = selectImage(project);
         return (
           <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
             <Card

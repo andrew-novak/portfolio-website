@@ -20,7 +20,7 @@ const HomeButton = () => {
         alignItems: "center",
         cursor: "pointer",
         userSelect: "none",
-        pointerEvents: location.pathname === "/" && "none",
+        //pointerEvents: location.pathname === "/" && "none",
       }}
       onClick={() => navigate("/")}
     >
