@@ -22,8 +22,10 @@ const editProject = (id, title, description, mediaList) => async (dispatch) => {
   // mediaFilenames, mediaDataUrls
   // mediaFilenames - array of filenames (strings) (already saved in server)
   // mediaDataUrls - array of dataUrls (strings) (new files)
-  const { serverFilenames, clientBlobs } = splitMediaList(mediaList);
-  const mediaDataUrls = await mediaBlobsToDataUrls(clientBlobs);
+  const { serverFilenames, clientLocalUrls } = splitMediaList(mediaList);
+  const splitMedia = splitMediaList(mediaList);
+  console.log("SPLIT MEDIA LIST:", splitMedia);
+  const mediaDataUrls = await mediaBlobsToDataUrls(clientLocalUrls);
 
   const idToken = localStorage.getItem("idToken");
   const response = await axios.post(

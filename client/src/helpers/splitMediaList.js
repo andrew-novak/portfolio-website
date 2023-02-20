@@ -53,8 +53,8 @@ const splitMediaList = (mediaList) => {
         }
 
         accumulator[key + "s"][index] = mediaList[index][key];
-        return accumulator;
       }
+      return accumulator;
     },
     // default accumulator:
     {}

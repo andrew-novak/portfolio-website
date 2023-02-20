@@ -9,8 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 
-import getMedia from "helpers/getMedia";
-import { shouldDisplayImage, shouldDisplayVideo } from "helpers/fileTypes";
 import getVideoCover from "helpers/getVideoCover";
 
 const ProjectsGrid = ({ projects, cardHeightPercentRatio }) => {
@@ -18,27 +16,22 @@ const ProjectsGrid = ({ projects, cardHeightPercentRatio }) => {
 
   const selectImage = (project) => {
     // No media:
-    if (project.mediaFilenames.length < 1) {
+    if (project.mediaList.length < 1) {
       return null;
     }
 
-    // Supported formats:
-    const filename = project.mediaFilenames[0];
-    const extension = filename ? filename.split(".").pop() : null;
-    const mediaUrl = getMedia.oneProjectFileUrl(
-      project.id,
-      project.mediaFilenames[0]
-    );
-    if (shouldDisplayImage(extension)) {
-      return mediaUrl;
+    // Supported format:
+    const { serverUrl, displayType } = project.mediaList[0];
+    if (displayType === "image") {
+      return serverUrl;
     }
-    if (shouldDisplayVideo(extension)) {
-      const coverFile = getVideoCover(mediaUrl);
+    if (displayType === "video") {
+      const coverFile = getVideoCover(serverUrl);
       const coverUrl = URL.createObjectURL(coverFile);
       return coverUrl;
     }
 
-    // Unsupported formats:
+    // Unsupported format:
     return "unsupportedFormat";
   };
 

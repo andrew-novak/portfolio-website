@@ -7,18 +7,24 @@ import {
 //import { unselectAll } from "actions/selection";
 import getVideoCover from "helpers/getVideoCover";
 
-export const mediaListAdd = (localUrl, mimeType, closeDialog) => (dispatch) => {
-  dispatch({
-    type: PROJECT_MEDIA_LIST_ADD,
-    localUrl,
-    mimeType,
-  });
-  closeDialog();
-  //dispatch(unselectAll());
-};
+export const mediaListAdd =
+  ({ localUrl, mimeType, displayType, closeMediaDialog }) =>
+  (dispatch) => {
+    console.log("ELO", localUrl, mimeType, displayType);
+    dispatch({
+      type: PROJECT_MEDIA_LIST_ADD,
+      localUrl,
+      mimeType,
+      displayType,
+      closeMediaDialog,
+    });
+    closeMediaDialog();
+    //dispatch(unselectAll());
+  };
 
 export const mediaListAddVideo =
-  (videoFile, videoUrl, mimeType, closeDialog) => async (dispatch) => {
+  ({ videoFile, videoUrl, mimeType, displayType, closeMediaDialog }) =>
+  async (dispatch) => {
     const coverFile = await getVideoCover(videoFile);
     const coverUrl = URL.createObjectURL(coverFile);
     dispatch({
@@ -26,8 +32,9 @@ export const mediaListAddVideo =
       videoUrl,
       coverUrl,
       mimeType,
+      displayType,
     });
-    closeDialog();
+    closeMediaDialog();
   };
 
 const swap = (array, moveIndex, toIndex) => {

@@ -49,7 +49,7 @@ const Routes = ({ isLoggedIn, resetState, retrieveIdToken }) => {
         }
       />
       <Route
-        path="/edit-project"
+        path="/edit-project/:projectId"
         exact
         element={
           <AuthOnly isLoggedIn={isLoggedIn}>

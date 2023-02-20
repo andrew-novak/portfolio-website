@@ -6,6 +6,7 @@ const logger = require("../../debug/logger");
 const handleValidationErrors = require("../../expressValidator/handleValidationErrors");
 const loginRoute = require("./login");
 const createProjectRoute = require("./projects/create");
+const editProjectRoute = require("./projects/edit");
 const removeProjectRoute = require("./projects/remove");
 
 const router = express.Router();
@@ -45,6 +46,16 @@ router.post(
   ],
   handleValidationErrors,
   createProjectRoute
+);
+
+router.post(
+  "/projects/:projectId",
+  [
+    body("title").isString().isLength({ min: 1, max: 30 }),
+    body("description").isString().isLength({ min: 1, max: 3000 }),
+  ],
+  handleValidationErrors,
+  editProjectRoute
 );
 
 router.delete(

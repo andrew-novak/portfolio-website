@@ -85,9 +85,7 @@ const ViewProjectScreen = ({
     getProject(projectId);
   }, [getProject, projectId]);
 
-  const mediaUrls = (project.mediaFilenames || []).map((filename) => {
-    return getMedia.oneProjectFileUrl(project.id, filename);
-  });
+  const mediaUrls = project.mediaList.map((obj) => obj.serverUrl);
 
   return (
     <Screen>
@@ -124,7 +122,7 @@ const ViewProjectScreen = ({
                 <div>
                   <Button
                     startIcon={<EditIcon />}
-                    onClick={() => navigate("/edit-project")}
+                    onClick={() => navigate(`/edit-project/${projectId}`)}
                   >
                     Edit Project
                   </Button>

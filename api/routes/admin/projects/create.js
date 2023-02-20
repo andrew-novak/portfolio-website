@@ -10,8 +10,8 @@ const logRequestBody = (body) => {
   logger.debug({
     ...body,
     ...(body.mediaDataUrls && {
-      mediaDataUrls: body.mediaDataUrls.map(
-        (dataUrl) => dataUrl.slice(0, 50) + "..."
+      mediaDataUrls: body.mediaDataUrls.map((dataUrl) =>
+        dataUrl === null ? dataUrl : dataUrl.slice(0, 50) + "..."
       ),
     }),
   });
@@ -42,8 +42,8 @@ const createProject = async (req, res, next) => {
   const { title, description, mediaDataUrls } = req.body;
   const projectId = await Project.getNextId();
   const projectOrder = await Project.getNextOrder();
+  const mediaFilenames = await saveProjectMedia(projectId, mediaDataUrls);
   try {
-    const mediaFilenames = await saveProjectMedia(projectId, mediaDataUrls);
     await Project.create({
       id: projectId,
       order: projectOrder,

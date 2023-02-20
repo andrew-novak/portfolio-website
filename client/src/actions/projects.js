@@ -1,16 +1,41 @@
 import axios from "axios";
 
+import getMedia from "helpers/getMedia";
+import supportedMimeTypes from "constants/supportedMimeTypes";
 import { API_URL } from "constants/urls";
-import { SET_PROJECTS, SET_PROJECT } from "constants/actionTypes";
+import { PROJECTS_SET, PROJECT_SET } from "constants/actionTypes";
+
+const convertProject = (project) => {
+  const { id, mediaFilenames } = project;
+  // Converting server-side media filenames to client-side media objects containing more info
+  const mediaList = mediaFilenames.map((filename) => {
+    const serverUrl = getMedia.oneProjectFileUrl(id, filename);
+    const extension = filename ? filename.split(".").pop() : null;
+    const supportedType = supportedMimeTypes.find(
+      (obj) => obj.extension === extension
+    );
+    const mimeType = supportedType ? supportedType.mimeType : null;
+    const displayType = supportedType ? supportedType.displayType : null;
+    return {
+      serverFilename: filename,
+      serverUrl,
+      mimeType,
+      displayType,
+    };
+  });
+  return { ...project, mediaFilenames: null, mediaList };
+};
 
 export const getProjects = () => async (dispatch) => {
   const response = await axios.get(`${API_URL}/projects`);
-  const { projects } = response.data;
-  dispatch({ type: SET_PROJECTS, projects });
+  const { projects: receivedProjects } = response.data;
+  const projects = receivedProjects.map(convertProject);
+  dispatch({ type: PROJECTS_SET, projects });
 };
 
 export const getProject = (projectId) => async (dispatch) => {
   const response = await axios.get(`${API_URL}/projects/${projectId}`);
-  const { project } = response.data;
-  dispatch({ type: SET_PROJECT, project });
+  const { project: receivedProject } = response.data;
+  const project = convertProject(receivedProject);
+  dispatch({ type: PROJECT_SET, project });
 };

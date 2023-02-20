@@ -95,6 +95,9 @@ const MediaItem = ({ children }) => {
           [spring.translateX, spring.translateY, spring.scale],
           (x, y, scale) => `translate3d(${x}px, ${y}px, 0) scale(${scale})`
         ),
+        background: "rgb(255,255,255)",
+        background:
+          "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(245,245,245,1) 100%)",
       }}
     >
       {children}

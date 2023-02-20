@@ -4,7 +4,6 @@ import snackbar from "./snackbar";
 import adminAuth from "./adminAuth";
 import projects from "./projects";
 import project from "./project";
-import projectSettings from "./projectSettings";
 import { RESET_STATE } from "constants/actionTypes";
 
 const appReducer = combineReducers({
@@ -12,7 +11,6 @@ const appReducer = combineReducers({
   adminAuth,
   projects,
   project,
-  projectSettings,
 });
 
 const rootReducer = (state, action) => {

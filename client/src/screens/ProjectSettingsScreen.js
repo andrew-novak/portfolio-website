@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { Container, Button, Typography, TextField } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import { connect } from "react-redux";
 
+import { getProject } from "actions/projects";
 import {
   setTitle,
   setDescription,
@@ -18,10 +19,10 @@ import Footer from "components/Footer";
 import MediaOrderedInput from "components/MediaOrderedInput";
 
 const ProjectSettingsScreen = ({
-  id,
   title,
   description,
   mediaList,
+  getProject,
   setTitle,
   setDescription,
   createProject,
@@ -29,7 +30,15 @@ const ProjectSettingsScreen = ({
 }) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const isNewProject = !id;
+
+  const { projectId } = useParams();
+  const isNewProject = !projectId;
+  useEffect(() => {
+    if (!isNewProject) {
+      getProject(projectId);
+    }
+  }, [getProject, projectId]);
+
   return (
     <Screen>
       <NavBar />
@@ -65,7 +74,7 @@ const ProjectSettingsScreen = ({
               onChange={(event) => setDescription(event.target.value)}
             />
             <Typography>Media:</Typography>
-            <MediaOrderedInput />
+            <MediaOrderedInput projectId={projectId} />
             <Button
               startIcon={<CheckIcon />}
               onClick={() =>
@@ -73,7 +82,7 @@ const ProjectSettingsScreen = ({
                   ? createProject(title, description, mediaList, () =>
                       navigate("/")
                     )
-                  : editProject(id, title, description, mediaList, () =>
+                  : editProject(projectId, title, description, mediaList, () =>
                       navigate("/")
                     )
               }
@@ -89,11 +98,12 @@ const ProjectSettingsScreen = ({
 };
 
 const mapState = (state) => {
-  const { id, title, description, mediaList } = state.projectSettings;
-  return { id, title, description, mediaList };
+  const { title, description, mediaList } = state.project;
+  return { title, description, mediaList };
 };
 
 export default connect(mapState, {
+  getProject,
   setTitle,
   setDescription,
   createProject,

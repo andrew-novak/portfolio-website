@@ -6,6 +6,7 @@ import {
   mediaListAdd,
   mediaListAddVideo,
 } from "actions/admin/projects";
+import supportedMimeTypes from "constants/supportedMimeTypes";
 import DialogImageCrop from "./DialogImageCrop";
 import DialogVideoPreview from "./DialogVideoPreview";
 
@@ -17,12 +18,17 @@ const MediaDialogs = ({
   mediaListAdd,
   mediaListAddVideo,
 }) => {
-  const [mimeType, setMimeType] = useState();
-  const [objectUrl, setObjectUrl] = useState();
+  const [mimeType, setMimeType] = useState(null);
+  const [displayType, setDisplayType] = useState(null);
+  const [objectUrl, setObjectUrl] = useState(null);
 
   useEffect(() => {
     if (file !== null) {
       setMimeType(file.type);
+      const newDisplayType = supportedMimeTypes.find(
+        (obj) => obj.mimeType === file.type
+      ).displayType;
+      setDisplayType(newDisplayType);
       setObjectUrl(URL.createObjectURL(file));
     }
   }, [file]);
@@ -37,7 +43,12 @@ const MediaDialogs = ({
         }
         onCancel={closeMediaDialog}
         onConfirm={(croppedImageUrl) =>
-          mediaListAdd(croppedImageUrl, mimeType, closeMediaDialog)
+          mediaListAdd({
+            localUrl: croppedImageUrl,
+            mimeType,
+            displayType,
+            closeMediaDialog,
+          })
         }
       />
       <DialogVideoPreview
@@ -48,7 +59,13 @@ const MediaDialogs = ({
         }
         onCancel={closeMediaDialog}
         onConfirm={(videoUrl, thumbnailUrl) =>
-          mediaListAddVideo(file, videoUrl, mimeType, closeMediaDialog)
+          mediaListAddVideo({
+            videoFile: file,
+            videoUrl,
+            mimeType,
+            displayType,
+            closeMediaDialog,
+          })
         }
       />
     </>
@@ -56,7 +73,7 @@ const MediaDialogs = ({
 };
 
 const mapState = (state) => {
-  const { dialogVariant, file } = state.projectSettings.mediaDialog;
+  const { dialogVariant, file } = state.project.mediaDialog;
   return { dialogVariant, file };
 };
 
