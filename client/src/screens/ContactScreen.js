@@ -12,12 +12,11 @@ import Footer from "components/Footer";
 
 const ContactScreen = ({ sendEmail }) => {
   const theme = useTheme();
-  const defaultEmailForm = {
-    clientEmail: "",
-    clientEmailRepeat: "",
-    message: "",
-  };
-  const [emailForm, setEmailForm] = useState(defaultEmailForm);
+  const [clientEmail, setClientEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+  const maxMessageChars = 1000;
+  const isMessageTooLong = message.length > maxMessageChars;
   return (
     <Screen>
       <NavBar />
@@ -37,29 +36,40 @@ const ContactScreen = ({ sendEmail }) => {
               gap: theme.spacing(3),
             }}
           >
-            <Typography variant="h3">Contact</Typography>
+            <Typography variant="h3">Send a message</Typography>
             <TextField
-              label="Email"
-              onChange={(event) =>
-                setEmailForm({ ...emailForm, clientEmail: event.target.value })
-              }
-            />
-            <TextField
-              label="Repeat Email"
-              onChange={(event) =>
-                setEmailForm({
-                  ...emailForm,
-                  clientEmailRepeat: event.target.value,
-                })
-              }
+              label="Your Email"
+              fullWidth
+              onChange={(event) => setClientEmail(event.target.value)}
             />
             <TextField
               label="Message"
-              onChange={(event) =>
-                setEmailForm({ ...emailForm, message: event.target.value })
-              }
+              error={isMessageTooLong}
+              multiline
+              minRows={3}
+              fullWidth
+              onChange={(event) => setMessage(event.target.value)}
             />
-            <Button onClick={() => sendEmail(emailForm)}>Send</Button>
+            <Typography
+              sx={{
+                marginTop: -2,
+                fontSize: 14,
+                color: isMessageTooLong ? "#d32f2f" : null,
+              }}
+            >
+              Character count: {message.length} / {maxMessageChars}
+            </Typography>
+            <Button
+              onClick={() =>
+                sendEmail({
+                  clientEmail,
+                  message,
+                  onSuccessRedirect: () => navigate("/"),
+                })
+              }
+            >
+              Send
+            </Button>
           </Container>
         </div>
       </Content>

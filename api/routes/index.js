@@ -36,8 +36,8 @@ router.use("/projects", projectsRoute);
 router.post(
   "/sendEmail",
   [
-    body("clientEmail").isString().isLength({ min: 1, max: 50 }),
-    body("message").isString().isLength({ min: 1, max: 3000 }),
+    body("clientEmail").isString().isEmail().isLength({ min: 1, max: 100 }),
+    body("message").isString().isLength({ min: 1, max: 1000 }),
   ],
   handleValidationErrors,
   sendEmailRoute
