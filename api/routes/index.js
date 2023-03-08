@@ -1,8 +1,12 @@
 const express = require("express");
+const { body, param } = require("express-validator");
 
+const handleValidationErrors = require("../expressValidator/handleValidationErrors");
+// subroutes
 const mediaDirs = require("../localFiles/mediaDirs");
 const projectsRoute = require("./projects");
-const adminRoutes = require("./admin");
+const sendEmailRoute = require("./sendEmail");
+const adminRoute = require("./admin");
 
 const NODE_ENV = process.env.NODE_ENV;
 const router = express.Router();
@@ -29,6 +33,16 @@ if (NODE_ENV === "development") {
 
 router.use("/projects", projectsRoute);
 
-router.use("/admin", adminRoutes);
+router.post(
+  "/sendEmail",
+  [
+    body("clientEmail").isString().isLength({ min: 1, max: 50 }),
+    body("message").isString().isLength({ min: 1, max: 3000 }),
+  ],
+  handleValidationErrors,
+  sendEmailRoute
+);
+
+router.use("/admin", adminRoute);
 
 module.exports = router;
