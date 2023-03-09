@@ -32,10 +32,13 @@ const parallelySaveMedia = async (
 ) => {
   const projDir = mediaDirs.getProjectPath(projectId);
   // Extensions are ignored when getting a free filename
-  const removeExtensions = (filenames) =>
-    filenames.map((filename) =>
-      !filename ? null : filename.replace(/\.[^/.]+$/, "")
-    );
+  const removeExtensions = (filenames) => {
+    return filenames.map((filename) => {
+      if (!filename) return null;
+      const noExtFilename = filename.replace(/\.[^/.]+$/, "");
+      return noExtFilename;
+    });
+  };
   const noExtTakenFilenames = removeExtensions(takenFilenames);
   const noExtCreatedFilenames = removeExtensions(createdFilenames);
   // running this promise parallely for each data url
@@ -55,7 +58,12 @@ const parallelySaveMedia = async (
 // parallely saves media data urls as files,
 // revokes any changes in case of an error
 // and returns media filenames
-const saveProjectMedia = async (takenFilenames, projectId, dataUrls) => {
+const saveProjectMedia = async (
+  projectId,
+  dataUrls,
+  receivedTakenFilenames
+) => {
+  const takenFilenames = receivedTakenFilenames ? receivedTakenFilenames : [];
   let projectDirJustCreated = false;
   const createdFilenames = [];
   try {

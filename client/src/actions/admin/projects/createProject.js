@@ -28,8 +28,8 @@ const createProject =
 
     const idToken = localStorage.getItem("idToken");
 
-    const { clientBlobs = [] } = splitMediaList(mediaList);
-    const mediaDataUrls = await mediaBlobsToDataUrls(clientBlobs);
+    const { clientLocalUrls = [] } = splitMediaList(mediaList);
+    const mediaDataUrls = await mediaBlobsToDataUrls(clientLocalUrls);
 
     const response = await axios.post(
       `${API_URL}/admin/projects`,

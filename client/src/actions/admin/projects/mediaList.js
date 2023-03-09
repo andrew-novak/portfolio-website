@@ -10,7 +10,6 @@ import getVideoCover from "helpers/getVideoCover";
 export const mediaListAdd =
   ({ localUrl, mimeType, displayType, closeMediaDialog }) =>
   (dispatch) => {
-    console.log("ELO", localUrl, mimeType, displayType);
     dispatch({
       type: PROJECT_MEDIA_LIST_ADD,
       localUrl,

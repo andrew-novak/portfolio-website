@@ -1,8 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import Image from "mui-image";
-import { Box, CardMedia, Container, Button, Typography } from "@mui/material";
+import {
+  Grid,
+  Box,
+  CardMedia,
+  Container,
+  Button,
+  Typography,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Carousel from "react-material-ui-carousel";
@@ -16,57 +23,35 @@ import NavBar from "components/NavBar";
 import Content from "components/Content";
 import Footer from "components/Footer";
 
-const Media = ({ url }) => {
+const Media = ({ mediaUrls }) => {
   const theme = useTheme();
-  console.log("url:", url);
-  return (
-    <div>
-      <Box
-        component="img"
-        sx={{
-          height: 1000,
-          width: 1000,
-        }}
-        src={url}
-      />
-      <Box
-        component="img"
-        sx={{
-          height: 0,
-          padding: theme.custom.percentHeight169,
-          width: "100%",
-        }}
-        src={url}
-      />
-      <CardMedia
-        classes={{
-          root: {
-            height: 0,
-            paddingTop: theme.custom.percentHeight169,
-          },
-        }}
-        image={url}
-      />
-    </div>
-  );
-};
+  const parentRef = useRef(null);
 
-const Slider = ({ mediaUrls }) => {
-  const theme = useTheme();
   return (
-    <div style={{ width: "100%" }}>
-      <Carousel timeout={100} sx={{ marginBottom: 10 }}>
-        {mediaUrls.map((url, index) => {
-          const extension = url.split(".").pop();
-          return (
-            <div key={index}>
-              <h1>extension: {extension}</h1>
-              <Image src={url} />
-            </div>
-          );
-          // <Media key={index} url={url} />;
-        })}
-      </Carousel>
+    <div
+      ref={parentRef}
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      {mediaUrls.map((url, index) => {
+        const width = 800;
+        const height = width;
+        return (
+          <div
+            key={index}
+            style={{
+              width,
+              height,
+              backgroundImage: `url(${url})`,
+              backgroundSize: "cover",
+            }}
+          />
+        );
+      })}
     </div>
   );
 };
@@ -137,7 +122,7 @@ const ViewProjectScreen = ({
                 </div>
               )}
             </div>
-            <Slider mediaUrls={mediaUrls} />
+            <Media mediaUrls={mediaUrls} />
             {/*media.length > 1 ? (<Slider media={media})*/}
             <Typography variant="h4">{project.description || ""}</Typography>
             <Typography>{JSON.stringify(project, null, 2)}</Typography>

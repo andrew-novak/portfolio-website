@@ -14,7 +14,6 @@ const sendEmail =
       dispatch(setSuccessSnackbar("Email sent successfully"));
       onSuccessRedirect();
     } catch (err) {
-      console.log(err.response);
       const { status } = err.response;
       const { message } = err.response.data;
       // Wrong email & message fields

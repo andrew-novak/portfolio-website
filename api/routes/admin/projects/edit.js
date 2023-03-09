@@ -52,9 +52,9 @@ const editProject = async (req, res, next) => {
   } = req.body;
   // TODO: add media deletion
   const newMediaFilenames = await saveProjectMedia(
-    oldMediaFilenames,
     projectId,
-    mediaDataUrls
+    mediaDataUrls,
+    oldMediaFilenames
   );
   const mediaFilenames = mergeMediaFilenames(
     newMediaFilenames,
