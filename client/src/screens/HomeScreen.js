@@ -9,8 +9,9 @@ import { getProjects } from "actions/projects";
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
-import Footer from "components/Footer";
+import GeometryPattern from "components/GeometryPattern";
 import ProjectsGrid from "components/ProjectsGrid";
+import Footer from "components/Footer";
 
 const HomeScreen = ({ projects, getProjects }) => {
   const theme = useTheme();
@@ -26,14 +27,50 @@ const HomeScreen = ({ projects, getProjects }) => {
       <Content>
         <div
           style={{
-            paddingTop: theme.spacing(5),
+            //paddingTop: theme.spacing(5),
             paddingBottom: theme.spacing(3),
           }}
         >
+          {/* Intro Section */}
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-start",
+              backgroundColor: "#e6d49e",
+            }}
+          >
+            <Container
+              maxWidth="xl"
+              disableGutters
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <GeometryPattern color1="#393939" color2="#e6d49e" />
+              <div style={{ display: "flex", translate: "-80px 35px" }}>
+                <div
+                  style={{
+                    height: 200,
+                    width: 200,
+                    borderRadius: "100%",
+                    background: "blue",
+                    marginRight: 16,
+                  }}
+                />
+                <Typography variant="p" sx={{ fontSize: 30 }}>
+                  Elo sdadsadasd
+                </Typography>
+              </div>
+            </Container>
+          </div>
+          {/* Projects Section */}
           <Container
             maxWidth="xl"
             disableGutters
             sx={{
+              marginTop: theme.spacing(3),
               display: "flex",
               flexDirection: "column",
               gap: theme.spacing(3),
