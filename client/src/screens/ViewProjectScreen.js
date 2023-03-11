@@ -18,15 +18,15 @@ import { connect } from "react-redux";
 import { getProject } from "actions/projects";
 import { removeProject } from "actions/admin/projects";
 import getMedia from "helpers/getMedia";
+import useElementDimensions from "hooks/useElementDimensions";
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
 import Footer from "components/Footer";
 
-const Media = ({ mediaUrls }) => {
+const Media = ({ mediaUrls, description, dimensionProps }) => {
   const theme = useTheme();
-  const parentRef = useRef(null);
-
+  const { parentRef, height, width, isMobile, isVeryMobile } = dimensionProps;
   return (
     <div
       ref={parentRef}
@@ -38,18 +38,73 @@ const Media = ({ mediaUrls }) => {
       }}
     >
       {mediaUrls.map((url, index) => {
-        const width = 800;
-        const height = width;
+        const color1 = "#0085ff";
+        const color2 = "#ffd16b";
         return (
-          <div
-            key={index}
-            style={{
-              width,
-              height,
-              backgroundImage: `url(${url})`,
-              backgroundSize: "cover",
-            }}
-          />
+          <>
+            <div
+              key={index}
+              style={{
+                position: "relative",
+                width: "100%",
+                height,
+                marginBottom: index > 0 ? (isVeryMobile ? 20 : 50) : 0,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {/* Desktop Colorful Div */}
+              {index === 0 && (
+                <div
+                  style={{
+                    position: "absolute",
+                    height: "calc(100% - 80px)",
+                    width: "100%",
+                    background: `linear-gradient(90deg, ${color1} 0%, ${color2} 100%)`,
+                  }}
+                />
+              )}
+              {/* Greyish Div */}
+              {index !== 0 && (
+                <>
+                  <div
+                    style={{
+                      position: "absolute",
+                      height: height - 80,
+                      width: "100%",
+                      background: color1,
+                      background: `linear-gradient(30deg, #f8f1ff 0%, #eff2fc 100%)`,
+                    }}
+                  />
+                </>
+              )}
+              <Box
+                sx={{
+                  position: "absolute",
+                  height: "100%",
+                  width,
+                  backgroundColor: "white",
+                  backgroundImage: `url(${url})`,
+                  backgroundSize: "cover",
+                  boxShadow: isVeryMobile ? 0 : 12,
+                }}
+              />
+            </div>
+            {description && index === 0 && (
+              <div style={{ marginTop: 40, marginBottom: 40, width: width }}>
+                <Container>
+                  <Typography
+                    align="center"
+                    variant="p"
+                    sx={{ fontSize: isMobile ? 18 : 24 }}
+                  >
+                    {description || ""}
+                  </Typography>
+                </Container>
+              </div>
+            )}
+          </>
         );
       })}
     </div>
@@ -66,6 +121,29 @@ const ViewProjectScreen = ({
   const { projectId } = useParams();
   const navigate = useNavigate();
 
+  const parentRef = useRef(null);
+  const { height: parentHeight, width: parentWidth } =
+    useElementDimensions(parentRef);
+  const maxImgWidth = 800;
+  const fullScreenImageWidth = 600;
+  const isMobile = parentWidth * 0.9 < maxImgWidth;
+  const isVeryMobile = parentWidth < fullScreenImageWidth;
+  const width = isVeryMobile ? "100%" : isMobile ? "90%" : maxImgWidth;
+  const height = isVeryMobile
+    ? parentWidth
+    : isMobile
+    ? parentWidth * 0.9
+    : maxImgWidth;
+  const dimensionProps = {
+    parentRef,
+    maxImgWidth,
+    fullScreenImageWidth,
+    isMobile,
+    isVeryMobile,
+    width,
+    height,
+  };
+
   useEffect(() => {
     getProject(projectId);
   }, [getProject, projectId]);
@@ -79,57 +157,52 @@ const ViewProjectScreen = ({
         <div
           style={{
             paddingTop: theme.spacing(5),
-            paddingBottom: theme.spacing(3),
+            //paddingBottom: theme.spacing(3),
             width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Container
-            maxWidth="xl"
-            disableGutters
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              gap: theme.spacing(3),
-            }}
+          <Typography
+            variant="h3"
+            sx={{ fontSize: 40, marginBottom: theme.spacing(3) }}
           >
+            {project.title || ""}
+          </Typography>
+          {/* Admin Buttons */}
+          {isAdminMode && (
             <div
               style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                maxWidth: "calc(100vw - 20px)",
                 width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                marginBottom: theme.spacing(3),
               }}
             >
-              <Typography variant="h4">{project.title || ""}</Typography>
-              {isAdminMode && (
-                <div>
-                  <Button
-                    startIcon={<EditIcon />}
-                    onClick={() => navigate(`/edit-project/${projectId}`)}
-                  >
-                    Edit Project
-                  </Button>
-                  <Button
-                    startIcon={<DeleteIcon />}
-                    onClick={() =>
-                      removeProject(projectId, () => navigate("/"))
-                    }
-                  >
-                    Remove Project
-                  </Button>
-                </div>
-              )}
+              <Button
+                startIcon={<EditIcon />}
+                onClick={() => navigate(`/edit-project/${projectId}`)}
+              >
+                Edit Project
+              </Button>
+              <div style={{ width: 20 }} />
+              <Button
+                startIcon={<DeleteIcon />}
+                onClick={() => removeProject(projectId, () => navigate("/"))}
+              >
+                Remove Project
+              </Button>
             </div>
-            <Media mediaUrls={mediaUrls} />
-            {/*media.length > 1 ? (<Slider media={media})*/}
-            <Typography variant="h4">{project.description || ""}</Typography>
-            <Typography>{JSON.stringify(project, null, 2)}</Typography>
-          </Container>
+          )}
+          <Media
+            mediaUrls={mediaUrls}
+            description={project.description}
+            dimensionProps={dimensionProps}
+          />
         </div>
       </Content>
-      <Footer />
+      <Footer maxWidth={isMobile ? parentWidth * 0.9 + 50 : maxImgWidth + 50} />
     </Screen>
   );
 };

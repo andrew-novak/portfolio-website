@@ -2,12 +2,10 @@ import { Snackbar as MuiSnackbar, Alert } from "@mui/material";
 import { connect } from "react-redux";
 
 import { closeSnackbar } from "actions/snackbar";
-import getWindowDimensions from "hooks/getWindowDimensions";
-
-//         sx={{ /*fontSize: isLargerScreen ? 30 : 20*/ }}
+import useWindowDimensions from "hooks/useWindowDimensions";
 
 const Snackbar = ({ isOpen, severity, message, closeSnackbar }) => {
-  const { height, width } = getWindowDimensions();
+  const { height, width } = useWindowDimensions();
   const isLargerScreen = width > 600;
   return (
     <MuiSnackbar

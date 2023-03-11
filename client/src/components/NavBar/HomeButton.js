@@ -36,7 +36,7 @@ const HomeButton = () => {
           sx={{
             lineHeight: 2,
             fontFamily: "Pacifico",
-            fontSize: 24,
+            fontSize: isLargerThanSm ? 24 : 22,
             letterSpacing: 2,
             background: theme.custom.colors.activity,
             WebkitBackgroundClip: "text",
