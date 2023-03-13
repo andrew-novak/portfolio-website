@@ -35,12 +35,13 @@ const HomeButton = () => {
         <Typography
           sx={{
             lineHeight: 2,
-            fontFamily: "Pacifico",
-            fontSize: isLargerThanSm ? 24 : 22,
+            fontFamily: "Sansita Swashed, cursive",
+            fontSize: isLargerThanSm ? 28 : 24,
             letterSpacing: 2,
             background: theme.custom.colors.activity,
             WebkitBackgroundClip: "text",
             textFillColor: "transparent",
+            background: "rgb(103, 51, 51)",
           }}
           color="inherit"
         >
