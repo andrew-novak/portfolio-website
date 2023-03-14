@@ -4,31 +4,30 @@ const Project = require("../../models/Project");
 
 // server-side logs
 const logProjectCount = (count) => logger.debug(`${count} project(s) found`);
-const failureLog = (err) =>
-  logger.debug(
-    `${
-      utf8Chars.xMark
-    } error during multiple projects retrival:\n${JSON.stringify(err)}`
+const logFailure = (err) => {
+  logger.error(
+    `${utf8Chars.xMark} unable to retrieve multiple projects, error occured:`
   );
+  logger.error(err);
+};
 // client-side messages
-const failureMessage = "An error occurred during multiple projects retrieval";
+const messageFailure = "Unable to retrieve projects";
 
 const getProjectsRoute = async (req, res, next) => {
   try {
     const projects = await Project.find({});
     logProjectCount(projects.length);
-    const selectedPropsProjects = projects.map((project) => ({
+    const frontendProjects = projects.map((project) => ({
       id: project.id,
       order: project.order,
       title: project.title,
       description: project.description,
       mediaFilenames: project.mediaFilenames,
     }));
-    res.status(200).json({ projects: selectedPropsProjects });
+    res.status(200).json({ projects: frontendProjects });
   } catch (err) {
-    logger.error(err);
-    failureLog(err);
-    res.status(500).json({ message: failureMessage });
+    logFailure(err);
+    res.status(500).json({ message: messageFailure });
   }
 };
 

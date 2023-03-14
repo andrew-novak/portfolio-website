@@ -6,9 +6,12 @@ import { API_URL } from "constants/urls";
 export const retrieveIdToken = () => async (dispatch) => {
   const idToken = localStorage.getItem("idToken");
   if (idToken) {
-    return dispatch({ type: ADMIN_AUTH_SET_IS_LOGGED_IN, isLoggedIn: true });
+    return dispatch({
+      type: ADMIN_AUTH_SET_IS_LOGGED_IN,
+      isAdminLoggedIn: true,
+    });
   }
-  dispatch({ type: ADMIN_AUTH_SET_IS_LOGGED_IN, isLoggedIn: false });
+  dispatch({ type: ADMIN_AUTH_SET_IS_LOGGED_IN, isAdminLoggedIn: false });
 };
 
 export const login =
@@ -22,7 +25,7 @@ export const login =
       if (response.data.idToken) {
         const idToken = response.data.idToken;
         localStorage.setItem("idToken", idToken);
-        dispatch({ type: ADMIN_AUTH_SET_IS_LOGGED_IN, isLoggedIn: true });
+        dispatch({ type: ADMIN_AUTH_SET_IS_LOGGED_IN, isAdminLoggedIn: true });
         return redirect();
       }
       new Error("No id token");
@@ -34,5 +37,5 @@ export const login =
 
 export const logout = () => async (dispatch) => {
   localStorage.removeItem("idToken");
-  dispatch({ type: ADMIN_AUTH_SET_IS_LOGGED_IN, isLoggedIn: false });
+  dispatch({ type: ADMIN_AUTH_SET_IS_LOGGED_IN, isAdminLoggedIn: false });
 };

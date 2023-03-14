@@ -4,6 +4,7 @@ import getMedia from "helpers/getMedia";
 import supportedMimeTypes from "constants/supportedMimeTypes";
 import { API_URL } from "constants/urls";
 import { PROJECTS_SET, PROJECT_SET } from "constants/actionTypes";
+import { setErrorSnackbar } from "actions/snackbar";
 
 const convertProject = (project) => {
   const { id, mediaFilenames } = project;
@@ -27,15 +28,31 @@ const convertProject = (project) => {
 };
 
 export const getProjects = () => async (dispatch) => {
-  const response = await axios.get(`${API_URL}/projects`);
-  const { projects: receivedProjects } = response.data;
-  const projects = receivedProjects.map(convertProject);
-  dispatch({ type: PROJECTS_SET, projects });
+  try {
+    const response = await axios.get(`${API_URL}/projects`);
+    const { projects: receivedProjects } = response.data;
+    const projects = receivedProjects.map(convertProject);
+    return dispatch({ type: PROJECTS_SET, projects });
+  } catch (err) {
+    return dispatch(
+      setErrorSnackbar(
+        err.response.data.message || "Unable to retrieve projects"
+      )
+    );
+  }
 };
 
 export const getProject = (projectId) => async (dispatch) => {
-  const response = await axios.get(`${API_URL}/projects/${projectId}`);
-  const { project: receivedProject } = response.data;
-  const project = convertProject(receivedProject);
-  dispatch({ type: PROJECT_SET, project });
+  try {
+    const response = await axios.get(`${API_URL}/projects/${projectId}`);
+    const { project: receivedProject } = response.data;
+    const project = convertProject(receivedProject);
+    return dispatch({ type: PROJECT_SET, project });
+  } catch (err) {
+    return dispatch(
+      setErrorSnackbar(
+        err.response.data.message || "Unable to retrieve the project"
+      )
+    );
+  }
 };

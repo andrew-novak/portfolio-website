@@ -30,25 +30,29 @@ const editProject =
     const mediaDataUrls = await mediaBlobsToDataUrls(clientLocalUrls);
 
     const idToken = localStorage.getItem("idToken");
-    const response = await axios.post(
-      `${API_URL}/admin/projects/${id}`,
-      {
-        title,
-        description,
-        mediaFilenames: serverFilenames,
-        mediaDataUrls,
-      },
-      {
-        headers: { Authorization: "Bearer " + idToken },
-      }
-    );
 
-    if (response.status !== 200) {
-      return dispatch(setErrorSnackbar("Project edit failed"));
+    try {
+      const response = await axios.post(
+        `${API_URL}/admin/projects/${id}`,
+        {
+          title,
+          description,
+          mediaFilenames: serverFilenames,
+          mediaDataUrls,
+        },
+        {
+          headers: { Authorization: "Bearer " + idToken },
+        }
+      );
+      dispatch(setSuccessSnackbar("Project has been edited"));
+      return onSuccessRedirect();
+    } catch (err) {
+      return dispatch(
+        setErrorSnackbar(
+          err.response.data.message || "Unable to edit the project"
+        )
+      );
     }
-
-    dispatch(setSuccessSnackbar("Project edited"));
-    onSuccessRedirect();
   };
 
 export default editProject;

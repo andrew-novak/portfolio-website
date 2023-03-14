@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { Container, Button, Typography } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import { connect } from "react-redux";
 
@@ -9,11 +10,12 @@ import { getProjects } from "actions/projects";
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
+import Intro from "components/Intro";
 import GeometryPattern from "components/GeometryPattern";
 import ProjectsGrid from "components/ProjectsGrid";
 import Footer from "components/Footer";
 
-const HomeScreen = ({ projects, getProjects }) => {
+const HomeScreen = ({ isAdminLoggedIn, projects, getProjects }) => {
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -32,39 +34,7 @@ const HomeScreen = ({ projects, getProjects }) => {
           }}
         >
           {/* Intro Section */}
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "flex-start",
-              backgroundColor: "#e6d49e",
-            }}
-          >
-            <Container
-              maxWidth="xl"
-              disableGutters
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <GeometryPattern color1="#393939" color2="#e6d49e" />
-              <div style={{ display: "flex", translate: "-80px 35px" }}>
-                <div
-                  style={{
-                    height: 200,
-                    width: 200,
-                    borderRadius: "100%",
-                    background: "blue",
-                    marginRight: 16,
-                  }}
-                />
-                <Typography variant="p" sx={{ fontSize: 30 }}>
-                  Elo sdadsadasd
-                </Typography>
-              </div>
-            </Container>
-          </div>
+          <Intro />
           {/* Projects Section */}
           <Container
             maxWidth="xl"
@@ -87,12 +57,14 @@ const HomeScreen = ({ projects, getProjects }) => {
                 }}
               >
                 <Typography variant="h4">My Projects:</Typography>
-                <Button
-                  startIcon={<AddIcon />}
-                  onClick={() => navigate("/create-project")}
-                >
-                  Add Project
-                </Button>
+                {isAdminLoggedIn && (
+                  <Button
+                    startIcon={<AddIcon />}
+                    onClick={() => navigate("/create-project")}
+                  >
+                    Add Project
+                  </Button>
+                )}
               </div>
             </div>
             <ProjectsGrid
@@ -108,8 +80,9 @@ const HomeScreen = ({ projects, getProjects }) => {
 };
 
 const mapState = (state) => {
+  const { isAdminLoggedIn } = state.adminAuth;
   const { projects } = state;
-  return { projects };
+  return { isAdminLoggedIn, projects };
 };
 
 export default connect(mapState, { getProjects })(HomeScreen);

@@ -18,16 +18,16 @@ const logRequestBody = (body) => {
     }),
   });
 };
-const successLog = (id, title) =>
+const logSuccess = (id, title) =>
   logger.debug(
     `${utf8Chars.checkMark} updated project { id: ${id} title: ${title} }`
   );
-const failureLog = (err) => {
+const logFailure = (err) => {
   logger.error(`${utf8Chars.xMark} no project updated, error occured:`);
   logger.error(err);
 };
 // client-side messages
-const failureMessage = "An error occurred during a product update";
+const messageFailure = "An error occurred during a product update";
 
 /*
 example project in db:
@@ -65,13 +65,13 @@ const editProject = async (req, res, next) => {
       { id: projectId },
       { title, description, mediaFilenames }
     );
-    successLog(projectId, title);
+    logSuccess(projectId, title);
     res.status(200).json({});
   } catch (err) {
     // remove added filenames
     mediaDirs.removeMediaFiles(projectId, newMediaFilenames);
-    failureLog(err);
-    res.status(500).json({ message: failureMessage });
+    logFailure(err);
+    res.status(500).json({ message: messageFailure });
   }
 };
 

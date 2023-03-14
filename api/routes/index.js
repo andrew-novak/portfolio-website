@@ -4,6 +4,7 @@ const { body, param } = require("express-validator");
 const handleValidationErrors = require("../expressValidator/handleValidationErrors");
 // subroutes
 const mediaDirs = require("../localFiles/mediaDirs");
+const getIntroRoute = require("./getIntro");
 const projectsRoute = require("./projects");
 const sendEmailRoute = require("./sendEmail");
 const adminRoute = require("./admin");
@@ -30,6 +31,8 @@ if (NODE_ENV === "development") {
   router.use("/media", require("serve-index")(mediaRoot));
   router.use("/media", express.static(mediaRoot));
 }
+
+router.get("/intro", getIntroRoute);
 
 router.use("/projects", projectsRoute);
 

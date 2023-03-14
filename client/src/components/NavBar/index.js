@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { logout } from "actions/admin/auth";
 import HomeButton from "./HomeButton";
 
-const NavBar = ({ isAdminMode, logout }) => {
+const NavBar = ({ isAdminLoggedIn, logout }) => {
   const theme = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const NavBar = ({ isAdminMode, logout }) => {
           >
             Contact
           </Button>
-          {isAdminMode && (
+          {isAdminLoggedIn && (
             <Button
               startIcon={
                 <LogoutIcon style={{ width: iconSize, height: iconSize }} />
@@ -59,8 +59,8 @@ const NavBar = ({ isAdminMode, logout }) => {
 };
 
 const mapState = (state) => {
-  const isAdminMode = state.adminAuth.isLoggedIn;
-  return { isAdminMode };
+  const { isAdminLoggedIn } = state.adminAuth;
+  return { isAdminLoggedIn };
 };
 
 export default connect(mapState, { logout })(NavBar);

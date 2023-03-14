@@ -5,6 +5,10 @@ export const CLOSE_SNACKBAR = "CLOSE_SNACKBAR";
 
 export const ADMIN_AUTH_SET_IS_LOGGED_IN = "ADMIN_AUTH_SET_IS_LOGGED_IN";
 
+export const INTRO_SET = "INTRO_SET";
+export const INTRO_SET_IMAGE = "INTRO_SET_IMAGE";
+export const INTRO_SET_TEXT = "INTRO_SET_TEXT";
+
 export const PROJECTS_SET = "PROJECTS_SET";
 
 export const PROJECT_SET = "PROJECT_SET";

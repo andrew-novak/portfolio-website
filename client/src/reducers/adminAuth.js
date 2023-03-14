@@ -1,7 +1,7 @@
 import { ADMIN_AUTH_SET_IS_LOGGED_IN } from "constants/actionTypes";
 
 const initialState = {
-  isLoggedIn: false,
+  isAdminLoggedIn: false,
 };
 
 const adminAuth = (state = initialState, action) => {
@@ -9,7 +9,7 @@ const adminAuth = (state = initialState, action) => {
     case ADMIN_AUTH_SET_IS_LOGGED_IN:
       return {
         ...state,
-        isLoggedIn: action.isLoggedIn,
+        isAdminLoggedIn: action.isAdminLoggedIn,
       };
 
     default:

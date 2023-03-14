@@ -6,7 +6,6 @@ import { WEBSITE_NAME } from "../constants/general";
 
 const Footer = ({ maxWidth }) => {
   const theme = useTheme();
-  console.log("maxWidth:", typeof maxWidth);
   return (
     <div
       style={{

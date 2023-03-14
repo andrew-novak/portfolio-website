@@ -16,16 +16,16 @@ const logRequestBody = (body) => {
     }),
   });
 };
-const successLog = (id, title) =>
+const logSuccess = (id, title) =>
   logger.debug(
     `${utf8Chars.checkMark} created project { id: ${id} title: ${title} }`
   );
-const failureLog = (err) => {
+const logFailure = (err) => {
   logger.error(`${utf8Chars.xMark} no project created, error occured:`);
   logger.error(err);
 };
 // client-side messages
-const failureMessage = "An error occurred during a product creation";
+const messageFailure = "An error occurred during a product creation";
 
 /*
 example project in db:
@@ -51,11 +51,11 @@ const createProject = async (req, res, next) => {
       description,
       mediaFilenames,
     });
-    successLog(projectId, title);
+    logSuccess(projectId, title);
     res.status(200).json({});
   } catch (err) {
-    failureLog(err);
-    res.status(500).json({ message: failureMessage });
+    logFailure(err);
+    res.status(500).json({ message: messageFailure });
   }
 };
 

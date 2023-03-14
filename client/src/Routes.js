@@ -12,21 +12,22 @@ import { retrieveIdToken } from "actions/admin/auth";
 import HomeScreen from "screens/HomeScreen";
 import ViewProjectScreen from "screens/ViewProjectScreen";
 import ContactScreen from "screens/ContactScreen";
+import IntroSettingsScreen from "screens/IntroSettingsScreen";
 import ProjectSettingsScreen from "screens/ProjectSettingsScreen";
 import AdminLoginScreen from "screens/AdminLoginScreen";
 import NotFoundScreen from "screens/NotFoundScreen";
 
-const AuthOnly = ({ isLoggedIn, children }) => {
-  if (isLoggedIn) return children;
+const AuthOnly = ({ isAdminLoggedIn, children }) => {
+  if (isAdminLoggedIn) return children;
   return <Navigate to="/admin" />;
 };
 
-const UnauthOnly = ({ isLoggedIn, children }) => {
-  if (!isLoggedIn) return children;
+const UnauthOnly = ({ isAdminLoggedIn, children }) => {
+  if (!isAdminLoggedIn) return children;
   return <Navigate to="/" />;
 };
 
-const Routes = ({ isLoggedIn, resetState, retrieveIdToken }) => {
+const Routes = ({ isAdminLoggedIn, resetState, retrieveIdToken }) => {
   const location = useLocation();
 
   useEffect(() => {
@@ -40,10 +41,19 @@ const Routes = ({ isLoggedIn, resetState, retrieveIdToken }) => {
       <Route path="/project/:projectId" exact element={<ViewProjectScreen />} />
       <Route path="/contact" exact element={<ContactScreen />} />
       <Route
+        path="/edit-intro"
+        exact
+        element={
+          <AuthOnly isAdminLoggedIn={isAdminLoggedIn}>
+            <IntroSettingsScreen />
+          </AuthOnly>
+        }
+      />
+      <Route
         path="/create-project"
         exact
         element={
-          <AuthOnly isLoggedIn={isLoggedIn}>
+          <AuthOnly isAdminLoggedIn={isAdminLoggedIn}>
             <ProjectSettingsScreen />
           </AuthOnly>
         }
@@ -52,7 +62,7 @@ const Routes = ({ isLoggedIn, resetState, retrieveIdToken }) => {
         path="/edit-project/:projectId"
         exact
         element={
-          <AuthOnly isLoggedIn={isLoggedIn}>
+          <AuthOnly isAdminLoggedIn={isAdminLoggedIn}>
             <ProjectSettingsScreen />
           </AuthOnly>
         }
@@ -61,7 +71,7 @@ const Routes = ({ isLoggedIn, resetState, retrieveIdToken }) => {
         path="/admin"
         exact
         element={
-          <UnauthOnly isLoggedIn={isLoggedIn}>
+          <UnauthOnly isAdminLoggedIn={isAdminLoggedIn}>
             <AdminLoginScreen />
           </UnauthOnly>
         }
@@ -72,8 +82,8 @@ const Routes = ({ isLoggedIn, resetState, retrieveIdToken }) => {
 };
 
 const mapState = (state) => {
-  const { isLoggedIn } = state.adminAuth;
-  return { isLoggedIn };
+  const { isAdminLoggedIn } = state.adminAuth;
+  return { isAdminLoggedIn };
 };
 
 export default connect(mapState, { resetState, retrieveIdToken })(Routes);

@@ -112,7 +112,7 @@ const Media = ({ mediaUrls, description, dimensionProps }) => {
 };
 
 const ViewProjectScreen = ({
-  isAdminMode,
+  isAdminLoggedIn,
   project,
   getProject,
   removeProject,
@@ -171,7 +171,7 @@ const ViewProjectScreen = ({
             {project.title || ""}
           </Typography>
           {/* Admin Buttons */}
-          {isAdminMode && (
+          {isAdminLoggedIn && (
             <div
               style={{
                 width: "100%",
@@ -208,9 +208,9 @@ const ViewProjectScreen = ({
 };
 
 const mapState = (state) => {
-  const isAdminMode = state.adminAuth.isLoggedIn;
+  const { isAdminLoggedIn } = state.adminAuth;
   const { project } = state;
-  return { isAdminMode, project };
+  return { isAdminLoggedIn, project };
 };
 
 export default connect(mapState, { getProject, removeProject })(

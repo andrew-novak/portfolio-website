@@ -6,31 +6,27 @@ const utf8Chars = require("../../constants/utf8Chars");
 const logger = require("../../debug/logger");
 
 // server-side logs
-const authenticateFailureLog = (err) =>
-  logger.debug(
-    `${
-      utf8Chars.xMark
-    } passport.authenticate error during admin login attempt:\n${JSON.stringify(
-      err
-    )}`
+const logAuthFailure = (err) => {
+  logger.error(
+    `${utf8Chars.xMark} passport.authenticate error during admin login attempt:`
   );
-const loginFailureLog = (err) =>
-  logger.debug(
-    `${
-      utf8Chars.xMark
-    } passport.authenticate's req.login error during admin login attempt:\n${JSON.stringify(
-      err
-    )}`
+  logger.error(err);
+};
+const logLoginFailure = (err) => {
+  logger.error(
+    `${utf8Chars.xMark} passport.authenticate's req.login error during admin login attempt:`
   );
-const adminNotFoundLog = () =>
+  logger.error(err);
+};
+const logAdminNotFound = () =>
   logger.debug(
     `${utf8Chars.xMark} failed admin login: admin with given credentials not found`
   );
-const adminFoundLog = () =>
+const logAdminFound = () =>
   logger.debug(
     `${utf8Chars.checkMark} admin with given credentials found, logging in...`
   );
-const adminLoggedInLog = () =>
+const logAdminLoggedIn = () =>
   logger.debug(
     `${utf8Chars.checkMark} admin successfully logged in, sending token id to the client...`
   );
@@ -38,24 +34,24 @@ const adminLoggedInLog = () =>
 const loginRoute = (req, res, next) => {
   passport.authenticate("local", (err, admin, info) => {
     if (err) {
-      failureLog(err);
+      logAuthFailure(err);
       return res.status(500).json(null);
     }
 
     if (!admin) {
-      adminNotFoundLog();
+      logAdminNotFound();
       return res.status(400).json(null);
     }
+    logAdminFound();
 
-    adminFoundLog();
     req.login(admin, (err) => {
       if (err) {
-        logger.error(err);
+        logLoginFailure(err);
         return res.status(500).json(null);
       }
 
       const idToken = jwt.sign({ adminId: admin._id }, JWT_SECRET);
-      adminLoggedInLog();
+      logAdminLoggedIn();
       res.status(200).json({ idToken });
     });
   })(req, res, next);

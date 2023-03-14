@@ -24,35 +24,32 @@ media - array of objects e.g. [
 */
 const createProject =
   (title, description, mediaList, onSuccessRedirect) => async (dispatch) => {
-    //dispatch(validate(title, description, mediaList));
-
-    const idToken = localStorage.getItem("idToken");
-
     const { clientLocalUrls = [] } = splitMediaList(mediaList);
     const mediaDataUrls = await mediaBlobsToDataUrls(clientLocalUrls);
 
-    const response = await axios.post(
-      `${API_URL}/admin/projects`,
-      {
-        title,
-        description,
-        mediaDataUrls,
-        /*mediaList: mediaList.map(({ serverFilename, clientLocalUrl }) => ({
-        serverFilename,
-        clientLocalUrl,
-      })),*/
-      },
-      {
-        headers: { Authorization: "Bearer " + idToken },
-      }
-    );
+    const idToken = localStorage.getItem("idToken");
 
-    if (response.status !== 200) {
-      return dispatch(setErrorSnackbar("Project creation failed"));
+    try {
+      const response = await axios.post(
+        `${API_URL}/admin/projects`,
+        {
+          title,
+          description,
+          mediaDataUrls,
+        },
+        {
+          headers: { Authorization: "Bearer " + idToken },
+        }
+      );
+      dispatch(setSuccessSnackbar("Project has been created"));
+      return onSuccessRedirect();
+    } catch (err) {
+      return dispatch(
+        setErrorSnackbar(
+          err.response.data.message || "Unable to create the project"
+        )
+      );
     }
-
-    dispatch(setSuccessSnackbar("Project created"));
-    onSuccessRedirect();
   };
 
 export default createProject;

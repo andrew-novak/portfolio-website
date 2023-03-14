@@ -1,7 +1,7 @@
 import axios from "axios";
 
-import { setErrorSnackbar, setSuccessSnackbar } from "actions/snackbar";
 import { API_URL } from "constants/urls";
+import { setErrorSnackbar, setSuccessSnackbar } from "actions/snackbar";
 
 const sendEmail =
   ({ clientEmail, message, onSuccessRedirect }) =>
