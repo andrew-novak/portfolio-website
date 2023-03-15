@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import resetState from "actions/resetState";
 import { retrieveIdToken } from "actions/admin/auth";
 import HomeScreen from "screens/HomeScreen";
-import ViewProjectScreen from "screens/ViewProjectScreen";
+import ProjectViewScreen from "screens/ProjectViewScreen";
 import ContactScreen from "screens/ContactScreen";
 import IntroSettingsScreen from "screens/IntroSettingsScreen";
 import ProjectSettingsScreen from "screens/ProjectSettingsScreen";
@@ -38,7 +38,7 @@ const Routes = ({ isAdminLoggedIn, resetState, retrieveIdToken }) => {
   return (
     <RouterRoutes>
       <Route path="/" exact element={<HomeScreen />} />
-      <Route path="/project/:projectId" exact element={<ViewProjectScreen />} />
+      <Route path="/project/:projectId" exact element={<ProjectViewScreen />} />
       <Route path="/contact" exact element={<ContactScreen />} />
       <Route
         path="/edit-intro"

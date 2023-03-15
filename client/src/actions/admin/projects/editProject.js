@@ -44,7 +44,7 @@ const editProject =
           headers: { Authorization: "Bearer " + idToken },
         }
       );
-      dispatch(setSuccessSnackbar("Project has been edited"));
+      dispatch(setSuccessSnackbar("Project edited"));
       return onSuccessRedirect();
     } catch (err) {
       return dispatch(

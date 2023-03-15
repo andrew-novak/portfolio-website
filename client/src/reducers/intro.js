@@ -1,11 +1,13 @@
 import {
   INTRO_SET,
+  INTRO_SET_DIALOG_IMAGE,
   INTRO_SET_IMAGE,
   INTRO_SET_TEXT,
 } from "constants/actionTypes";
 
 const initialState = {
-  image: "",
+  dialogImage: null,
+  image: null,
   text: "",
 };
 
@@ -15,6 +17,12 @@ const intro = (state = initialState, action) => {
       return {
         image: action.image,
         text: action.text,
+      };
+
+    case INTRO_SET_DIALOG_IMAGE:
+      return {
+        ...state,
+        dialogImage: action.dialogImage,
       };
 
     case INTRO_SET_IMAGE:

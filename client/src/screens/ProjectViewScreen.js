@@ -87,7 +87,7 @@ const Media = ({ mediaUrls, description, dimensionProps }) => {
                   backgroundColor: "white",
                   backgroundImage: `url(${url})`,
                   backgroundSize: "cover",
-                  boxShadow: isVeryMobile ? 0 : 12,
+                  boxShadow: isVeryMobile ? 0 : 6,
                 }}
               />
             </div>
@@ -111,7 +111,7 @@ const Media = ({ mediaUrls, description, dimensionProps }) => {
   );
 };
 
-const ViewProjectScreen = ({
+const ProjectViewScreen = ({
   isAdminLoggedIn,
   project,
   getProject,
@@ -214,5 +214,5 @@ const mapState = (state) => {
 };
 
 export default connect(mapState, { getProject, removeProject })(
-  ViewProjectScreen
+  ProjectViewScreen
 );

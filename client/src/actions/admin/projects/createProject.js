@@ -41,7 +41,7 @@ const createProject =
           headers: { Authorization: "Bearer " + idToken },
         }
       );
-      dispatch(setSuccessSnackbar("Project has been created"));
+      dispatch(setSuccessSnackbar("Project created"));
       return onSuccessRedirect();
     } catch (err) {
       return dispatch(

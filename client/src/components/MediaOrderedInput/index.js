@@ -22,68 +22,6 @@ const MediaOrderedInput = ({
   const isMd = useMediaQuery(theme.breakpoints.up("md"));
   const isSm = useMediaQuery(theme.breakpoints.up("sm"));
 
-  /*
-  {
-    mediaList.map(
-      ({ clientLocalUrl, clientMimeType, serverFilename, coverUrl }, index) => {
-        if (serverFilename) {
-          return display;
-        }
-
-        const serverUrl = serverFilename
-          ? getMedia.oneProjectFileUrl(projectId, serverFilename)
-          : null;
-        const serverExtension = serverFilename
-          ? serverFilename.split(".").pop()
-          : null;
-
-        const url = serverUrl ? serverUrl : clientLocalUrl;
-
-        const Image = ({ url }) => (
-          <div
-            src={url}
-            style={{
-              backgroundImage: `url(${url})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              width: "100%",
-              height: "100%",
-              backgroundColor: "red",
-            }}
-          />
-        );
-
-        if (serverFilename) {
-          return (
-            <MediaItem key={index}>
-              {shouldDisplayImage(serverExtension, clientMimeType) && (
-                <Image url={url} />
-              )}
-              {shouldDisplayVideo(serverExtension, clientMimeType) && (
-                <Image url={coverUrl} />
-              )}
-            </MediaItem>
-          );
-        }
-
-        console.log("ESSA BYQU");
-        console.log(shouldDisplayImage(serverExtension, clientMimeType));
-        console.log(shouldDisplayVideo(serverExtension, clientMimeType));
-
-        return (
-          <MediaItem key={index}>
-            {shouldDisplayImage(serverExtension, clientMimeType) && (
-              <Image url={url} />
-            )}
-            {shouldDisplayVideo(serverExtension, clientMimeType) && (
-              <Image url={coverUrl} />
-            )}
-          </MediaItem>
-        );
-      }
-    );
-  }*/
-
   const imageUrls = mediaList.map((mediaObj, index) => {
     const {
       serverFilename,
@@ -131,7 +69,6 @@ const MediaOrderedInput = ({
             />
           </MediaItem>
         ))}
-        {/*<UploadMediaDropzone onDrop={(files) => mediaDialog.open(files)} />*/}
         <UploadMediaDropzone onDrop={(files) => openMediaDialog(files)} />
       </MediaContainer>
     </>
