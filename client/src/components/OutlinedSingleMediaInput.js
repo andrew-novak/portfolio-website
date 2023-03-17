@@ -4,7 +4,7 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 import useWindowDimensions from "hooks/useWindowDimensions";
 
-const MediaSingleInput = ({ title, image, onFileUpload }) => {
+const OutlinedSingleMediaInput = ({ title, image, onFileUpload }) => {
   const { width: windowWidth } = useWindowDimensions();
   const [isHover, setIsHover] = useState(false);
   const theme = useTheme();
@@ -25,7 +25,7 @@ const MediaSingleInput = ({ title, image, onFileUpload }) => {
         sx={{
           ...theme.custom.styles.inputLabel,
           borderBottom: `solid 1px ${outlineColor}`,
-          padding: "16.5px 14px",
+          padding: theme.custom.cssProps.outlinePadding,
         }}
       >
         Image
@@ -48,7 +48,7 @@ const MediaSingleInput = ({ title, image, onFileUpload }) => {
           sx={{
             borderTopLeftRadius: 0,
             borderTopRightRadius: 0,
-            padding: "16.5px 14px",
+            padding: theme.custom.cssProps.outlinePadding,
           }}
         >
           Upload File
@@ -59,4 +59,4 @@ const MediaSingleInput = ({ title, image, onFileUpload }) => {
   );
 };
 
-export default MediaSingleInput;
+export default OutlinedSingleMediaInput;

@@ -25,6 +25,14 @@ const theme = createTheme({
       section: 8,
       element: 2,
     },
+    selectionBorderWidth: 2,
+    heightPercentRatios: {
+      "1:1": "100%",
+      "4:3": "75%",
+      "3:2": "66.6%",
+      "16:9": "56.25%",
+    },
+
     colors: {
       activityInactive: "rgb(184, 184, 184)",
       activity: "rgb(94, 126, 133)",
@@ -35,6 +43,7 @@ const theme = createTheme({
     },
     cssProps: {
       outlineBorderRadius: "4px",
+      outlinePadding: "14px",
     },
     muiProps: {
       largeTitleVariant: "h3",
@@ -46,14 +55,18 @@ const theme = createTheme({
         fontSize: "1rem",
         lineHeight: "1.4375em",
         letterSpacing: "0.00938em",
+        padding: "14px",
+        /*
+        padding: "16.5px 14px",
+        margin: 0,
+        height: "23px",
+        wordSpacing: "normal",
+        lineHeight: "normal",
+        textTransform: "none",
+        textIndent: "0px",
+        textShadow: "none",
+        */
       },
-    },
-    selectionBorderWidth: 2,
-    heightPercentRatios: {
-      "1:1": "100%",
-      "4:3": "75%",
-      "3:2": "66.6%",
-      "16:9": "56.25%",
     },
   },
 });

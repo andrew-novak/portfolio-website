@@ -15,8 +15,9 @@ import {
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
-import Footer from "components/Footer";
+import OutlinedColorPicker from "components/OutlinedColorPicker";
 import MediaOrderedInput from "components/MediaOrderedInput";
+import Footer from "components/Footer";
 
 const ProjectSettingsScreen = ({
   title,
@@ -77,8 +78,11 @@ const ProjectSettingsScreen = ({
               label="Description"
               value={description}
               fullWidth
+              multiline
               onChange={(event) => setDescription(event.target.value)}
             />
+            <OutlinedColorPicker label="Color 1" fullWidth />
+            <OutlinedColorPicker label="Color 2" fullWidth />
             <Container
               onMouseEnter={() => setIsHover(true)}
               onMouseLeave={() => setIsHover(false)}
@@ -98,12 +102,7 @@ const ProjectSettingsScreen = ({
                   borderBottom: `solid 1px ${outlineColor}`,
                 }}
               >
-                <Typography
-                  sx={{
-                    ...theme.custom.styles.inputLabel,
-                    padding: "16.5px 14px",
-                  }}
-                >
+                <Typography sx={theme.custom.styles.inputLabel}>
                   Media
                 </Typography>
               </div>

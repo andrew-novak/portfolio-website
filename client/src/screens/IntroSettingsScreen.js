@@ -14,7 +14,8 @@ import NavBar from "components/NavBar";
 import Content from "components/Content";
 import DialogImageCrop from "components/MediaOrderedInput/MediaDialogs/DialogImageCrop";
 import Intro from "components/Intro";
-import MediaSingleInput from "components/MediaSingleInput";
+import OutlinedColorPicker from "components/OutlinedColorPicker";
+import OutlinedSingleMediaInput from "components/OutlinedSingleMediaInput";
 import Footer from "components/Footer";
 
 const IntroSettingsScreen = ({
@@ -98,7 +99,15 @@ const IntroSettingsScreen = ({
                 gap: theme.spacing(3),
               }}
             >
-              <div style={{ width: "100%", maxWidth: isMobile && 400 }}>
+              <div
+                style={{
+                  width: "100%",
+                  maxWidth: isMobile && 400,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: theme.spacing(3),
+                }}
+              >
                 <TextField
                   label="Text"
                   value={text}
@@ -106,8 +115,10 @@ const IntroSettingsScreen = ({
                   multiline
                   onChange={(event) => setText(event.target.value)}
                 />
+                <OutlinedColorPicker label="Primary Color" />
+                <OutlinedColorPicker label="Secondary Color" />
               </div>
-              <MediaSingleInput
+              <OutlinedSingleMediaInput
                 title="Image"
                 image={image.serverUrl || image.clientLocalUrl}
                 onFileUpload={(event) => openImageDialog(event.target.files)}
