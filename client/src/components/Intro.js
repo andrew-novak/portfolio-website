@@ -1,6 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
-import { Container, Button, Typography, TextField } from "@mui/material";
+import {
+  useMediaQuery,
+  Container,
+  Button,
+  Typography,
+  TextField,
+} from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import EditIcon from "@mui/icons-material/Edit";
 import { connect } from "react-redux";
@@ -13,22 +19,48 @@ import Content from "components/Content";
 import GeometryPattern from "components/GeometryPattern";
 import Footer from "components/Footer";
 
-const Intro = ({ isPreview, isAdminLoggedIn, image, text, editIntro }) => {
+const Intro = ({ hideEditButton, isAdminLoggedIn, image, text, editIntro }) => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const isSmallerThan1600 = useMediaQuery("(min-width:1600px)");
   const { width: windowWidth } = useWindowDimensions();
   const imageSize = 200;
   const separatingMargin = 24;
   const isMobile = windowWidth < 700;
   const isLargeScreen = windowWidth > 1000;
   return (
-    <div>
+    <div style={{ position: "relative" }}>
+      {/* Edit Button Section (Admin-Accessible) */}
+      <div style={{ position: "absolute", width: "100%", zIndex: 5 }}>
+        <Container maxWidth="xl" disableGutters={isSmallerThan1600} sx={{}}>
+          <div
+            style={{
+              marginTop: theme.spacing(1),
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            {isAdminLoggedIn && (
+              <Button
+                disabled={hideEditButton}
+                startIcon={<EditIcon />}
+                sx={{ display: hideEditButton && "none" }}
+                onClick={() => navigate("/edit-intro")}
+              >
+                Edit Intro
+              </Button>
+            )}
+          </div>
+        </Container>
+      </div>
+      {/* Secton Visible to Clients */}
       <div
         style={{
           width: "100%",
           display: "flex",
           justifyContent: "flex-start",
           backgroundColor: "#e6d49e",
+          position: "relative",
         }}
       >
         <Container
@@ -56,7 +88,9 @@ const Intro = ({ isPreview, isAdminLoggedIn, image, text, editIntro }) => {
                 width: imageSize,
                 borderRadius: "100%",
                 backgroundColor: "white",
-                backgroundImage: `url(${image})`,
+                backgroundImage:
+                  (image.serverUrl && `url(${image.serverUrl})`) ||
+                  (image.clientLocalUrl && `url(${image.clientLocalUrl})`),
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 marginRight: separatingMargin,
@@ -74,7 +108,6 @@ const Intro = ({ isPreview, isAdminLoggedIn, image, text, editIntro }) => {
                       fontSize: isLargeScreen ? 40 : 30,
                       height: "100%",
                       width: "100%",
-
                       overflow: "hidden",
                     }}
                     style={{ maxWidth: 600 }}
@@ -85,6 +118,7 @@ const Intro = ({ isPreview, isAdminLoggedIn, image, text, editIntro }) => {
               </div>
             )}
           </div>
+          {/*
           <div
             style={{
               //marginTop: theme.spacing(3),
@@ -98,15 +132,16 @@ const Intro = ({ isPreview, isAdminLoggedIn, image, text, editIntro }) => {
           >
             {isAdminLoggedIn && (
               <Button
-                disabled={isPreview}
+                disabled={hideEditButton}
                 startIcon={<EditIcon />}
-                sx={{ display: isPreview && "none" }}
+                sx={{ display: hideEditButton && "none" }}
                 onClick={() => navigate("/edit-intro")}
               >
                 Edit Intro
               </Button>
             )}
           </div>
+          */}
         </Container>
       </div>
       {isMobile && text && (

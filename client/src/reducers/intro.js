@@ -7,7 +7,14 @@ import {
 
 const initialState = {
   dialogImage: null,
-  image: null,
+  image: {},
+  /* example property keys:
+  image: {
+    serverFilename,
+    serverUrl,
+    clientLocalUrl,
+  }
+  */
   text: "",
 };
 
@@ -15,8 +22,8 @@ const intro = (state = initialState, action) => {
   switch (action.type) {
     case INTRO_SET:
       return {
-        image: action.image,
-        text: action.text,
+        image: action.image || initialState.image,
+        text: action.text || initialState.text,
       };
 
     case INTRO_SET_DIALOG_IMAGE:

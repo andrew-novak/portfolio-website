@@ -46,7 +46,7 @@ const createProject =
     } catch (err) {
       return dispatch(
         setErrorSnackbar(
-          err.response.data.message || "Unable to create the project"
+          err.response?.data?.message || "Unable to create the project"
         )
       );
     }

@@ -36,7 +36,9 @@ const ContactScreen = ({ sendEmail }) => {
               gap: theme.spacing(3),
             }}
           >
-            <Typography variant="h3">Send a message</Typography>
+            <Typography variant={theme.custom.muiProps.largeTitleVariant}>
+              Send a message
+            </Typography>
             <TextField
               label="Your Email"
               fullWidth
@@ -73,7 +75,7 @@ const ContactScreen = ({ sendEmail }) => {
           </Container>
         </div>
       </Content>
-      <Footer />
+      <Footer maxWidth="md" />
     </Screen>
   );
 };

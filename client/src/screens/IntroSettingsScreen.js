@@ -50,14 +50,18 @@ const IntroSettingsScreen = ({
           }}
         >
           <Typography
-            variant="h3"
+            variant={theme.custom.muiProps.largeTitleVariant}
             align={isMobile ? "center" : "left"}
             sx={{ paddingBottom: theme.spacing(3) }}
           >
             Edit Intro
           </Typography>
-          <Typography variant="h5" align={isMobile ? "center" : "left"}>
-            Preview:
+          <Typography
+            variant="h5"
+            align={isMobile ? "center" : "left"}
+            sx={theme.custom.styles.inputLabel}
+          >
+            Preview
           </Typography>
         </Container>
         <DialogImageCrop
@@ -69,7 +73,7 @@ const IntroSettingsScreen = ({
             setImage(croppedImageUrl, closeImageDialog)
           }
         />
-        <Intro isPreview={true} />
+        <Intro hideEditButton={true} />
         <div
           style={{
             paddingTop: theme.spacing(5),
@@ -105,7 +109,7 @@ const IntroSettingsScreen = ({
               </div>
               <MediaSingleInput
                 title="Image"
-                file={image}
+                image={image.serverUrl || image.clientLocalUrl}
                 onFileUpload={(event) => openImageDialog(event.target.files)}
               />
             </div>
@@ -119,7 +123,7 @@ const IntroSettingsScreen = ({
           </Container>
         </div>
       </Content>
-      <Footer />
+      <Footer maxWidth={isMobile ? 400 : "md"} />
     </Screen>
   );
 };

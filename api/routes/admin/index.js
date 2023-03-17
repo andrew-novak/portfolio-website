@@ -5,6 +5,7 @@ const { body, param } = require("express-validator");
 const logger = require("../../debug/logger");
 const handleValidationErrors = require("../../expressValidator/handleValidationErrors");
 const loginRoute = require("./login");
+const setIntroRoute = require("./setIntro");
 const createProjectRoute = require("./projects/create");
 const editProjectRoute = require("./projects/edit");
 const removeProjectRoute = require("./projects/remove");
@@ -35,6 +36,16 @@ router.use("/", (req, res, next) => {
     next();
   })(req, res, next);
 });
+
+router.post(
+  "/intro",
+  [
+    //body("imageDataUrl").isString().isLength({ min: 1 }),
+    body("text").isString().isLength({ min: 1, max: 400 }),
+  ],
+  handleValidationErrors,
+  setIntroRoute
+);
 
 router.post(
   "/projects",

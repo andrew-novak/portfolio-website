@@ -49,7 +49,7 @@ const editProject =
     } catch (err) {
       return dispatch(
         setErrorSnackbar(
-          err.response.data.message || "Unable to edit the project"
+          err.response?.data?.message || "Unable to edit the project"
         )
       );
     }

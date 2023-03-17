@@ -36,7 +36,7 @@ export const getProjects = () => async (dispatch) => {
   } catch (err) {
     return dispatch(
       setErrorSnackbar(
-        err.response.data.message || "Unable to retrieve projects"
+        err.response?.data?.message || "Unable to retrieve projects"
       )
     );
   }
@@ -51,7 +51,7 @@ export const getProject = (projectId) => async (dispatch) => {
   } catch (err) {
     return dispatch(
       setErrorSnackbar(
-        err.response.data.message || "Unable to retrieve the project"
+        err.response?.data?.message || "Unable to retrieve the project"
       )
     );
   }

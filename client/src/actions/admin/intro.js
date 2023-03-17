@@ -1,5 +1,6 @@
 import axios from "axios";
 
+import mediaBlobsToDataUrls from "helpers/mediaBlobsToDataUrls";
 import { API_URL } from "constants/urls";
 import {
   INTRO_SET_DIALOG_IMAGE,
@@ -31,8 +32,8 @@ export const closeImageDialog = () => (dispatch) => {
   dispatch({ type: INTRO_SET_DIALOG_IMAGE, dialogImage: null });
 };
 
-export const setImage = (image, closeDialog) => (dispatch) => {
-  dispatch({ type: INTRO_SET_IMAGE, image });
+export const setImage = (clientLocalUrl, closeDialog) => (dispatch) => {
+  dispatch({ type: INTRO_SET_IMAGE, image: { clientLocalUrl } });
   closeDialog();
 };
 
@@ -43,21 +44,27 @@ export const setText = (text) => (dispatch) => {
 export const editIntro =
   (image, text, onSuccessRedirect) => async (dispatch) => {
     const idToken = localStorage.getItem("idToken");
-    const response = await axios.post(
-      `${API_URL}/admin/intro`,
-      {
-        image,
-        text,
-      },
-      {
-        headers: { Authorization: "Bearer " + idToken },
-      }
-    );
 
-    if (response.status !== 200) {
-      return dispatch(setErrorSnackbar("Intro edit failed"));
+    const [imageDataUrl] = await mediaBlobsToDataUrls([image.clientLocalUrl]);
+
+    try {
+      const response = await axios.post(
+        `${API_URL}/admin/intro`,
+        {
+          ...(imageDataUrl && { imageDataUrl }),
+          ...(text && { text }),
+        },
+        {
+          headers: { Authorization: "Bearer " + idToken },
+        }
+      );
+      dispatch(setSuccessSnackbar("Intro edited"));
+      onSuccessRedirect();
+    } catch (err) {
+      return dispatch(
+        setErrorSnackbar(
+          err.response?.data?.message || "Unable to edit the intro"
+        )
+      );
     }
-
-    dispatch(setSuccessSnackbar("Intro edited"));
-    onSuccessRedirect();
   };

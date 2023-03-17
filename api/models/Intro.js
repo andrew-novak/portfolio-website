@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 
 const IntroSchema = new Schema({
-  image: String,
+  imageFilename: String,
   text: String,
 });
 

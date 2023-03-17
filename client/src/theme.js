@@ -29,6 +29,24 @@ const theme = createTheme({
       activityInactive: "rgb(184, 184, 184)",
       activity: "rgb(94, 126, 133)",
       //activity: "rgb(92, 92, 92)",
+      outline: "rgba(0, 0, 0, 0.23)",
+      outlineHover: "rgba(0, 0, 0, 0.87)",
+      inputLabel: "rgba(0, 0, 0, 0.6)",
+    },
+    cssProps: {
+      outlineBorderRadius: "4px",
+    },
+    muiProps: {
+      largeTitleVariant: "h3",
+    },
+    styles: {
+      inputLabel: {
+        color: "rgba(0, 0, 0, 0.6)",
+        fontWeight: 400,
+        fontSize: "1rem",
+        lineHeight: "1.4375em",
+        letterSpacing: "0.00938em",
+      },
     },
     selectionBorderWidth: 2,
     heightPercentRatios: {

@@ -18,14 +18,14 @@ const logRequestBody = (body) => {
 };
 const logSuccess = (id, title) =>
   logger.debug(
-    `${utf8Chars.checkMark} created project { id: ${id} title: ${title} }`
+    `${utf8Chars.checkMark} project created { id: ${id} title: ${title} }`
   );
 const logFailure = (err) => {
   logger.error(`${utf8Chars.xMark} no project created, error occured:`);
   logger.error(err);
 };
 // client-side messages
-const messageFailure = "An error occurred during a product creation";
+const messageFailure = "Unable to create the project";
 
 /*
 example project in db:
@@ -42,8 +42,8 @@ const createProject = async (req, res, next) => {
   const { title, description, mediaDataUrls } = req.body;
   const projectId = await Project.getNextId();
   const projectOrder = await Project.getNextOrder();
-  const mediaFilenames = await saveProjectMedia(projectId, mediaDataUrls);
   try {
+    const mediaFilenames = await saveProjectMedia(projectId, mediaDataUrls);
     await Project.create({
       id: projectId,
       order: projectOrder,

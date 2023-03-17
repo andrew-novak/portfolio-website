@@ -1,4 +1,5 @@
 import React, { Children, useRef, useState, useEffect } from "react";
+import { useTheme } from "@mui/material/styles";
 
 import { MediaItemContext } from "./MediaItem";
 
@@ -104,9 +105,6 @@ const MediaContainer = ({
         position: "relative",
         display: "flex",
         flexWrap: "wrap",
-        borderStyle: "solid",
-        borderColor: "#dadada",
-        borderWidth: 1,
       }}
     >
       {Children.map(children, (child, childIndex) => {

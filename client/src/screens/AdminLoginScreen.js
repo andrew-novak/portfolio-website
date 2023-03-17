@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Typography, TextField, Link, Button } from "@mui/material";
+import { useTheme, Typography, TextField, Link, Button } from "@mui/material";
 import { connect } from "react-redux";
 
 import { login } from "actions/admin/auth";
@@ -10,6 +10,7 @@ import Content from "components/Content";
 import Footer from "components/Footer";
 
 const AdminLoginScreen = ({ login }) => {
+  const theme = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -34,7 +35,10 @@ const AdminLoginScreen = ({ login }) => {
               flexDirection: "column",
             }}
           >
-            <Typography variant="h3" align="center">
+            <Typography
+              variant={theme.custom.muiProps.largeTitleVariant}
+              align="center"
+            >
               Admin
             </Typography>
             <TextField

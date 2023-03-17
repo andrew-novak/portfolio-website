@@ -43,6 +43,11 @@ const removeProjectDir = async (projectId) => {
     });
 };
 
+const removeIntroImage = async (filename) => {
+  const imagePath = path.join(mediaRoot, filename);
+  await fs.promises.rm(imagePath);
+};
+
 const removeMediaFile = async (projectId, filename) => {
   const projectDir = getProjectPath(projectId);
   const mediaPath = path.join(projectDir, filename);
@@ -63,6 +68,7 @@ module.exports = {
   getProjectPath,
   isThereProjectDir,
   createProjectDir,
+  removeIntroImage,
   removeProjectDir,
   removeMediaFile,
   removeMediaFiles,

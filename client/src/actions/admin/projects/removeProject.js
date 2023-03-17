@@ -14,7 +14,7 @@ const projectRemove = (id, onSuccessRedirect) => async (dispatch) => {
   } catch (err) {
     return dispatch(
       setErrorSnackbar(
-        err.response.data.message || "Unable to remove the project"
+        err.response?.data?.message || "Unable to remove the project"
       )
     );
   }

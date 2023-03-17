@@ -27,7 +27,7 @@ const logFailure = (err) => {
   logger.error(err);
 };
 // client-side messages
-const messageFailure = "An error occurred during a product update";
+const messageFailure = "Unable to edit the project";
 
 /*
 example project in db:
@@ -50,17 +50,18 @@ const editProject = async (req, res, next) => {
     mediaFilenames: oldMediaFilenames,
     mediaDataUrls,
   } = req.body;
-  // TODO: add media deletion
-  const newMediaFilenames = await saveProjectMedia(
-    projectId,
-    mediaDataUrls,
-    oldMediaFilenames
-  );
-  const mediaFilenames = mergeMediaFilenames(
-    newMediaFilenames,
-    oldMediaFilenames
-  );
+  let newMediaFilenames = [];
   try {
+    // TODO: add media deletion
+    newMediaFilenames = await saveProjectMedia(
+      projectId,
+      mediaDataUrls,
+      oldMediaFilenames
+    );
+    const mediaFilenames = mergeMediaFilenames(
+      newMediaFilenames,
+      oldMediaFilenames
+    );
     await Project.updateOne(
       { id: projectId },
       { title, description, mediaFilenames }

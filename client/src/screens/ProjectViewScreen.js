@@ -41,9 +41,16 @@ const Media = ({ mediaUrls, description, dimensionProps }) => {
         const color1 = "#0085ff";
         const color2 = "#ffd16b";
         return (
-          <>
+          <div
+            key={index}
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             <div
-              key={index}
               style={{
                 position: "relative",
                 width: "100%",
@@ -104,7 +111,7 @@ const Media = ({ mediaUrls, description, dimensionProps }) => {
                 </Container>
               </div>
             )}
-          </>
+          </div>
         );
       })}
     </div>
@@ -165,7 +172,7 @@ const ProjectViewScreen = ({
           }}
         >
           <Typography
-            variant="h3"
+            variant={theme.custom.muiProps.largeTitleVariant}
             sx={{ fontSize: 40, marginBottom: theme.spacing(3) }}
           >
             {project.title || ""}

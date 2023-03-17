@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { useTheme, Box, Typography, Button } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 import useWindowDimensions from "hooks/useWindowDimensions";
@@ -7,8 +7,10 @@ import useWindowDimensions from "hooks/useWindowDimensions";
 const MediaSingleInput = ({ title, image, onFileUpload }) => {
   const { width: windowWidth } = useWindowDimensions();
   const [isHover, setIsHover] = useState(false);
-  const outlineColor = isHover ? "rgba(0, 0, 0, 0.87)" : "rgba(0, 0, 0, 0.23)";
-  const textColor = "rgba(0, 0, 0, 0.6)";
+  const theme = useTheme();
+  const outlineColor = isHover
+    ? theme.custom.colors.outlineHover
+    : theme.custom.colors.outline;
   return (
     <Box
       onMouseEnter={() => setIsHover(true)}
@@ -21,11 +23,7 @@ const MediaSingleInput = ({ title, image, onFileUpload }) => {
       <Typography
         align="center"
         sx={{
-          color: textColor,
-          fontWeight: 400,
-          fontSize: "1rem",
-          lineHeight: "1.4375em",
-          letterSpacing: "0.00938em",
+          ...theme.custom.styles.inputLabel,
           borderBottom: `solid 1px ${outlineColor}`,
           padding: "16.5px 14px",
         }}
@@ -48,7 +46,6 @@ const MediaSingleInput = ({ title, image, onFileUpload }) => {
           component="label"
           startIcon={<FileUploadIcon />}
           sx={{
-            color: textColor,
             borderTopLeftRadius: 0,
             borderTopRightRadius: 0,
             padding: "16.5px 14px",

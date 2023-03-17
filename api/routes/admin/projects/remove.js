@@ -6,21 +6,20 @@ const mediaDirs = require("../../../localFiles/mediaDirs");
 // server-side logs
 const logSuccess = (id, title) =>
   logger.debug(
-    `${utf8Chars.checkMark} deleted project (id / title): (${id} / ${title})`
+    `${utf8Chars.checkMark} project removed (id / title): (${id} / ${title})`
   );
 const logNotFound = (id) =>
   logger.error(`${utf8Chars.xMark} unable to find project with id: ${id}`);
 const logError = (err) => {
   logger.error(
-    `${utf8Chars.xMark} unable to delete single project, error occured:`
+    `${utf8Chars.xMark} unable to remove single project, error occured:`
   );
   logger.error(err);
 };
 
 // client-side messages
-const messageNotFound = (projectId) =>
-  `The project with id ${projectId} does not exist`;
-const messageError = "An error occurred during a product creation";
+const messageNotFound = (projectId) => "The project does not exist";
+const messageError = "Unable to remove the project";
 
 const removeProjectRoute = async (req, res, next) => {
   console.log("############ req.body:", req.body);

@@ -20,13 +20,16 @@ const NotFoundScreen = () => {
           }}
         >
           <Container maxWidth="md">
-            <Typography variant="h3" sx={{ marginBottom: theme.spacing(2) }}>
+            <Typography
+              variant={theme.custom.muiProps.largeTitleVariant}
+              sx={{ marginBottom: theme.spacing(2) }}
+            >
               Page Not Found
             </Typography>
           </Container>
         </div>
       </Content>
-      <Footer />
+      <Footer maxWidth="md" />
     </Screen>
   );
 };

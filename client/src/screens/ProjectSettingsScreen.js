@@ -39,6 +39,12 @@ const ProjectSettingsScreen = ({
     }
   }, [getProject, projectId]);
 
+  // for outline color
+  const [isHover, setIsHover] = useState(false);
+  const outlineColor = isHover
+    ? theme.custom.colors.outlineHover
+    : theme.custom.colors.outline;
+
   return (
     <Screen>
       <NavBar />
@@ -58,7 +64,7 @@ const ProjectSettingsScreen = ({
               gap: theme.spacing(3),
             }}
           >
-            <Typography variant="h3">
+            <Typography variant={theme.custom.muiProps.largeTitleVariant}>
               {isNewProject ? "New Project" : "Edit Project"}
             </Typography>
             <TextField
@@ -73,8 +79,39 @@ const ProjectSettingsScreen = ({
               fullWidth
               onChange={(event) => setDescription(event.target.value)}
             />
-            <Typography>Media:</Typography>
-            <MediaOrderedInput projectId={projectId} />
+            <Container
+              onMouseEnter={() => setIsHover(true)}
+              onMouseLeave={() => setIsHover(false)}
+              disableGutters
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+                border: `solid 1px ${outlineColor}`,
+                borderTopLeftRadius: theme.custom.cssProps.outlineBorderRadius,
+                borderTopRightRadius: theme.custom.cssProps.outlineBorderRadius,
+              }}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  borderBottom: `solid 1px ${outlineColor}`,
+                }}
+              >
+                <Typography
+                  sx={{
+                    ...theme.custom.styles.inputLabel,
+                    padding: "16.5px 14px",
+                  }}
+                >
+                  Media
+                </Typography>
+              </div>
+              <div style={{ width: "100%" }}>
+                <MediaOrderedInput projectId={projectId} />
+              </div>
+            </Container>
+
             <Button
               startIcon={<CheckIcon />}
               onClick={() =>
@@ -92,7 +129,7 @@ const ProjectSettingsScreen = ({
           </Container>
         </div>
       </Content>
-      <Footer />
+      <Footer maxWidth="md" />
     </Screen>
   );
 };
