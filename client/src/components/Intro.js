@@ -3,6 +3,7 @@ import { useTheme } from "@mui/material/styles";
 import {
   useMediaQuery,
   Container,
+  Box,
   Button,
   Typography,
   TextField,
@@ -11,7 +12,6 @@ import CheckIcon from "@mui/icons-material/Check";
 import EditIcon from "@mui/icons-material/Edit";
 import { connect } from "react-redux";
 
-import { editIntro } from "actions/admin/intro";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
@@ -19,7 +19,7 @@ import Content from "components/Content";
 import GeometryPattern from "components/GeometryPattern";
 import Footer from "components/Footer";
 
-const Intro = ({ hideEditButton, isAdminLoggedIn, image, text, editIntro }) => {
+const Intro = ({ hideEditButton, isAdminLoggedIn, colors, image, text }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const isSmallerThan1600 = useMediaQuery("(min-width:1600px)");
@@ -59,7 +59,7 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, image, text, editIntro }) => {
           width: "100%",
           display: "flex",
           justifyContent: "flex-start",
-          backgroundColor: "#e6d49e",
+          backgroundColor: colors[0],
           position: "relative",
         }}
       >
@@ -71,7 +71,7 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, image, text, editIntro }) => {
             position: "relative",
           }}
         >
-          <GeometryPattern color1="#393939" color2="#e6d49e" />
+          <GeometryPattern color1="#393939" color2={colors[0] || "#ffffff"} />
           <div
             style={{
               display: "flex",
@@ -81,8 +81,8 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, image, text, editIntro }) => {
               width: "calc(100% - 70px)",
             }}
           >
-            <div
-              style={{
+            <Box
+              sx={{
                 flexShrink: 0,
                 height: imageSize,
                 width: imageSize,
@@ -148,7 +148,7 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, image, text, editIntro }) => {
         <div
           style={{
             width: "100%",
-            background: "#f6f2dd",
+            background: colors[1],
             paddingTop: theme.spacing(2),
             paddingBottom: theme.spacing(2),
           }}
@@ -166,10 +166,8 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, image, text, editIntro }) => {
 
 const mapState = (state) => {
   const { isAdminLoggedIn } = state.adminAuth;
-  const { image, text } = state.intro;
-  return { isAdminLoggedIn, image, text };
+  const { colors, image, text } = state.intro;
+  return { isAdminLoggedIn, colors, image, text };
 };
 
-export default connect(mapState, {
-  editIntro,
-})(Intro);
+export default connect(mapState)(Intro);

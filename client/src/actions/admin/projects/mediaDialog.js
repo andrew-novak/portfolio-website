@@ -1,4 +1,4 @@
-import { PROJECT_MEDIA_DIALOG_SET } from "constants/actionTypes";
+import { PROJECT_SET_DIALOG_MEDIA } from "constants/actionTypes";
 import { setErrorSnackbar } from "actions/snackbar";
 
 export const openMediaDialog = (files) => (dispatch) => {
@@ -12,7 +12,7 @@ export const openMediaDialog = (files) => (dispatch) => {
   const acceptedImageTypes = ["image/jpg", "image/jpeg", "image/png"];
   if (acceptedImageTypes.includes(file.type)) {
     return dispatch({
-      type: PROJECT_MEDIA_DIALOG_SET,
+      type: PROJECT_SET_DIALOG_MEDIA,
       dialogVariant: "image",
       file,
     });
@@ -21,7 +21,7 @@ export const openMediaDialog = (files) => (dispatch) => {
   const acceptedVideoTypes = ["video/mp4"];
   if (acceptedVideoTypes.includes(file.type)) {
     return dispatch({
-      type: PROJECT_MEDIA_DIALOG_SET,
+      type: PROJECT_SET_DIALOG_MEDIA,
       dialogVariant: "video",
       file,
     });
@@ -31,5 +31,5 @@ export const openMediaDialog = (files) => (dispatch) => {
 };
 
 export const closeMediaDialog = () => (dispatch) => {
-  dispatch({ type: PROJECT_MEDIA_DIALOG_SET, dialogVariant: null, file: null });
+  dispatch({ type: PROJECT_SET_DIALOG_MEDIA, dialogVariant: null, file: null });
 };

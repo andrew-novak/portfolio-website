@@ -1,5 +1,6 @@
 import axios from "axios";
 
+import indexedObjectToArray from "helpers/indexedObjectToArray";
 import splitMediaList from "helpers/splitMediaList";
 import mediaBlobsToDataUrls from "helpers/mediaBlobsToDataUrls";
 import { API_URL } from "constants/urls";
@@ -12,15 +13,17 @@ description - string
 mediaList - array of media objects
 */
 const editProject =
-  (id, title, description, mediaList, onSuccessRedirect) =>
+  (id, title, description, colorsObj, mediaList, onSuccessRedirect) =>
   async (dispatch) => {
     /*
-  // client-side input validation:
-  if (!productName)
-    return dispatch(setErrorSnackbar("Title field cannot be empty."));
-  if (!description)
-    return dispatch(setErrorSnackbar("Description field cannot be empty."));
-  */
+    // client-side input validation:
+    if (!productName)
+      return dispatch(setErrorSnackbar("Title field cannot be empty."));
+    if (!description)
+      return dispatch(setErrorSnackbar("Description field cannot be empty."));
+    */
+
+    const colors = indexedObjectToArray(colorsObj);
 
     // mediaFilenames, mediaDataUrls
     // mediaFilenames - array of filenames (strings) (already saved in server)
@@ -37,6 +40,7 @@ const editProject =
         {
           title,
           description,
+          colors,
           mediaFilenames: serverFilenames,
           mediaDataUrls,
         },

@@ -6,13 +6,23 @@ import CheckIcon from "@mui/icons-material/Check";
 import { connect } from "react-redux";
 
 import { getIntro } from "actions/intro";
-import { openImageDialog, closeImageDialog } from "actions/admin/intro";
-import { setImage, setText, editIntro } from "actions/admin/intro";
+import {
+  openColorDialog,
+  closeColorDialog,
+  setDialogColor,
+  openImageDialog,
+  closeImageDialog,
+  setColor,
+  setImage,
+  setText,
+  setIntro,
+} from "actions/admin/intro";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
-import DialogImageCrop from "components/MediaOrderedInput/MediaDialogs/DialogImageCrop";
+import DialogColorPicker from "components/dialogs/DialogColorPicker";
+import DialogImageCrop from "components/dialogs/DialogImageCrop";
 import Intro from "components/Intro";
 import OutlinedColorPicker from "components/OutlinedColorPicker";
 import OutlinedSingleMediaInput from "components/OutlinedSingleMediaInput";
@@ -20,15 +30,22 @@ import Footer from "components/Footer";
 
 const IntroSettingsScreen = ({
   dimensionProps,
+  dialogColor,
   dialogImage,
+  colors,
   image,
   text,
+  // actions
   getIntro,
+  openColorDialog,
+  closeColorDialog,
+  setDialogColor,
   openImageDialog,
   closeImageDialog,
+  setColor,
   setImage,
   setText,
-  editIntro,
+  setIntro,
 }) => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -40,6 +57,8 @@ const IntroSettingsScreen = ({
     getIntro();
   }, [getIntro]);
 
+  //align={isMobile ? "center" : "left"}
+
   return (
     <Screen>
       <NavBar />
@@ -48,23 +67,37 @@ const IntroSettingsScreen = ({
           maxWidth="md"
           sx={{
             paddingTop: theme.spacing(5),
+            ...(isMobile && { maxWidth: 400 }),
           }}
         >
           <Typography
             variant={theme.custom.muiProps.largeTitleVariant}
-            align={isMobile ? "center" : "left"}
             sx={{ paddingBottom: theme.spacing(3) }}
           >
             Edit Intro
           </Typography>
           <Typography
-            variant="h5"
-            align={isMobile ? "center" : "left"}
-            sx={theme.custom.styles.inputLabel}
+            sx={{ ...theme.custom.styles.inputLabel, paddingLeft: 0 }}
           >
             Preview
           </Typography>
         </Container>
+        <DialogColorPicker
+          dialogTitle={`Picking a ${
+            dialogColor.index === 0
+              ? "primary"
+              : dialogColor.index === 1
+              ? "secondary"
+              : null
+          } color`}
+          isOpen={!!dialogColor.color}
+          color={dialogColor.color}
+          onColorChange={(newColor) => setDialogColor(newColor)}
+          onCancel={closeColorDialog}
+          onConfirm={(color) =>
+            setColor(dialogColor.index, color, closeColorDialog)
+          }
+        />
         <DialogImageCrop
           dialogTitle="Uploading an intro image"
           isOpen={!!dialogImage}
@@ -115,8 +148,16 @@ const IntroSettingsScreen = ({
                   multiline
                   onChange={(event) => setText(event.target.value)}
                 />
-                <OutlinedColorPicker label="Primary Color" />
-                <OutlinedColorPicker label="Secondary Color" />
+                <OutlinedColorPicker
+                  label="Primary Color"
+                  color={colors[0]}
+                  onClick={() => openColorDialog(0, colors[0])}
+                />
+                <OutlinedColorPicker
+                  label="Secondary Color"
+                  color={colors[1]}
+                  onClick={() => openColorDialog(1, colors[1])}
+                />
               </div>
               <OutlinedSingleMediaInput
                 title="Image"
@@ -124,13 +165,27 @@ const IntroSettingsScreen = ({
                 onFileUpload={(event) => openImageDialog(event.target.files)}
               />
             </div>
-            <Button
-              startIcon={<CheckIcon />}
-              sx={{ margin: isMobile && "auto" }}
-              onClick={() => editIntro(image, text, () => navigate("/"))}
+            <div
+              style={{
+                width: "100%",
+                maxWidth: isMobile && 400,
+                margin: "auto",
+              }}
             >
-              Submit
-            </Button>
+              <Button
+                startIcon={<CheckIcon />}
+                sx={
+                  {
+                    /* margin: isMobile && "auto" */
+                  }
+                }
+                onClick={() =>
+                  setIntro(text, colors, image, () => navigate("/"))
+                }
+              >
+                Submit
+              </Button>
+            </div>
           </Container>
         </div>
       </Content>
@@ -140,15 +195,25 @@ const IntroSettingsScreen = ({
 };
 
 const mapState = (state) => {
-  const { dialogImage, image, text } = state.intro;
-  return { dialogImage, image, text };
+  const { dialogColor, dialogImage, colors, image, text } = state.intro;
+  return {
+    dialogColor,
+    dialogImage,
+    colors,
+    image,
+    text,
+  };
 };
 
 export default connect(mapState, {
   getIntro,
+  openColorDialog,
+  closeColorDialog,
+  setDialogColor,
   openImageDialog,
   closeImageDialog,
+  setColor,
   setImage,
   setText,
-  editIntro,
+  setIntro,
 })(IntroSettingsScreen);

@@ -46,6 +46,7 @@ const editProject = async (req, res, next) => {
     // TODO: add 'order' prop management
     title,
     description,
+    colors,
     // TODO: check if these mediaFilenames are equal to existing mediaFilenames
     mediaFilenames: oldMediaFilenames,
     mediaDataUrls,
@@ -64,7 +65,7 @@ const editProject = async (req, res, next) => {
     );
     await Project.updateOne(
       { id: projectId },
-      { title, description, mediaFilenames }
+      { title, description, colors, mediaFilenames }
     );
     logSuccess(projectId, title);
     res.status(200).json({});

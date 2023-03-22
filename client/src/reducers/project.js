@@ -1,16 +1,32 @@
 import {
   PROJECT_SET,
   PROJECT_SET_TITLE,
+  PROJECT_SET_DIALOG_COLOR,
+  PROJECT_SET_DIALOG_MEDIA,
   PROJECT_SET_DESCRIPTION,
+  PROJECT_SET_COLOR,
   PROJECT_MEDIA_LIST_ADD,
   PROJECT_MEDIA_LIST_ADD_VIDEO,
   PROJECT_MEDIA_LIST_SET,
-  PROJECT_MEDIA_DIALOG_SET,
 } from "constants/actionTypes";
 
 const initialState = {
+  // dialog input
+  mediaDialog: {
+    dialogViariant: null,
+    file: null,
+  },
+  colorDialog: {
+    index: null,
+    color: null,
+  },
+  // form input
   title: "",
   description: "",
+  colors: {
+    0: "#f8f1ff",
+    1: "#eff2fc",
+  },
   mediaList: [
     /*
     examples:
@@ -20,19 +36,32 @@ const initialState = {
     serverFilename & clientLocalUrl are the only properties sent to server
     */
   ],
-  mediaDialog: {
-    dialogViariant: null,
-    file: null,
-  },
 };
 
 const project = (state = initialState, action) => {
   switch (action.type) {
     case PROJECT_SET:
       return {
+        ...initialState,
         ...action.project,
+      };
+
+    case PROJECT_SET_DIALOG_COLOR:
+      return {
+        ...state,
+        colorDialog: {
+          ...state.colorDialog,
+          ...(action.index !== undefined && { index: action.index }),
+          ...(action.color !== undefined && { color: action.color }),
+        },
+      };
+
+    case PROJECT_SET_DIALOG_MEDIA:
+      return {
+        ...state,
         mediaDialog: {
-          ...state.mediaDialog,
+          dialogVariant: action.dialogVariant,
+          file: action.file,
         },
       };
 
@@ -46,6 +75,15 @@ const project = (state = initialState, action) => {
       return {
         ...state,
         description: action.description,
+      };
+
+    case PROJECT_SET_COLOR:
+      return {
+        ...state,
+        colors: {
+          ...state.colors,
+          [action.index]: action.color,
+        },
       };
 
     case PROJECT_MEDIA_LIST_SET:
@@ -83,15 +121,6 @@ const project = (state = initialState, action) => {
             displayType: action.displayType,
           },
         ],
-      };
-
-    case PROJECT_MEDIA_DIALOG_SET:
-      return {
-        ...state,
-        mediaDialog: {
-          dialogVariant: action.dialogVariant,
-          file: action.file,
-        },
       };
 
     default:

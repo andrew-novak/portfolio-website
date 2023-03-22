@@ -1,5 +1,6 @@
 import axios from "axios";
 
+import indexedObjectToArray from "helpers/indexedObjectToArray";
 import splitMediaList from "helpers/splitMediaList";
 import mediaBlobsToDataUrls from "helpers/mediaBlobsToDataUrls";
 import { API_URL } from "constants/urls";
@@ -23,7 +24,10 @@ media - array of objects e.g. [
 ]
 */
 const createProject =
-  (title, description, mediaList, onSuccessRedirect) => async (dispatch) => {
+  (title, description, colorsObj, mediaList, onSuccessRedirect) =>
+  async (dispatch) => {
+    const colors = indexedObjectToArray(colorsObj);
+
     const { clientLocalUrls = [] } = splitMediaList(mediaList);
     const mediaDataUrls = await mediaBlobsToDataUrls(clientLocalUrls);
 
@@ -35,6 +39,8 @@ const createProject =
         {
           title,
           description,
+          colors,
+          mediaFilenames: [],
           mediaDataUrls,
         },
         {

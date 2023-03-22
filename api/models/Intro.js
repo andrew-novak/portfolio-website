@@ -1,8 +1,9 @@
 const { Schema, model } = require("mongoose");
 
 const IntroSchema = new Schema({
-  imageFilename: String,
   text: String,
+  colors: [String],
+  imageFilename: String,
 });
 
 const Intro = model("Intro", IntroSchema);

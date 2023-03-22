@@ -58,6 +58,7 @@ const ProjectsGrid = ({ projects, cardHeightPercentRatio }) => {
                     height: 0,
                     paddingTop: cardHeightPercentRatio,
                     position: "relative",
+                    boxShadow: 1,
                   }}
                 >
                   {

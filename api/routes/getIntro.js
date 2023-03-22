@@ -23,8 +23,9 @@ const getIntroRoute = async (req, res, next) => {
     }
     logSuccess();
     const frontendIntro = {
-      imageFilename: intro.imageFilename,
       text: intro.text,
+      colors: intro.colors,
+      imageFilename: intro.imageFilename,
     };
     res.status(200).json({ intro: frontendIntro });
   } catch (err) {

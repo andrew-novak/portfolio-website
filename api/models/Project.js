@@ -5,6 +5,7 @@ const ProjectSchema = new Schema({
   order: Number,
   title: String,
   description: String,
+  colors: [String],
   mediaFilenames: [String],
 });
 

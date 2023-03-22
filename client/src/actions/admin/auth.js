@@ -30,7 +30,7 @@ export const login =
       }
       new Error("No id token");
     } catch (err) {
-      console.log("error:", err);
+      console.error(err);
       alert("Something went wrong!");
     }
   };

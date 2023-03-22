@@ -1,5 +1,10 @@
-export { setTitle, setDescription } from "./textInputs";
+export {
+  openColorDialog,
+  closeColorDialog,
+  setDialogColor,
+} from "./colorDialog";
 export { openMediaDialog, closeMediaDialog } from "./mediaDialog";
+export { setTitle, setDescription, setColor } from "./simpleInputs";
 export {
   mediaListAdd,
   mediaListAddVideo,

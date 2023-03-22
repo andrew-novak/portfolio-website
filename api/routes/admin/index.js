@@ -12,6 +12,20 @@ const removeProjectRoute = require("./projects/remove");
 
 const router = express.Router();
 
+const hexColorRegex = /^#[0-9A-F]{6}$/i;
+const base64Regex = /^data:.*\/.*;base64,([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+/*
+Base 64 Beginning Example:
+data:image/jpeg;base64,/9j/4AAQSkZJ
+*/
+
+const isHexColor = (value) => {
+  return hexColorRegex.test(value);
+};
+const isBase64 = (value) => {
+  return base64Regex.test(value);
+};
+
 router.post(
   "/login",
   [body("email").isString(), body("password").isString()],
@@ -40,8 +54,13 @@ router.use("/", (req, res, next) => {
 router.post(
   "/intro",
   [
-    //body("imageDataUrl").isString().isLength({ min: 1 }),
     body("text").isString().isLength({ min: 1, max: 400 }),
+    body("imageFilename").optional().isString().isLength({ min: 1, max: 50 }),
+    body("imageDataUrl")
+      .optional()
+      .isString()
+      .isLength({ min: 1 })
+      .custom(isBase64),
   ],
   handleValidationErrors,
   setIntroRoute
@@ -52,8 +71,19 @@ router.post(
   [
     body("title").isString().isLength({ min: 1, max: 30 }),
     body("description").isString().isLength({ min: 1, max: 3000 }),
+    body("colors").isArray(),
+    body("colors.*").isString().custom(isHexColor),
+    body("mediaFilenames").isArray(),
+    body("mediaFilenames.*")
+      .optional()
+      .isString()
+      .isLength({ min: 1, max: 50 }),
     body("mediaDataUrls").isArray(),
-    body("mediaDataUrls.*").isString().isLength({ min: 1 }),
+    body("mediaDataUrls.*")
+      .optional()
+      .isString()
+      .isLength({ min: 1 })
+      .custom(isBase64),
   ],
   handleValidationErrors,
   createProjectRoute

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTheme, Button, Typography } from "@mui/material";
 
-const OutlinedColorPicker = ({ label, color, fullWidth }) => {
+const OutlinedColorPicker = ({ label, color, fullWidth, onClick }) => {
   const theme = useTheme();
   const [isHover, setIsHover] = useState(false);
   const outlineColor = isHover
@@ -19,6 +19,7 @@ const OutlinedColorPicker = ({ label, color, fullWidth }) => {
         padding: 0,
         textTransform: "none",
       }}
+      onClick={onClick}
     >
       <div
         style={{

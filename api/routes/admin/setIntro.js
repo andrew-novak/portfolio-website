@@ -20,7 +20,9 @@ const messageError = "Unable to create/edit an intro";
 // create or edit intro
 // only max 1 intro available
 const setIntroRoute = async (req, res, next) => {
-  const { imageDataUrl, text } = req.body;
+  const { imageDataUrl, text, colors } = req.body;
+
+  console.log(imageDataUrl.substring(0, 30));
 
   let newImageFilename = null;
   try {
@@ -29,6 +31,7 @@ const setIntroRoute = async (req, res, next) => {
     if (imageDataUrl) {
       // remove old file
       if (intro?.imageFilename) {
+        console.log("remove");
         await mediaDirs.removeIntroImage(intro.imageFilename);
       }
       // create new file
@@ -40,8 +43,9 @@ const setIntroRoute = async (req, res, next) => {
         {},
         {
           $set: {
-            ...(newImageFilename && { imageFilename: newImageFilename }),
             ...(text && { text }),
+            ...(colors && { colors }),
+            ...(newImageFilename && { imageFilename: newImageFilename }),
           },
         }
       );

@@ -39,7 +39,7 @@ project {
 */
 const createProject = async (req, res, next) => {
   logRequestBody(req.body);
-  const { title, description, mediaDataUrls } = req.body;
+  const { title, description, colors, mediaDataUrls } = req.body;
   const projectId = await Project.getNextId();
   const projectOrder = await Project.getNextOrder();
   try {
@@ -49,6 +49,7 @@ const createProject = async (req, res, next) => {
       order: projectOrder,
       title,
       description,
+      colors,
       mediaFilenames,
     });
     logSuccess(projectId, title);

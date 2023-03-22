@@ -22,6 +22,7 @@ const getProjectsRoute = async (req, res, next) => {
       order: project.order,
       title: project.title,
       description: project.description,
+      colors: project.colors,
       mediaFilenames: project.mediaFilenames,
     }));
     res.status(200).json({ projects: frontendProjects });

@@ -24,13 +24,15 @@ const HomeButton = () => {
       }}
       onClick={() => navigate("/")}
     >
-      <img
-        style={{
-          height: isLargerThanSm ? 50 : 46,
-          marginRight: 10,
-        }}
-        alt="logo"
-      />
+      {false && (
+        <img
+          style={{
+            height: isLargerThanSm ? 50 : 46,
+            marginRight: 10,
+          }}
+          alt="logo"
+        />
+      )}
       {sm ? null : (
         <Typography
           sx={{
@@ -41,7 +43,7 @@ const HomeButton = () => {
             background: theme.custom.colors.activity,
             WebkitBackgroundClip: "text",
             textFillColor: "transparent",
-            background: "rgb(103, 51, 51)",
+            background: "rgb(0, 0, 0)",
           }}
           color="inherit"
         >

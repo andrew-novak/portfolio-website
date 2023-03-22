@@ -21,7 +21,7 @@ const UploadMediaDropzone = ({ onDrop }) => {
                 justifyContent: "center",
                 textAlign: "center",
                 cursor: "pointer",
-                backgroundColor: theme.custom.colors.activityInactive,
+                backgroundColor: "rgb(230, 230, 230)",
                 padding: theme.spacing(1),
               }}
               {...getRootProps()}

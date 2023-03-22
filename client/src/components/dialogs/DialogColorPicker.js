@@ -9,38 +9,21 @@ import {
   Container,
   Button,
 } from "@mui/material";
-import Cropper from "react-easy-crop";
+import { ChromePicker } from "react-color";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import CheckIcon from "@mui/icons-material/Check";
 
 import cropImage from "helpers/cropImage";
 
-const DialogImageCrop = ({
+const DialogColorPicker = ({
   dialogTitle,
   isOpen,
-  fileObjectUrl,
+  color,
+  onColorChange,
   onCancel,
   onConfirm,
 }) => {
   const theme = useTheme();
-
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [rotation, setRotation] = useState(0);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-
-  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  }, []);
-
-  const handleApplyClick = async () => {
-    const croppedImageUrl = await cropImage(
-      fileObjectUrl,
-      croppedAreaPixels,
-      rotation
-    );
-    return onConfirm(croppedImageUrl);
-  };
 
   return (
     <div style={{ position: "absolute" }}>
@@ -48,22 +31,26 @@ const DialogImageCrop = ({
         <DialogTitle
           sx={{
             display: "flex",
-            flexDirection: "column",
             justifyContent: "center",
           }}
         >
           {dialogTitle}
         </DialogTitle>
-        <DialogContent sx={{ position: "relative" }}>
-          <Cropper
-            image={fileObjectUrl}
-            crop={crop}
-            zoom={zoom}
-            aspect={1}
-            onCropChange={setCrop}
-            onCropComplete={onCropComplete}
-            onZoomChange={setZoom}
-          />
+        <DialogContent
+          sx={{
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            background: color,
+          }}
+        >
+          <div>
+            <ChromePicker
+              color={color || "rgb(255, 255, 255)"}
+              onChangeComplete={(newColor) => onColorChange(newColor.hex)}
+            />
+          </div>
         </DialogContent>
         <DialogActions sx={{ justifyContent: "center", alignItems: "center" }}>
           <Button
@@ -77,7 +64,7 @@ const DialogImageCrop = ({
           <Button
             startIcon={<CheckIcon />}
             variant="contained"
-            onClick={handleApplyClick}
+            onClick={() => onConfirm(color)}
           >
             Apply
           </Button>
@@ -87,4 +74,4 @@ const DialogImageCrop = ({
   );
 };
 
-export default DialogImageCrop;
+export default DialogColorPicker;

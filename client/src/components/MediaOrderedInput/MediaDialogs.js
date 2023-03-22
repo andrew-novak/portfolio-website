@@ -7,8 +7,8 @@ import {
   mediaListAddVideo,
 } from "actions/admin/projects";
 import supportedMimeTypes from "constants/supportedMimeTypes";
-import DialogImageCrop from "./DialogImageCrop";
-import DialogVideoPreview from "./DialogVideoPreview";
+import DialogImageCrop from "components/dialogs/DialogImageCrop";
+import DialogVideoPreview from "components/dialogs/DialogVideoPreview";
 
 // displays a specific dialog based on media type
 const MediaDialogs = ({
