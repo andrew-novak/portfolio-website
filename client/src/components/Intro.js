@@ -81,22 +81,29 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, colors, image, text }) => {
               width: "calc(100% - 70px)",
             }}
           >
-            <Box
-              sx={{
+            <div
+              style={{
                 flexShrink: 0,
                 height: imageSize,
                 width: imageSize,
-                borderRadius: "100%",
-                backgroundColor: "white",
-                backgroundImage:
-                  (image.serverUrl && `url(${image.serverUrl})`) ||
-                  (image.clientLocalUrl && `url(${image.clientLocalUrl})`),
-                backgroundSize: "cover",
-                backgroundPosition: "center",
                 marginRight: separatingMargin,
-                boxShadow: 3,
               }}
-            />
+            >
+              <Box
+                sx={{
+                  height: imageSize,
+                  width: imageSize,
+                  borderRadius: "100%",
+                  backgroundColor: "white",
+                  backgroundImage:
+                    (image.serverUrl && `url(${image.serverUrl})`) ||
+                    (image.clientLocalUrl && `url(${image.clientLocalUrl})`),
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  boxShadow: 3,
+                }}
+              />
+            </div>
             {!isMobile && (
               <div style={{ width: "100%" }}>
                 <div style={{ width: "100%", maxWidth: 800 }}>
@@ -118,30 +125,6 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, colors, image, text }) => {
               </div>
             )}
           </div>
-          {/*
-          <div
-            style={{
-              //marginTop: theme.spacing(3),
-              marginTop: theme.spacing(1),
-              position: "absolute",
-              display: "flex",
-              justifyContent: "flex-end",
-              maxWidth: "calc(100vw - 20px)",
-              width: "100%",
-            }}
-          >
-            {isAdminLoggedIn && (
-              <Button
-                disabled={hideEditButton}
-                startIcon={<EditIcon />}
-                sx={{ display: hideEditButton && "none" }}
-                onClick={() => navigate("/edit-intro")}
-              >
-                Edit Intro
-              </Button>
-            )}
-          </div>
-          */}
         </Container>
       </div>
       {isMobile && text && (
