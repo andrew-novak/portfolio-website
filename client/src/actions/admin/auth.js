@@ -38,6 +38,13 @@ export const retrieveIdToken = () => async (dispatch) => {
     });
   }
 
+  // do it here so elements do not disappear
+  // and reappear on a redirect/refresh
+  dispatch({
+    type: ADMIN_AUTH_SET_IS_LOGGED_IN,
+    isAdminLoggedIn: true,
+  });
+
   // if idToken in localStorage
   try {
     const response = await axios.post(
@@ -47,10 +54,8 @@ export const retrieveIdToken = () => async (dispatch) => {
         headers: { Authorization: "Bearer " + idToken },
       }
     );
-    return dispatch({
-      type: ADMIN_AUTH_SET_IS_LOGGED_IN,
-      isAdminLoggedIn: true,
-    });
+    // redux state has been already set above so just return
+    return;
   } catch (err) {
     console.error(err);
     dispatch(
