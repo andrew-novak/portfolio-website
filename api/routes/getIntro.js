@@ -19,7 +19,7 @@ const getIntroRoute = async (req, res, next) => {
     const intro = await Intro.findOne({});
     if (!intro) {
       logNotFound();
-      return res.status(500).json({ message: messageNotFound });
+      return res.status(200).json({ message: messageNotFound });
     }
     logSuccess();
     const frontendIntro = {

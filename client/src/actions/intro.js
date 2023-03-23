@@ -9,6 +9,11 @@ import { setErrorSnackbar } from "actions/snackbar";
 export const getIntro = () => async (dispatch) => {
   try {
     const response = await axios.get(`${API_URL}/intro`);
+
+    if (!response.data?.intro) {
+      return dispatch(setErrorSnackbar(response.data?.message || "No intro"));
+    }
+
     const {
       text,
       colors: colorsArray,
