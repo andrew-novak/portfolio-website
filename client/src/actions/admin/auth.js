@@ -2,6 +2,7 @@ import axios from "axios";
 
 import { ADMIN_AUTH_SET_IS_LOGGED_IN } from "constants/actionTypes";
 import { API_URL } from "constants/urls";
+import { setErrorSnackbar } from "actions/snackbar";
 
 export const login =
   ({ email, password, redirect }) =>
@@ -51,11 +52,11 @@ export const retrieveIdToken = () => async (dispatch) => {
       isAdminLoggedIn: true,
     });
   } catch (err) {
-    console.err(err);
+    console.error(err);
     dispatch(
       setErrorSnackbar(err.response?.data?.message || "ID token check failed")
     );
-    const idToken = localStorage.removeItem("idToken");
+    localStorage.removeItem("idToken");
     return dispatch({
       type: ADMIN_AUTH_SET_IS_LOGGED_IN,
       isAdminLoggedIn: false,
