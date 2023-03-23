@@ -51,6 +51,12 @@ router.use("/", (req, res, next) => {
   })(req, res, next);
 });
 
+// if a request successfully has gone through the above middleware
+// to finally access this one, it means that idToken is alright
+router.post("/checkIdToken", (req, res, next) => {
+  res.status(200).json({});
+});
+
 router.post(
   "/intro",
   [
