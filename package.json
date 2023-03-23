@@ -10,7 +10,8 @@
     "install:client": "npm i --prefix client",
     "install:all": "(npm i) && (npm run install:api) && (npm run install:client)",
     "build:client": "npm run build --prefix client",
-    "cli": "npm run cli --prefix api"
+    "cli:prod": "npm run cli:prod --prefix api",
+    "cli:dev": "npm run cli:dev --prefix api"
   },
   "author": {
     "name": "Andrew Novak",

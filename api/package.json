@@ -5,7 +5,8 @@
   "scripts": {
     "start:prod": "NODE_ENV=production node server.js",
     "start:dev": "NODE_ENV=development nodemon --require dotenv/config server.js",
-    "cli": "node --require dotenv/config ./cli/cli.js"
+    "cli:prod": "NODE_ENV=production node ./cli/cli.js",
+    "cli:dev": "NODE_ENV=development node --require dotenv/config ./cli/cli.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
