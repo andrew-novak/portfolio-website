@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTheme, Typography, TextField, Link, Button } from "@mui/material";
+import {
+  useTheme,
+  Box,
+  Typography,
+  TextField,
+  Link,
+  Button,
+} from "@mui/material";
 import { connect } from "react-redux";
 
 import { login } from "actions/admin/auth";
@@ -24,22 +31,26 @@ const AdminLoginScreen = ({ login }) => {
             display: "flex",
             alignItems: "start",
             justifyContent: "center",
+            background: "rgb(230, 230, 230)",
           }}
         >
-          <div
-            style={{
+          <Box
+            sx={{
               backgroundColor: "white",
               width: 400,
               marginTop: "10vh",
               display: "flex",
               flexDirection: "column",
+              gap: theme.spacing(3),
+              padding: theme.spacing(4),
+              boxShadow: 2,
             }}
           >
             <Typography
               variant={theme.custom.muiProps.largeTitleVariant}
               align="center"
             >
-              Admin
+              Admin Login
             </Typography>
             <TextField
               label="Email"
@@ -53,7 +64,7 @@ const AdminLoginScreen = ({ login }) => {
               fullWidth
               onChange={(event) => setPassword(event.target.value)}
             />
-            <Link sx={{ color: "rgb(250, 44, 143)" }}>Forgot password</Link>
+            {/*<Link sx={{ color: "rgb(250, 44, 143)" }}>Forgot password</Link>*/}
             <Button
               fullWidth
               onClick={() =>
@@ -62,7 +73,7 @@ const AdminLoginScreen = ({ login }) => {
             >
               Login
             </Button>
-          </div>
+          </Box>
         </div>
       </Content>
       <Footer />
