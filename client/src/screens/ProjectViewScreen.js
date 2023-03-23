@@ -37,6 +37,24 @@ const Media = ({ description, colors, mediaUrls, dimensionProps }) => {
         alignItems: "center",
       }}
     >
+      {mediaUrls.length === 0 && (
+        <div
+          style={{
+            marginBottom: 50,
+            width: width,
+          }}
+        >
+          <Container>
+            <Typography
+              align="center"
+              variant="p"
+              sx={{ fontSize: isMobile ? 25 : 30 }}
+            >
+              {description || ""}
+            </Typography>
+          </Container>
+        </div>
+      )}
       {mediaUrls.map((url, index) => {
         const color1 = index === 0 ? colors[0] : null;
         const color2 = index === 0 ? colors[1] : null;
@@ -131,37 +149,43 @@ const ProjectViewScreen = ({
             alignItems: "center",
           }}
         >
-          <Typography
-            variant={theme.custom.muiProps.largeTitleVariant}
-            sx={{ fontSize: 40, marginBottom: theme.spacing(3) }}
-          >
-            {project.title || ""}
-          </Typography>
-          {/* Admin Buttons */}
-          {isAdminLoggedIn && (
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-                marginBottom: theme.spacing(3),
-              }}
-            >
-              <Button
-                startIcon={<EditIcon />}
-                onClick={() => navigate(`/edit-project/${projectId}`)}
+          <div style={{ width }}>
+            <Container>
+              <Typography
+                variant={theme.custom.muiProps.largeTitleVariant}
+                sx={{ fontSize: 40, marginBottom: theme.spacing(5) }}
               >
-                Edit Project
-              </Button>
-              <div style={{ width: 20 }} />
-              <Button
-                startIcon={<DeleteIcon />}
-                onClick={() => removeProject(projectId, () => navigate("/"))}
-              >
-                Remove Project
-              </Button>
-            </div>
-          )}
+                {project.title || ""}
+              </Typography>
+              {/* Admin Buttons */}
+              {isAdminLoggedIn && (
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    marginBottom: theme.spacing(5),
+                  }}
+                >
+                  <Button
+                    startIcon={<EditIcon />}
+                    onClick={() => navigate(`/edit-project/${projectId}`)}
+                  >
+                    Edit Project
+                  </Button>
+                  <div style={{ width: 20 }} />
+                  <Button
+                    startIcon={<DeleteIcon />}
+                    onClick={() =>
+                      removeProject(projectId, () => navigate("/"))
+                    }
+                  >
+                    Remove Project
+                  </Button>
+                </div>
+              )}
+            </Container>
+          </div>
           {/* Description is in Media component*/}
           <Media
             description={project.description}
@@ -171,7 +195,19 @@ const ProjectViewScreen = ({
           />
         </div>
       </Content>
-      <Footer maxWidth={isMobile ? windowWidth * 0.9 + 50 : maxImgWidth + 50} />
+      <Footer
+        maxWidth={
+          isMobile
+            ? // mobile
+              windowWidth * 0.9 + 50
+            : // desktop
+            mediaUrls.length > 1
+            ? // make it equal to image above it
+              maxImgWidth + 50
+            : // make it equal to text above it
+              maxImgWidth - 0
+        }
+      />
     </Screen>
   );
 };
