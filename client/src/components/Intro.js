@@ -71,7 +71,23 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, colors, image, text }) => {
             position: "relative",
           }}
         >
-          <GeometryPattern color1="#393939" color2={colors[0] || "#ffffff"} />
+          <div style={{ position: "relative", overflow: "hidden" }}>
+            <GeometryPattern color1="#393939" color2={colors[0] || "#ffffff"} />
+            <div style={{ position: "absolute" }}>
+              <GeometryPattern
+                color1="#393939"
+                color2={colors[0] || "#ffffff"}
+              />
+              <GeometryPattern
+                color1="#393939"
+                color2={colors[0] || "#ffffff"}
+              />
+              <GeometryPattern
+                color1="#393939"
+                color2={colors[0] || "#ffffff"}
+              />
+            </div>
+          </div>
           <div
             style={{
               display: "flex",
@@ -101,6 +117,9 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, colors, image, text }) => {
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   boxShadow: 3,
+                  // just for zIndex:
+                  position: "relative",
+                  zIndex: 1,
                 }}
               />
             </div>
@@ -132,12 +151,12 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, colors, image, text }) => {
           style={{
             width: "100%",
             background: colors[1],
-            paddingTop: theme.spacing(2),
-            paddingBottom: theme.spacing(2),
+            paddingTop: theme.spacing(4),
+            paddingBottom: theme.spacing(4),
           }}
         >
           <Container maxWidth="xl">
-            <Typography align="center" sx={{ fontSize: 35 }}>
+            <Typography align="center" sx={{ fontSize: 25 }}>
               {text}
             </Typography>
           </Container>

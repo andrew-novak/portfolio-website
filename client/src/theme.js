@@ -46,7 +46,7 @@ const theme = createTheme({
       outlinePadding: "14px",
     },
     muiProps: {
-      largeTitleVariant: "h3",
+      largeTitleVariant: "h4",
     },
     styles: {
       inputLabel: {

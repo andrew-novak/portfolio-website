@@ -4,13 +4,10 @@ import { useMediaQuery, Typography } from "@mui/material";
 
 import { WEBSITE_NAME } from "../../constants/general";
 
-const HomeButton = () => {
+const HomeButton = ({ min350px, min450px, smUp }) => {
   const theme = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
-
-  const sm = useMediaQuery("(maxWidth: 450px)");
-  const isLargerThanSm = useMediaQuery(theme.breakpoints.up("sm"));
 
   return (
     <div
@@ -24,32 +21,33 @@ const HomeButton = () => {
       }}
       onClick={() => navigate("/")}
     >
-      {false && (
-        <img
-          style={{
-            height: isLargerThanSm ? 50 : 46,
-            marginRight: 10,
-          }}
-          alt="logo"
-        />
-      )}
-      {sm ? null : (
-        <Typography
-          sx={{
-            lineHeight: 2,
-            fontFamily: "Sansita Swashed, cursive",
-            fontSize: isLargerThanSm ? 28 : 24,
-            letterSpacing: 2,
-            background: theme.custom.colors.activity,
-            WebkitBackgroundClip: "text",
-            textFillColor: "transparent",
-            background: "rgb(0, 0, 0)",
-          }}
-          color="inherit"
-        >
-          {WEBSITE_NAME}
-        </Typography>
-      )}
+      {
+        /* No Icon For Now */
+        false && (
+          <img
+            style={{
+              height: smUp ? 50 : 46,
+              marginRight: 10,
+            }}
+            alt="logo"
+          />
+        )
+      }
+      <Typography
+        sx={{
+          lineHeight: 2,
+          fontFamily: "Sansita Swashed, cursive",
+          fontSize: smUp ? 28 : min450px ? 24 : min350px ? 20 : 18,
+          letterSpacing: 2,
+          background: theme.custom.colors.activity,
+          WebkitBackgroundClip: "text",
+          textFillColor: "transparent",
+          background: "rgb(0, 0, 0)",
+        }}
+        color="inherit"
+      >
+        {WEBSITE_NAME}
+      </Typography>
     </div>
   );
 };

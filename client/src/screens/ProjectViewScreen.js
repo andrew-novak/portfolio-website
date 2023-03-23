@@ -68,7 +68,7 @@ const Media = ({ description, colors, mediaUrls, dimensionProps }) => {
                   <Typography
                     align="center"
                     variant="p"
-                    sx={{ fontSize: isMobile ? 18 : 24 }}
+                    sx={{ fontSize: isMobile ? 25 : 30 }}
                   >
                     {description || ""}
                   </Typography>

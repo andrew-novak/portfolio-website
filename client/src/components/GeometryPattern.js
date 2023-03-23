@@ -74,7 +74,7 @@ const GeometryPattern = ({ color1: c1, color2: c2 }) => {
         <HorizontalOpposite color1={c2} color2={c1} size={size} />
         <VerticalOpposite color1={c1} color2={c2} size={size} />
         <VerticalOpposite color1={c2} color2={c1} size={size} />
-        <HorizontalOpposite color1={c1} color2={c2} size={size} />
+        {/*<HorizontalOpposite color1={c1} color2={c2} size={size} />*/}
       </div>
       <div>
         <VerticalOpposite color1={c2} color2={c1} size={size} />
@@ -85,7 +85,7 @@ const GeometryPattern = ({ color1: c1, color2: c2 }) => {
         <HorizontalOpposite color1={c1} color2={c2} size={size} />
         <HorizontalOpposite color1={c2} color2={c1} size={size} />
         <VerticalOpposite color1={c1} color2={c2} size={size} />
-        <VerticalOpposite color1={c2} color2={c1} size={size} />
+        {/*<VerticalOpposite color1={c2} color2={c1} size={size} />*/}
       </div>
       <div>
         <HorizontalOpposite color1={c1} color2={c2} size={size} />
@@ -96,7 +96,7 @@ const GeometryPattern = ({ color1: c1, color2: c2 }) => {
         <VerticalOpposite color1={c2} color2={c1} size={size} />
         <HorizontalOpposite color1={c1} color2={c2} size={size} />
         <HorizontalOpposite color1={c2} color2={c1} size={size} />
-        <VerticalOpposite color1={c1} color2={c2} size={size} />
+        {/*<VerticalOpposite color1={c1} color2={c2} size={size} />*/}
       </div>
       <div>
         <HorizontalOpposite color1={c2} color2={c1} size={size} />
@@ -107,7 +107,7 @@ const GeometryPattern = ({ color1: c1, color2: c2 }) => {
         <VerticalOpposite color1={c1} color2={c2} size={size} />
         <VerticalOpposite color1={c2} color2={c1} size={size} />
         <HorizontalOpposite color1={c1} color2={c2} size={size} />
-        <HorizontalOpposite color1={c2} color2={c1} size={size} />
+        {/*<HorizontalOpposite color1={c2} color2={c1} size={size} />*/}
       </div>
     </div>
   );
