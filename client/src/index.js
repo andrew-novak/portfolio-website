@@ -11,6 +11,8 @@ import theme from "theme";
 import Routes from "Routes";
 
 const App = () => {
+  // Router and routes are separated due to this error:
+  // Error: useLocation() may be used only in the context of a <Router> component.
   return (
     <StoreProvider store={store}>
       <ThemeProvider theme={theme}>

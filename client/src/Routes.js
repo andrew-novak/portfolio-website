@@ -30,11 +30,18 @@ const UnauthOnly = ({ isAdminLoggedIn, children }) => {
 const Routes = ({ isAdminLoggedIn, resetState, retrieveIdToken }) => {
   const location = useLocation();
 
+  // on redirect
   useEffect(() => {
+    // scroll to top
+    window.scrollTo(0, 0);
+    // reset redux state
     resetState();
+    // set idToken & set redux state based on it
     retrieveIdToken();
   }, [location.pathname]);
 
+  // Router and routes are separated due to this error:
+  // Error: useLocation() may be used only in the context of a <Router> component.
   return (
     <RouterRoutes>
       <Route path="/" exact element={<HomeScreen />} />
