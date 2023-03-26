@@ -64,9 +64,27 @@ const MediaOrderedInput = ({
       <MediaDialogs />
       <DialogMediaEdit
         dialogTitle="Showing Media"
-        isOpen={!!mediaEditDialog}
-        mediaUrl={mediaEditDialog?.url}
+        isOpen={mediaEditDialog.index != null && mediaEditDialog.url != null}
+        mediaUrl={mediaEditDialog.url}
+        disableMoveLeft={mediaEditDialog.index < 1}
+        disableMoveRight={mediaEditDialog.index > mediaList.length - 2}
         onCancel={closeMediaEditDialog}
+        onMoveLeft={() => {
+          mediaListSwapPlaces({
+            mediaList,
+            sourceIndex: mediaEditDialog.index,
+            targetIndex: mediaEditDialog.index - 1,
+          });
+          closeMediaEditDialog();
+        }}
+        onMoveRight={() => {
+          mediaListSwapPlaces({
+            mediaList,
+            sourceIndex: mediaEditDialog.index,
+            targetIndex: mediaEditDialog.index + 1,
+          });
+          closeMediaEditDialog();
+        }}
         onRemove={() =>
           mediaListRemove(
             mediaList,
@@ -90,6 +108,7 @@ const MediaOrderedInput = ({
           return (
             // parent div just for cancelation of mediaEditDialog opening
             <div
+              key={index}
               onMouseDown={() => setIsDialogOpeningCanceled(false)}
               onMouseUp={() => {
                 !isDialogOpeningCanceled &&
@@ -97,7 +116,7 @@ const MediaOrderedInput = ({
                 setIsDialogOpeningCanceled(false);
               }}
             >
-              <MediaItem key={index} cancelDialogOpening={cancelDialogOpening}>
+              <MediaItem cancelDialogOpening={cancelDialogOpening}>
                 <div
                   src={url}
                   style={{

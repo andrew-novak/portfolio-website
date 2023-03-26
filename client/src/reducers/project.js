@@ -17,7 +17,10 @@ const initialState = {
     dialogViariant: null,
     file: null,
   },
-  mediaEditDialog: null,
+  mediaEditDialog: {
+    index: null,
+    url: null,
+  },
   colorDialog: {
     index: null,
     color: null,
@@ -70,7 +73,10 @@ const project = (state = initialState, action) => {
     case PROJECT_SET_DIALOG_EDIT_MEDIA:
       return {
         ...state,
-        mediaEditDialog: action.mediaEditDialog,
+        mediaEditDialog:
+          action.mediaEditDialog === null
+            ? initialState.mediaEditDialog
+            : action.mediaEditDialog,
       };
 
     case PROJECT_SET_TITLE:
