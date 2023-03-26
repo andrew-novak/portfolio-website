@@ -4,16 +4,29 @@ import { useTheme } from "@mui/material/styles";
 import { connect } from "react-redux";
 
 //import useMediaDialog from "./MediaDialog/useMediaDialog";
-import { mediaListSwapPlaces, openMediaDialog } from "actions/admin/projects";
+import {
+  mediaListRemove,
+  mediaListSwapPlaces,
+  openMediaEditDialog,
+  closeMediaEditDialog,
+  openMediaDialog,
+} from "actions/admin/projects";
 import MediaDialogs from "./MediaDialogs";
+import DialogMediaEdit from "components/dialogs/DialogMediaEdit";
 import MediaContainer from "./MediaContainer";
 import MediaItem from "./MediaItem";
 import UploadMediaDropzone from "./UploadMediaDropzone";
 
 const MediaOrderedInput = ({
   projectId,
+  // state
   mediaList,
+  mediaEditDialog,
+  // actions
+  mediaListRemove,
   mediaListSwapPlaces,
+  openMediaEditDialog,
+  closeMediaEditDialog,
   openMediaDialog,
 }) => {
   const theme = useTheme();
@@ -40,9 +53,28 @@ const MediaOrderedInput = ({
     return null;
   });
 
+  // for cancelation of mediaEditDialog opening
+  const [isDialogOpeningCanceled, setIsDialogOpeningCanceled] = useState(false);
+  const cancelDialogOpening = () => {
+    setIsDialogOpeningCanceled(true);
+  };
+
   return (
     <>
       <MediaDialogs />
+      <DialogMediaEdit
+        dialogTitle="Showing Media"
+        isOpen={!!mediaEditDialog}
+        mediaUrl={mediaEditDialog?.url}
+        onCancel={closeMediaEditDialog}
+        onRemove={() =>
+          mediaListRemove(
+            mediaList,
+            mediaEditDialog.index,
+            closeMediaEditDialog
+          )
+        }
+      />
       <MediaContainer
         columns={isLg ? 4 : isMd ? 3 : isSm ? 2 : 1}
         spacing={theme.spacing(1)}
@@ -54,21 +86,32 @@ const MediaOrderedInput = ({
           })
         }
       >
-        {imageUrls.map((url, index) => (
-          <MediaItem key={index}>
+        {imageUrls.map((url, index) => {
+          return (
+            // parent div just for cancelation of mediaEditDialog opening
             <div
-              src={url}
-              style={{
-                backgroundImage: `url(${url})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                width: "100%",
-                height: "100%",
-                backgroundColor: "red",
+              onMouseDown={() => setIsDialogOpeningCanceled(false)}
+              onMouseUp={() => {
+                !isDialogOpeningCanceled &&
+                  openMediaEditDialog(mediaList, imageUrls, index);
+                setIsDialogOpeningCanceled(false);
               }}
-            />
-          </MediaItem>
-        ))}
+            >
+              <MediaItem key={index} cancelDialogOpening={cancelDialogOpening}>
+                <div
+                  src={url}
+                  style={{
+                    backgroundImage: `url(${url})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                />
+              </MediaItem>
+            </div>
+          );
+        })}
         <UploadMediaDropzone onDrop={(files) => openMediaDialog(files)} />
       </MediaContainer>
     </>
@@ -76,10 +119,14 @@ const MediaOrderedInput = ({
 };
 
 const mapState = (state) => {
-  const { mediaList } = state.project;
-  return { mediaList };
+  const { mediaList, mediaEditDialog } = state.project;
+  return { mediaList, mediaEditDialog };
 };
 
-export default connect(mapState, { mediaListSwapPlaces, openMediaDialog })(
-  MediaOrderedInput
-);
+export default connect(mapState, {
+  mediaListRemove,
+  mediaListSwapPlaces,
+  openMediaEditDialog,
+  closeMediaEditDialog,
+  openMediaDialog,
+})(MediaOrderedInput);

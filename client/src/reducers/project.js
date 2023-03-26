@@ -3,24 +3,26 @@ import {
   PROJECT_SET_TITLE,
   PROJECT_SET_DIALOG_COLOR,
   PROJECT_SET_DIALOG_MEDIA,
+  PROJECT_SET_DIALOG_EDIT_MEDIA,
   PROJECT_SET_DESCRIPTION,
   PROJECT_SET_COLOR,
+  PROJECT_SET_MEDIA_LIST,
   PROJECT_MEDIA_LIST_ADD,
   PROJECT_MEDIA_LIST_ADD_VIDEO,
-  PROJECT_MEDIA_LIST_SET,
 } from "constants/actionTypes";
 
 const initialState = {
-  // dialog input
+  // dialogs
   mediaDialog: {
     dialogViariant: null,
     file: null,
   },
+  mediaEditDialog: null,
   colorDialog: {
     index: null,
     color: null,
   },
-  // form input
+  // form
   title: "",
   description: "",
   colors: {
@@ -65,6 +67,12 @@ const project = (state = initialState, action) => {
         },
       };
 
+    case PROJECT_SET_DIALOG_EDIT_MEDIA:
+      return {
+        ...state,
+        mediaEditDialog: action.mediaEditDialog,
+      };
+
     case PROJECT_SET_TITLE:
       return {
         ...state,
@@ -86,7 +94,7 @@ const project = (state = initialState, action) => {
         },
       };
 
-    case PROJECT_MEDIA_LIST_SET:
+    case PROJECT_SET_MEDIA_LIST:
       return {
         ...state,
         mediaList: action.newMediaList,

@@ -1,11 +1,11 @@
 import {
+  PROJECT_SET_MEDIA_LIST,
   PROJECT_MEDIA_LIST_ADD,
   PROJECT_MEDIA_LIST_ADD_VIDEO,
-  PROJECT_MEDIA_LIST_SET,
-  PROJECT_MEDIA_LIST_REMOVE,
 } from "constants/actionTypes";
 //import { unselectAll } from "actions/selection";
 import getVideoCover from "helpers/getVideoCover";
+import { setErrorSnackbar, setSuccessSnackbar } from "actions/snackbar";
 
 export const mediaListAdd =
   ({ localUrl, mimeType, displayType, closeMediaDialog }) =>
@@ -34,6 +34,20 @@ export const mediaListAddVideo =
       displayType,
     });
     closeMediaDialog();
+  };
+
+export const mediaListRemove =
+  (mediaList, removeMediaIndex, closeDialog) => (dispatch) => {
+    const newMediaList = mediaList.filter(
+      (obj, index) => index !== removeMediaIndex
+    );
+    if (newMediaList.length === mediaList.length) {
+      return;
+      dispatch(setErrorSnackbar("This media is not in the media list"));
+    }
+    dispatch({ type: PROJECT_SET_MEDIA_LIST, newMediaList });
+    dispatch(setSuccessSnackbar("Media removed"));
+    closeDialog();
   };
 
 const swap = (array, moveIndex, toIndex) => {
@@ -67,13 +81,7 @@ export const mediaListSwapPlaces =
     if (sourceIndex === targetIndex) return;
     const newMediaList = swap(mediaList, sourceIndex, targetIndex);
     return dispatch({
-      type: PROJECT_MEDIA_LIST_SET,
+      type: PROJECT_SET_MEDIA_LIST,
       newMediaList,
     });
   };
-
-export const mediaListRemove = (mediaIndexes, closeDialog) => (dispatch) => {
-  dispatch({ type: PROJECT_MEDIA_LIST_REMOVE, mediaIndexes });
-  closeDialog();
-  //dispatch(unselectAll());
-};

@@ -4,6 +4,7 @@ export {
   setDialogColor,
 } from "./colorDialog";
 export { openMediaDialog, closeMediaDialog } from "./mediaDialog";
+export { openMediaEditDialog, closeMediaEditDialog } from "./dialogEditMedia";
 export { setTitle, setDescription, setColor } from "./simpleInputs";
 export {
   mediaListAdd,

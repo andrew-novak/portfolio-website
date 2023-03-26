@@ -10,7 +10,8 @@ import { useGestureResponder } from "react-gesture-responder";
 
 export const MediaItemContext = createContext(null);
 
-const MediaItem = ({ children }) => {
+// cancelDialogOpening for cancelation of mediaEditDialog opening
+const MediaItem = ({ children, cancelDialogOpening }) => {
   const { style, onDragMove, onDragEnd } = useContext(MediaItemContext);
   const { left, top } = style;
   const startCoords = useRef({ left, top });
@@ -82,6 +83,11 @@ const MediaItem = ({ children }) => {
       });
     }
   }, [isDragging.current, left, top]);
+
+  // for cancelation of mediaEditDialog opening
+  useEffect(() => {
+    isDragging.current === true && cancelDialogOpening();
+  }, [isDragging.current]);
 
   return (
     <animated.div
