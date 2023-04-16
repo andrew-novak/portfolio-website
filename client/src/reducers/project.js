@@ -29,7 +29,7 @@ const initialState = {
   // form
   positions: null,
   positionIndex: null,
-  order: null,
+  position: null,
   title: "",
   description: "",
   colors: {
@@ -88,7 +88,7 @@ const project = (state = initialState, action) => {
         ...state,
         positions: action.positions,
         positionIndex: action.positionIndex,
-        order: action.order,
+        position: action.position,
       };
 
     case PROJECT_SET_TITLE:

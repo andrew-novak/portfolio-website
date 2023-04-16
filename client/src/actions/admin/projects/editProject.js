@@ -8,12 +8,13 @@ import { setErrorSnackbar, setSuccessSnackbar } from "actions/snackbar";
 
 /*
 id - number
+position - number
 title - string
 description - string
 mediaList - array of media objects
 */
 const editProject =
-  (id, title, description, colorsObj, mediaList, onSuccessRedirect) =>
+  (id, position, title, description, colorsObj, mediaList, onSuccessRedirect) =>
   async (dispatch) => {
     /*
     // client-side input validation:
@@ -38,6 +39,7 @@ const editProject =
       const response = await axios.post(
         `${API_URL}/admin/projects/${id}`,
         {
+          position,
           title,
           description,
           colors,

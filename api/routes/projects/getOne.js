@@ -30,7 +30,7 @@ const getProjectRoute = async (req, res, next) => {
     logProjectFound(project);
     const frontendProject = {
       id: project.id,
-      order: project.order,
+      position: project.position,
       title: project.title,
       description: project.description,
       colors: project.colors,

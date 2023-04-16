@@ -17,7 +17,7 @@ export const getProject = (projectId) => async (dispatch) => {
 
     // position related
     const positionIndex = positions.findIndex(
-      (obj) => obj.order === project.order
+      (obj) => obj.position === project.position
     );
 
     return dispatch({

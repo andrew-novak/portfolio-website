@@ -31,7 +31,7 @@ const messageFailure = "Unable to create the project";
 example project in db:
 project {
   id: 12,
-  order: 0,
+  position: 0,
   title: "Project Name",
   description: "Lorem Ipsum...",
   mediaFilenames: ["media_2321477.jpg", "media_1351776.png"]
@@ -41,12 +41,12 @@ const createProject = async (req, res, next) => {
   logRequestBody(req.body);
   const { title, description, colors, mediaDataUrls } = req.body;
   const projectId = await Project.getNextId();
-  const projectOrder = await Project.getNextOrder();
+  const projectPosition = await Project.getNextPosition();
   try {
     const mediaFilenames = await saveProjectMedia(projectId, mediaDataUrls);
     await Project.create({
       id: projectId,
-      order: projectOrder,
+      position: projectPosition,
       title,
       description,
       colors,

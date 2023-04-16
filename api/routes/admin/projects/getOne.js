@@ -33,17 +33,17 @@ const getProjectRoute = async (req, res, next) => {
     logProjectFound(project);
     const frontendProject = {
       id: project.id,
-      order: project.order,
+      position: project.position,
       title: project.title,
       description: project.description,
       colors: project.colors,
       mediaFilenames: project.mediaFilenames,
     };
-    // get order & name for all projects
-    // (for order change)
-    const projects = await Project.find({}).sort({ order: "descending" });
+    // get position & name for all projects
+    // (for position change)
+    const projects = await Project.find({}).sort({ position: "descending" });
     const projectPositions = projects.map((project) => ({
-      order: project.order,
+      position: project.position,
       title: project.title,
     }));
     logProjectPositionsCount(projectPositions.length);

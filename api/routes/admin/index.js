@@ -80,6 +80,7 @@ router.get(
   getProjectRoute
 );
 
+// Create
 router.post(
   "/projects",
   [
@@ -103,9 +104,11 @@ router.post(
   createProjectRoute
 );
 
+// Edit
 router.post(
   "/projects/:projectId",
   [
+    body("position").notEmpty().isInt(),
     body("title").isString().isLength({ min: 1, max: 30 }),
     body("description").isString().isLength({ min: 1, max: 3000 }),
   ],

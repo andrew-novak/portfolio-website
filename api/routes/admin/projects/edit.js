@@ -33,7 +33,7 @@ const messageFailure = "Unable to edit the project";
 example project in db:
 project {
   id: 12,
-  order: 0,
+  position: 0,
   title: "Project Name",
   description: "Lorem Ipsum...",
   mediaFilenames: ["media_2321477.jpg", "media_1351776.png"]
@@ -43,7 +43,7 @@ const editProjectRoute = async (req, res, next) => {
   logRequestBody(req.body);
   const { projectId } = req.params;
   const {
-    // TODO: add 'order' prop management
+    // TODO: add 'position' prop management
     title,
     description,
     colors,

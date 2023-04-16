@@ -16,11 +16,11 @@ const messageFailure = "Unable to retrieve projects";
 
 const getProjectsRoute = async (req, res, next) => {
   try {
-    const projects = await Project.find({}).sort({ order: "descending" });
+    const projects = await Project.find({}).sort({ position: "descending" });
     logProjectCount(projects.length);
     const frontendProjects = projects.map((project) => ({
       id: project.id,
-      order: project.order,
+      position: project.position,
       title: project.title,
       description: project.description,
       colors: project.colors,

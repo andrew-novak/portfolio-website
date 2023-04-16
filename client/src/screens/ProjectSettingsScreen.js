@@ -31,7 +31,7 @@ const ProjectSettingsScreen = ({
   colorDialog,
   positions,
   positionIndex,
-  order,
+  position,
   title,
   description,
   colors,
@@ -89,18 +89,44 @@ const ProjectSettingsScreen = ({
             </Typography>
             <OutlinedMoveItemList
               items={[
-                { text: positions?.[positionIndex - 2]?.title },
-                { text: positions?.[positionIndex - 1]?.title },
                 {
-                  text: positions?.[positionIndex]?.title,
+                  text: positions?.[positionIndex - 2]
+                    ? `${positions[positionIndex - 2].position} ${
+                        positions[positionIndex - 2].title
+                      }`
+                    : null,
+                },
+                {
+                  text: positions?.[positionIndex - 1]
+                    ? `${positions[positionIndex - 1].position} ${
+                        positions[positionIndex - 1].title
+                      }`
+                    : null,
+                },
+                {
+                  text: positions?.[positionIndex]
+                    ? `${positions[positionIndex].position} ${positions[positionIndex].title}`
+                    : null,
                   isHighlighted: true,
                   onMoveUp: () =>
                     changePosition("next", positionIndex, positions),
                   onMoveDown: () =>
                     changePosition("previous", positionIndex, positions),
                 },
-                { text: positions?.[positionIndex + 1]?.title },
-                { text: positions?.[positionIndex + 2]?.title },
+                {
+                  text: positions?.[positionIndex + 1]
+                    ? `${positions[positionIndex + 1].position} ${
+                        positions[positionIndex + 1].title
+                      }`
+                    : null,
+                },
+                {
+                  text: positions?.[positionIndex + 2]
+                    ? `${positions[positionIndex + 2].position} ${
+                        positions[positionIndex + 2].title
+                      }`
+                    : null,
+                },
               ]}
             />
             <Typography
@@ -205,6 +231,7 @@ const ProjectSettingsScreen = ({
                     )
                   : editProject(
                       projectId,
+                      position,
                       title,
                       description,
                       colors,
@@ -228,7 +255,7 @@ const mapState = (state) => {
     colorDialog,
     positions,
     positionIndex,
-    order,
+    position,
     title,
     description,
     colors,
@@ -238,6 +265,7 @@ const mapState = (state) => {
     colorDialog,
     positions,
     positionIndex,
+    position,
     title,
     description,
     colors,

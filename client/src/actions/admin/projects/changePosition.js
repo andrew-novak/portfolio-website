@@ -10,8 +10,8 @@ const swapArrayElements = (passedArray, index1, index2) => {
 
 const changePosition = (direction, positionIndex, positions) => (dispatch) => {
   let targetIndex;
-  // since projects are sorted in descending order by 'order' field
-  // index 0 is the highest 'order' value
+  // since projects are sorted in descending position by 'position' field
+  // index 0 is the highest 'position' value
   if (direction === "next") targetIndex = positionIndex - 1;
   else if (direction === "previous") targetIndex = positionIndex + 1;
   else
@@ -22,13 +22,15 @@ const changePosition = (direction, positionIndex, positions) => (dispatch) => {
   // if target index outside of available space
   if (targetIndex < 0 || targetIndex > positions.length - 1) return;
 
-  const order = positions[targetIndex].order;
-
   const newPositions = swapArrayElements(positions, positionIndex, targetIndex);
+
+  const position = newPositions[targetIndex].position;
+  newPositions[targetIndex].position = newPositions[positionIndex].position;
+  newPositions[positionIndex].position = position;
 
   dispatch({
     type: PROJECT_SET_POSITION,
-    order,
+    position,
     positionIndex: targetIndex,
     positions: newPositions,
   });
