@@ -1,3 +1,5 @@
+export { default as getProject } from "./getProject";
+// dialogs
 export {
   openColorDialog,
   closeColorDialog,
@@ -5,6 +7,8 @@ export {
 } from "./colorDialog";
 export { openMediaDialog, closeMediaDialog } from "./mediaDialog";
 export { openMediaEditDialog, closeMediaEditDialog } from "./dialogEditMedia";
+// form
+export { default as changePosition } from "./changePosition";
 export { setTitle, setDescription, setColor } from "./simpleInputs";
 export {
   mediaListAdd,

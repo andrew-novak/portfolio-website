@@ -5,11 +5,12 @@ import { Container, Button, Typography, TextField } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import { connect } from "react-redux";
 
-import { getProject } from "actions/projects";
 import {
+  getProject,
   openColorDialog,
   closeColorDialog,
   setDialogColor,
+  changePosition,
   setTitle,
   setDescription,
   setColor,
@@ -19,23 +20,28 @@ import {
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
-import DialogColorPicker from "components/dialogs/DialogColorPicker";
+import OutlinedMoveItemList from "components/OutlinedMoveItemList";
 import DisplayProjectImage from "components/DisplayProjectImage";
+import DialogColorPicker from "components/dialogs/DialogColorPicker";
 import OutlinedColorPicker from "components/OutlinedColorPicker";
 import MediaOrderedInput from "components/MediaOrderedInput";
 import Footer from "components/Footer";
 
 const ProjectSettingsScreen = ({
   colorDialog,
+  positions,
+  positionIndex,
+  order,
   title,
   description,
   colors,
   mediaList,
-  getProject,
   // actions
+  getProject,
   openColorDialog,
   closeColorDialog,
   setDialogColor,
+  changePosition,
   setTitle,
   setDescription,
   setColor,
@@ -81,6 +87,22 @@ const ProjectSettingsScreen = ({
             <Typography variant={theme.custom.muiProps.largeTitleVariant}>
               {isNewProject ? "New Project" : "Edit Project"}
             </Typography>
+            <OutlinedMoveItemList
+              items={[
+                { text: positions?.[positionIndex - 2]?.title },
+                { text: positions?.[positionIndex - 1]?.title },
+                {
+                  text: positions?.[positionIndex]?.title,
+                  isHighlighted: true,
+                  onMoveUp: () =>
+                    changePosition("next", positionIndex, positions),
+                  onMoveDown: () =>
+                    changePosition("previous", positionIndex, positions),
+                },
+                { text: positions?.[positionIndex + 1]?.title },
+                { text: positions?.[positionIndex + 2]?.title },
+              ]}
+            />
             <Typography
               sx={{ ...theme.custom.styles.inputLabel, paddingLeft: 0 }}
             >
@@ -202,8 +224,25 @@ const ProjectSettingsScreen = ({
 };
 
 const mapState = (state) => {
-  const { colorDialog, title, description, colors, mediaList } = state.project;
-  return { colorDialog, title, description, colors, mediaList };
+  const {
+    colorDialog,
+    positions,
+    positionIndex,
+    order,
+    title,
+    description,
+    colors,
+    mediaList,
+  } = state.project;
+  return {
+    colorDialog,
+    positions,
+    positionIndex,
+    title,
+    description,
+    colors,
+    mediaList,
+  };
 };
 
 export default connect(mapState, {
@@ -211,6 +250,7 @@ export default connect(mapState, {
   openColorDialog,
   closeColorDialog,
   setDialogColor,
+  changePosition,
   setTitle,
   setDescription,
   setColor,

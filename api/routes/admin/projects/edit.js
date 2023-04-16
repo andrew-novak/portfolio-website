@@ -39,7 +39,7 @@ project {
   mediaFilenames: ["media_2321477.jpg", "media_1351776.png"]
 }
 */
-const editProject = async (req, res, next) => {
+const editProjectRoute = async (req, res, next) => {
   logRequestBody(req.body);
   const { projectId } = req.params;
   const {
@@ -77,4 +77,4 @@ const editProject = async (req, res, next) => {
   }
 };
 
-module.exports = editProject;
+module.exports = editProjectRoute;

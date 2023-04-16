@@ -1,5 +1,6 @@
 import {
   PROJECT_SET,
+  PROJECT_SET_POSITION,
   PROJECT_SET_TITLE,
   PROJECT_SET_DIALOG_COLOR,
   PROJECT_SET_DIALOG_MEDIA,
@@ -26,6 +27,9 @@ const initialState = {
     color: null,
   },
   // form
+  positions: null,
+  positionIndex: null,
+  order: null,
   title: "",
   description: "",
   colors: {
@@ -45,12 +49,6 @@ const initialState = {
 
 const project = (state = initialState, action) => {
   switch (action.type) {
-    case PROJECT_SET:
-      return {
-        ...initialState,
-        ...action.project,
-      };
-
     case PROJECT_SET_DIALOG_COLOR:
       return {
         ...state,
@@ -77,6 +75,20 @@ const project = (state = initialState, action) => {
           action.mediaEditDialog === null
             ? initialState.mediaEditDialog
             : action.mediaEditDialog,
+      };
+
+    case PROJECT_SET:
+      return {
+        ...initialState,
+        ...action.project,
+      };
+
+    case PROJECT_SET_POSITION:
+      return {
+        ...state,
+        positions: action.positions,
+        positionIndex: action.positionIndex,
+        order: action.order,
       };
 
     case PROJECT_SET_TITLE:

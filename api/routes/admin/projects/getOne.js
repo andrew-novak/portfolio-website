@@ -1,12 +1,14 @@
-const logger = require("../../debug/logger");
-const utf8Chars = require("../../constants/utf8Chars");
-const Project = require("../../models/Project");
+const logger = require("../../../debug/logger");
+const utf8Chars = require("../../../constants/utf8Chars");
+const Project = require("../../../models/Project");
 
 // server-side logs
 const logProjectFound = (project) =>
   logger.debug(
     `${utf8Chars.checkMark} found project { id: ${project.id} title: ${project.title} }`
   );
+const logProjectPositionsCount = (count) =>
+  logger.debug(`${utf8Chars.checkMark} ${count} project position(s) retrieved`);
 const logProjectNotFound = (project) =>
   logger.error(`${utf8Chars.xMark} project { id: ${project.id} } not found`);
 const logFailure = (err) => {
@@ -22,6 +24,7 @@ const messageError = "Unable to retrieve the project";
 const getProjectRoute = async (req, res, next) => {
   const { projectId } = req.params;
   try {
+    // get project
     const project = await Project.findOne({ id: projectId });
     if (!project) {
       logProjectNotFound();
@@ -36,7 +39,16 @@ const getProjectRoute = async (req, res, next) => {
       colors: project.colors,
       mediaFilenames: project.mediaFilenames,
     };
-    res.status(200).json({ project: frontendProject });
+    // get order & name for all projects
+    // (for order change)
+    const projects = await Project.find({}).sort({ order: "descending" });
+    const projectPositions = projects.map((project) => ({
+      order: project.order,
+      title: project.title,
+    }));
+    logProjectPositionsCount(projectPositions.length);
+    // send data
+    res.status(200).json({ project: frontendProject, projectPositions });
   } catch (err) {
     logFailure(err);
     res.status(500).json({ message: messageError });

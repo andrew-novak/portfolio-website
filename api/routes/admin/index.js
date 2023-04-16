@@ -8,6 +8,7 @@ const loginRoute = require("./login");
 const setIntroRoute = require("./setIntro");
 const createProjectRoute = require("./projects/create");
 const editProjectRoute = require("./projects/edit");
+const getProjectRoute = require("./projects/getOne");
 const removeProjectRoute = require("./projects/remove");
 
 const router = express.Router();
@@ -70,6 +71,13 @@ router.post(
   ],
   handleValidationErrors,
   setIntroRoute
+);
+
+router.get(
+  "/projects/:projectId",
+  [param("projectId").exists()],
+  handleValidationErrors,
+  getProjectRoute
 );
 
 router.post(
