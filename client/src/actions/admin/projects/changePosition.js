@@ -24,9 +24,9 @@ const changePosition = (direction, positionIndex, positions) => (dispatch) => {
 
   const newPositions = swapArrayElements(positions, positionIndex, targetIndex);
 
-  const position = newPositions[targetIndex].position;
-  newPositions[targetIndex].position = newPositions[positionIndex].position;
-  newPositions[positionIndex].position = position;
+  const position = newPositions[positionIndex].position;
+  newPositions[positionIndex].position = newPositions[targetIndex].position;
+  newPositions[targetIndex].position = position;
 
   dispatch({
     type: PROJECT_SET_POSITION,

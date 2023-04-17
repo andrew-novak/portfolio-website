@@ -36,6 +36,35 @@ const OutlinedMoveItemList = ({ items }) => {
         border: `solid 1px ${outlineColor}`,
       }}
     >
+      <div
+        style={{
+          display: "flex",
+          borderBottom: `solid 1px ${outlineColor}`,
+        }}
+      >
+        <Typography
+          noWrap
+          sx={{
+            ...theme.custom.styles.inputLabel,
+            width: 90,
+            borderRight: `solid 1px ${outlineColor}`,
+            paddingTop: 0,
+            paddingBottom: 0,
+          }}
+        >
+          Position
+        </Typography>
+        <Typography
+          noWrap
+          sx={{
+            ...theme.custom.styles.inputLabel,
+            paddingTop: 0,
+            paddingBottom: 0,
+          }}
+        >
+          Title
+        </Typography>
+      </div>
       {items.map((item, index) => (
         <div
           key={index}
@@ -49,10 +78,40 @@ const OutlinedMoveItemList = ({ items }) => {
               `linear-gradient(30deg, #f8f1ff 0%, #eff2fc 100%)`,
           }}
         >
-          <Typography sx={theme.custom.styles.inputLabel}>
-            {item.text}&nbsp;
-          </Typography>
-          <div>
+          <div style={{ display: "flex" }}>
+            <div
+              style={{ width: 90, borderRight: `solid 1px ${outlineColor}` }}
+            >
+              <Typography
+                noWrap
+                sx={{
+                  ...theme.custom.styles.inputLabel,
+                  paddingTop: 1,
+                  paddingBottom: 1,
+                }}
+              >
+                {item.position}&nbsp;
+              </Typography>
+            </div>
+            <Typography
+              noWrap
+              sx={{
+                ...theme.custom.styles.inputLabel,
+                paddingTop: 1,
+                paddingBottom: 1,
+              }}
+            >
+              {item.title}&nbsp;
+            </Typography>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 5,
+              paddingRight: 5,
+            }}
+          >
             {!!item.onMoveUp && (
               <IconButton onClick={item.onMoveUp}>
                 <ArrowUpwardIcon />

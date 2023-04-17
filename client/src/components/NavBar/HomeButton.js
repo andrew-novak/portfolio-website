@@ -42,7 +42,7 @@ const HomeButton = ({ min350px, min450px, smUp }) => {
           background: theme.custom.colors.activity,
           WebkitBackgroundClip: "text",
           textFillColor: "transparent",
-          background: "rgb(0, 0, 0)",
+          background: "rgba(0, 0, 0, 87)",
         }}
         color="inherit"
       >

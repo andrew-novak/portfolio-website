@@ -18,6 +18,12 @@ const logRequestBody = (body) => {
     }),
   });
 };
+const logNotFound = (id) =>
+  logger.debug(`${utf8Chars.xMark} project not found { id: ${id} }`);
+const logProjectMoved = (id, title, origin, target) =>
+  logger.debug(
+    `${utf8Chars.checkMark} project position move ${origin} -> ${target} { id: ${id}, title: ${title} }`
+  );
 const logSuccess = (id, title) =>
   logger.debug(
     `${utf8Chars.checkMark} updated project { id: ${id} title: ${title} }`
@@ -27,6 +33,7 @@ const logFailure = (err) => {
   logger.error(err);
 };
 // client-side messages
+const messageNotFound = "Project not found";
 const messageFailure = "Unable to edit the project";
 
 /*
@@ -43,7 +50,7 @@ const editProjectRoute = async (req, res, next) => {
   logRequestBody(req.body);
   const { projectId } = req.params;
   const {
-    // TODO: add 'position' prop management
+    position,
     title,
     description,
     colors,
@@ -53,6 +60,25 @@ const editProjectRoute = async (req, res, next) => {
   } = req.body;
   let newMediaFilenames = [];
   try {
+    // project existence
+    const originalProject = await Project.findOne({ id: projectId });
+    if (!originalProject) {
+      logNotFound(projectId);
+      return res.status(400).json({ message: messageNotFound });
+    }
+
+    // positions
+    if (position) {
+      await Project.move(originalProject.position, position);
+      logProjectMoved(
+        originalProject.id,
+        originalProject.title,
+        originalProject.position,
+        position
+      );
+    }
+
+    // media files
     // TODO: add media deletion
     newMediaFilenames = await saveProjectMedia(
       projectId,
@@ -63,6 +89,8 @@ const editProjectRoute = async (req, res, next) => {
       newMediaFilenames,
       oldMediaFilenames
     );
+
+    // update document (except positions)
     await Project.updateOne(
       { id: projectId },
       { title, description, colors, mediaFilenames }

@@ -90,23 +90,16 @@ const ProjectSettingsScreen = ({
             <OutlinedMoveItemList
               items={[
                 {
-                  text: positions?.[positionIndex - 2]
-                    ? `${positions[positionIndex - 2].position} ${
-                        positions[positionIndex - 2].title
-                      }`
-                    : null,
+                  position: positions?.[positionIndex - 2]?.position,
+                  title: positions?.[positionIndex - 2]?.title,
                 },
                 {
-                  text: positions?.[positionIndex - 1]
-                    ? `${positions[positionIndex - 1].position} ${
-                        positions[positionIndex - 1].title
-                      }`
-                    : null,
+                  position: positions?.[positionIndex - 1]?.position,
+                  title: positions?.[positionIndex - 1]?.title,
                 },
                 {
-                  text: positions?.[positionIndex]
-                    ? `${positions[positionIndex].position} ${positions[positionIndex].title}`
-                    : null,
+                  position: positions?.[positionIndex]?.position,
+                  title,
                   isHighlighted: true,
                   onMoveUp: () =>
                     changePosition("next", positionIndex, positions),
@@ -114,18 +107,12 @@ const ProjectSettingsScreen = ({
                     changePosition("previous", positionIndex, positions),
                 },
                 {
-                  text: positions?.[positionIndex + 1]
-                    ? `${positions[positionIndex + 1].position} ${
-                        positions[positionIndex + 1].title
-                      }`
-                    : null,
+                  position: positions?.[positionIndex + 1]?.position,
+                  title: positions?.[positionIndex + 1]?.title,
                 },
                 {
-                  text: positions?.[positionIndex + 2]
-                    ? `${positions[positionIndex + 2].position} ${
-                        positions[positionIndex + 2].title
-                      }`
-                    : null,
+                  position: positions?.[positionIndex + 2]?.position,
+                  title: positions?.[positionIndex + 2]?.title,
                 },
               ]}
             />

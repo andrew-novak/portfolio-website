@@ -6,12 +6,15 @@ import {
   CardMedia,
   CardHeader,
   CardContent,
+  Button,
   Typography,
+  IconButton,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 
 import getVideoCover from "helpers/getVideoCover";
 
-const ProjectsGrid = ({ projects, cardHeightPercentRatio }) => {
+const ProjectsGrid = ({ isAdmin, projects, cardHeightPercentRatio }) => {
   const navigate = useNavigate();
 
   const selectImage = (project) => {
@@ -46,6 +49,7 @@ const ProjectsGrid = ({ projects, cardHeightPercentRatio }) => {
                 borderRadius: 0,
                 boxShadow: 0,
                 //backgroundColor: "rgb(238, 238, 238)",
+                position: "relative",
               }}
             >
               <ButtonBase
@@ -97,11 +101,31 @@ const ProjectsGrid = ({ projects, cardHeightPercentRatio }) => {
                     )
                   }
                 </CardMedia>
-                <CardHeader title={project.title} sx={{ paddingBottom: 0 }} />
+                <CardHeader title={project.title} sx={{ paddingBottom: 1 }} />
                 <CardContent sx={{ paddingTop: 1 }}>
-                  <Typography>Ipsum...</Typography>
+                  <Typography>{project.description}</Typography>
                 </CardContent>
               </ButtonBase>
+              {isAdmin && (
+                <div style={{ position: "absolute", top: 0, right: 0 }}>
+                  <IconButton
+                    sx={{
+                      borderTopLeftRadius: 0,
+                      borderTopRightRadius: 0,
+                      borderBottomRightRadius: 0,
+                      opacity: 0.8,
+                      background: "white",
+                      "&:hover": {
+                        opacity: 1,
+                        background: "white",
+                      },
+                    }}
+                    onClick={() => navigate(`/edit-project/${project.id}`)}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </div>
+              )}
             </Card>
           </Grid>
         );

@@ -28,6 +28,9 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, colors, image, text }) => {
   const separatingMargin = 24;
   const isMobile = windowWidth < 700;
   const isLargeScreen = windowWidth > 1000;
+  const geometryColor = "#3c3b3b";
+  const desktopTextColor = "#525252";
+  const mobileTextColor = "#464444";
   return (
     <div style={{ position: "relative" }}>
       {/* Edit Button Section (Admin-Accessible) */}
@@ -72,18 +75,21 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, colors, image, text }) => {
           }}
         >
           <div style={{ position: "relative", overflow: "hidden" }}>
-            <GeometryPattern color1="#393939" color2={colors[0] || "#ffffff"} />
+            <GeometryPattern
+              color1={geometryColor}
+              color2={colors[0] || "#ffffff"}
+            />
             <div style={{ position: "absolute" }}>
               <GeometryPattern
-                color1="#393939"
+                color1={geometryColor}
                 color2={colors[0] || "#ffffff"}
               />
               <GeometryPattern
-                color1="#393939"
+                color1={geometryColor}
                 color2={colors[0] || "#ffffff"}
               />
               <GeometryPattern
-                color1="#393939"
+                color1={geometryColor}
                 color2={colors[0] || "#ffffff"}
               />
             </div>
@@ -135,6 +141,7 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, colors, image, text }) => {
                       height: "100%",
                       width: "100%",
                       overflow: "hidden",
+                      color: desktopTextColor,
                     }}
                     style={{ maxWidth: 600 }}
                   >
@@ -156,7 +163,10 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, colors, image, text }) => {
           }}
         >
           <Container maxWidth="xl">
-            <Typography align="center" sx={{ fontSize: 25 }}>
+            <Typography
+              align="center"
+              sx={{ fontSize: 25, color: mobileTextColor }}
+            >
               {text}
             </Typography>
           </Container>

@@ -89,6 +89,7 @@ const HomeScreen = ({
           >
             <div style={{ display: "flex", justifyContent: "center" }}></div>
             <ProjectsGrid
+              isAdmin={isAdminLoggedIn}
               projects={projects}
               cardHeightPercentRatio={theme.custom.heightPercentRatios["1:1"]}
             />
