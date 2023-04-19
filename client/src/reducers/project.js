@@ -31,7 +31,7 @@ const initialState = {
   positionIndex: null,
   position: null,
   title: "",
-  description: "",
+  description: null,
   colors: {
     0: "#f8f1ff",
     1: "#eff2fc",

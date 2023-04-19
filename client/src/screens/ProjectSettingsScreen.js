@@ -23,6 +23,7 @@ import Content from "components/Content";
 import OutlinedMoveItemList from "components/OutlinedMoveItemList";
 import DisplayProjectImage from "components/DisplayProjectImage";
 import DialogColorPicker from "components/dialogs/DialogColorPicker";
+import DescriptionInput from "components/DescriptionInput";
 import OutlinedColorPicker from "components/OutlinedColorPicker";
 import MediaOrderedInput from "components/MediaOrderedInput";
 import Footer from "components/Footer";
@@ -87,35 +88,37 @@ const ProjectSettingsScreen = ({
             <Typography variant={theme.custom.muiProps.largeTitleVariant}>
               {isNewProject ? "New Project" : "Edit Project"}
             </Typography>
-            <OutlinedMoveItemList
-              items={[
-                {
-                  position: positions?.[positionIndex - 2]?.position,
-                  title: positions?.[positionIndex - 2]?.title,
-                },
-                {
-                  position: positions?.[positionIndex - 1]?.position,
-                  title: positions?.[positionIndex - 1]?.title,
-                },
-                {
-                  position: positions?.[positionIndex]?.position,
-                  title,
-                  isHighlighted: true,
-                  onMoveUp: () =>
-                    changePosition("next", positionIndex, positions),
-                  onMoveDown: () =>
-                    changePosition("previous", positionIndex, positions),
-                },
-                {
-                  position: positions?.[positionIndex + 1]?.position,
-                  title: positions?.[positionIndex + 1]?.title,
-                },
-                {
-                  position: positions?.[positionIndex + 2]?.position,
-                  title: positions?.[positionIndex + 2]?.title,
-                },
-              ]}
-            />
+            {!isNewProject && (
+              <OutlinedMoveItemList
+                items={[
+                  {
+                    position: positions?.[positionIndex - 2]?.position,
+                    title: positions?.[positionIndex - 2]?.title,
+                  },
+                  {
+                    position: positions?.[positionIndex - 1]?.position,
+                    title: positions?.[positionIndex - 1]?.title,
+                  },
+                  {
+                    position: positions?.[positionIndex]?.position,
+                    title,
+                    isHighlighted: true,
+                    onMoveUp: () =>
+                      changePosition("next", positionIndex, positions),
+                    onMoveDown: () =>
+                      changePosition("previous", positionIndex, positions),
+                  },
+                  {
+                    position: positions?.[positionIndex + 1]?.position,
+                    title: positions?.[positionIndex + 1]?.title,
+                  },
+                  {
+                    position: positions?.[positionIndex + 2]?.position,
+                    title: positions?.[positionIndex + 2]?.title,
+                  },
+                ]}
+              />
+            )}
             <Typography
               sx={{ ...theme.custom.styles.inputLabel, paddingLeft: 0 }}
             >
@@ -162,6 +165,11 @@ const ProjectSettingsScreen = ({
               fullWidth
               onChange={(event) => setTitle(event.target.value)}
             />
+            <DescriptionInput
+              description={description}
+              onChange={(newDescription) => setDescription(newDescription)}
+            />
+            {/*
             <TextField
               label="Description"
               value={description}
@@ -169,6 +177,7 @@ const ProjectSettingsScreen = ({
               multiline
               onChange={(event) => setDescription(event.target.value)}
             />
+            */}
             <OutlinedColorPicker
               label="Color 0"
               color={colors[0]}
