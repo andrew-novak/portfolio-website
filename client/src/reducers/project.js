@@ -31,6 +31,7 @@ const initialState = {
   positionIndex: null,
   position: null,
   title: "",
+  // DraftJS EditorState
   description: null,
   colors: {
     0: "#f8f1ff",

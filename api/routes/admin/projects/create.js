@@ -40,6 +40,8 @@ project {
 const createProject = async (req, res, next) => {
   logRequestBody(req.body);
   const { title, description, colors, mediaDataUrls } = req.body;
+  console.log(description);
+  res.status(500).json({ message: "TEST ERROR" });
   const projectId = await Project.getNextId();
   const projectPosition = await Project.getNextPosition();
   try {

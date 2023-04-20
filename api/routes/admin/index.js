@@ -85,7 +85,7 @@ router.post(
   "/projects",
   [
     body("title").isString().isLength({ min: 1, max: 30 }),
-    body("description").isString().isLength({ min: 1, max: 3000 }),
+    //body("description").isString().isLength({ min: 1, max: 3000 }),
     body("colors").isArray(),
     body("colors.*").isString().custom(isHexColor),
     body("mediaFilenames").isArray(),
@@ -110,7 +110,7 @@ router.post(
   [
     body("position").notEmpty().isInt(),
     body("title").isString().isLength({ min: 1, max: 30 }),
-    body("description").isString().isLength({ min: 1, max: 3000 }),
+    //body("description").isString().isLength({ min: 1, max: 3000 }),
   ],
   handleValidationErrors,
   editProjectRoute

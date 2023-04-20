@@ -1,8 +1,30 @@
+import {
+  convertFromHTML,
+  ContentState,
+  convertFromRaw,
+  EditorState,
+} from "draft-js";
+
 import getMedia from "helpers/getMedia";
 import supportedMimeTypes from "constants/supportedMimeTypes";
 
 const apiProjectToFrontend = (project) => {
-  const { id, mediaFilenames } = project;
+  const { id, description: rawDescription, mediaFilenames } = project;
+
+  // Description
+  let contentState;
+  if (typeof rawDescription === "string" || rawDescription instanceof String) {
+    const blocks = convertFromHTML(`<p>${rawDescription}</p>`);
+    contentState = ContentState.createFromBlockArray(
+      blocks.contentBlocks,
+      blocks.entityMap
+    );
+  } else {
+    contentState = convertFromRaw(rawDescription);
+  }
+  const description = EditorState.createWithContent(contentState);
+
+  // Media
   // Converting server-side media filenames to client-side media objects containing more info
   const mediaList = mediaFilenames.map((filename) => {
     const serverUrl = getMedia.oneProjectFileUrl(id, filename);
@@ -19,7 +41,8 @@ const apiProjectToFrontend = (project) => {
       displayType,
     };
   });
-  return { ...project, mediaFilenames: null, mediaList };
+
+  return { ...project, description, mediaFilenames: null, mediaList };
 };
 
 export default apiProjectToFrontend;

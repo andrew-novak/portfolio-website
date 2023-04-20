@@ -8,7 +8,7 @@ const DescriptionInput = ({ description, onChange }) => {
 
   if (description && !(description instanceof EditorState)) {
     throw new Error(
-      "'description' argument in DescriptionInput must be an instance of EditorState " +
+      "'description' argument in <DescriptionInput /> must be an instance of EditorState " +
         description
     );
   }

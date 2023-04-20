@@ -1,10 +1,24 @@
-const { Schema, model } = require("mongoose");
+const { Schema, Mixed, model } = require("mongoose");
 
 const ProjectSchema = new Schema({
   id: Number,
   position: Number,
   title: String,
-  description: String,
+  // DraftJS Raw JS Object
+  description: {
+    blocks: [
+      {
+        key: String,
+        text: String,
+        type: Mixed,
+        depth: Number,
+        inlineStyleRanges: Array,
+        entityRanges: Array,
+        data: Mixed,
+      },
+    ],
+    entityMap: Mixed,
+  },
   colors: [String],
   mediaFilenames: [String],
 });

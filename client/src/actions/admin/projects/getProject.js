@@ -25,6 +25,7 @@ export const getProject = (projectId) => async (dispatch) => {
       project: { ...project, positions, positionIndex },
     });
   } catch (err) {
+    console.error(err);
     return dispatch(
       setErrorSnackbar(
         err.response?.data?.message || "Unable to retrieve the project"

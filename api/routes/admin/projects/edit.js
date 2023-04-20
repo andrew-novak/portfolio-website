@@ -58,6 +58,7 @@ const editProjectRoute = async (req, res, next) => {
     mediaFilenames: oldMediaFilenames,
     mediaDataUrls,
   } = req.body;
+  console.log(description);
   let newMediaFilenames = [];
   try {
     // project existence

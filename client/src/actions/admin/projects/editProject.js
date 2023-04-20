@@ -1,3 +1,4 @@
+import { convertToRaw } from "draft-js";
 import axios from "axios";
 
 import indexedObjectToArray from "helpers/indexedObjectToArray";
@@ -10,19 +11,16 @@ import { setErrorSnackbar, setSuccessSnackbar } from "actions/snackbar";
 id - number
 position - number
 title - string
-description - string
+description - DraftJS EditorState
 mediaList - array of media objects
 */
 const editProject =
   (id, position, title, description, colorsObj, mediaList, onSuccessRedirect) =>
   async (dispatch) => {
-    /*
-    // client-side input validation:
-    if (!productName)
-      return dispatch(setErrorSnackbar("Title field cannot be empty."));
-    if (!description)
-      return dispatch(setErrorSnackbar("Description field cannot be empty."));
-    */
+    // DraftJS EditorState to Raw JS Object
+    const contentState = description.getCurrentContent();
+    const rawDescription = convertToRaw(contentState);
+    console.log(rawDescription);
 
     const colors = indexedObjectToArray(colorsObj);
 
@@ -41,7 +39,7 @@ const editProject =
         {
           position,
           title,
-          description,
+          description: rawDescription,
           colors,
           mediaFilenames: serverFilenames,
           mediaDataUrls,

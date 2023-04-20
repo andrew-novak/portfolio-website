@@ -10,18 +10,23 @@ import {
   Button,
   Typography,
 } from "@mui/material";
+import { Editor, EditorState } from "draft-js";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import DownloadIcon from "@mui/icons-material/Download";
+import GitHubIcon from "@mui/icons-material/GitHub";
 import Carousel from "react-material-ui-carousel";
 import { connect } from "react-redux";
 
-import { getProject } from "actions/projects";
+import { getProject, downloadProjectFile } from "actions/projects";
 import { removeProject } from "actions/admin/projects";
 import getMedia from "helpers/getMedia";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
+import ProjectButtons from "components/ProjectButtons";
 import DisplayProjectImage from "components/DisplayProjectImage";
 import Footer from "components/Footer";
 
@@ -44,14 +49,11 @@ const Media = ({ description, colors, mediaUrls, dimensionProps }) => {
             width: width,
           }}
         >
-          <Container>
-            <Typography
-              align="center"
-              variant="p"
-              sx={{ fontSize: isMobile ? 25 : 30 }}
-            >
-              {description || ""}
-            </Typography>
+          <Container sx={{ fontSize: isMobile ? 22 : 30 }}>
+            <Editor
+              editorState={description || EditorState.createEmpty()}
+              readOnly={true}
+            />
           </Container>
         </div>
       )}
@@ -82,14 +84,11 @@ const Media = ({ description, colors, mediaUrls, dimensionProps }) => {
                   width: width,
                 }}
               >
-                <Container>
-                  <Typography
-                    align="center"
-                    variant="p"
-                    sx={{ fontSize: isMobile ? 25 : 30 }}
-                  >
-                    {description || ""}
-                  </Typography>
+                <Container sx={{ fontSize: isMobile ? 22 : 30 }}>
+                  <Editor
+                    editorState={description || EditorState.createEmpty()}
+                    readOnly={true}
+                  />
                 </Container>
               </div>
             )}
@@ -100,11 +99,18 @@ const Media = ({ description, colors, mediaUrls, dimensionProps }) => {
   );
 };
 
+const icons = {
+  PlayArrow: <PlayArrowIcon />,
+  Download: <DownloadIcon />,
+  GitHub: <GitHubIcon />,
+};
+
 const ProjectViewScreen = ({
   isAdminLoggedIn,
   project,
   getProject,
   removeProject,
+  downloadProjectFile,
 }) => {
   const theme = useTheme();
   const { projectId } = useParams();
@@ -153,46 +159,85 @@ const ProjectViewScreen = ({
             <Container>
               <Typography
                 variant={theme.custom.muiProps.largeTitleVariant}
-                sx={{ fontSize: 40, marginBottom: theme.spacing(5) }}
+                sx={{
+                  fontSize: 40,
+                  marginTop: theme.spacing(2),
+                  marginBottom: theme.spacing(6),
+                }}
               >
                 {project.title || ""}
               </Typography>
-              {/* Admin Buttons */}
-              {isAdminLoggedIn && (
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "flex-start",
-                    marginBottom: theme.spacing(5),
-                  }}
-                >
-                  <Button
-                    startIcon={<EditIcon />}
-                    onClick={() => navigate(`/edit-project/${projectId}`)}
-                  >
-                    Edit Project
-                  </Button>
-                  <div style={{ width: 20 }} />
-                  <Button
-                    startIcon={<DeleteIcon />}
-                    onClick={() =>
-                      removeProject(projectId, () => navigate("/"))
-                    }
-                  >
-                    Remove Project
-                  </Button>
-                </div>
-              )}
+              {
+                // Admin Buttons
+                isAdminLoggedIn && (
+                  <ProjectButtons
+                    styleContainer={{
+                      marginTop: theme.spacing(3),
+                      marginBottom: theme.spacing(3),
+                    }}
+                    styleButton={{
+                      background:
+                        "linear-gradient(30deg, rgb(245, 239, 251) 0%, rgb(239, 242, 252) 100%)",
+                    }}
+                    buttonVariant="outlined"
+                    buttons={[
+                      {
+                        label: "Edit Project",
+                        icon: <EditIcon />,
+                        onClick: () => navigate(`/edit-project/${projectId}`),
+                      },
+                      {
+                        label: "Remove Project",
+                        icon: <DeleteIcon />,
+                        onClick: () =>
+                          removeProject(projectId, () => navigate("/")),
+                      },
+                    ]}
+                  />
+                )
+              }
+              {
+                // Normal User Buttons
+                //(project.links?.length > 0 ||
+                //  project.downloadFiles?.length > 1) && (
+              }
+              <ProjectButtons
+                styleContainer={{
+                  marginTop: isAdminLoggedIn
+                    ? theme.spacing(3)
+                    : theme.spacing(3),
+                }}
+                buttonVariant="outlined"
+                buttons={[
+                  {
+                    label: "Run Demo",
+                    icon: icons["PlayArrow"],
+                    onClick: () =>
+                      (window.location.href = "https://google.com"), // test only
+                  },
+                  {
+                    label: "Download",
+                    icon: icons["Download"],
+                    onClick: () =>
+                      downloadProjectFile(projectId, "anImage.jpg"),
+                  },
+                  {
+                    label: "GitHub Repo",
+                    icon: icons["GitHub"],
+                  },
+                ]}
+              />
             </Container>
           </div>
-          {/* Description is in Media component*/}
-          <Media
-            description={project.description}
-            colors={project.colors}
-            mediaUrls={mediaUrls}
-            dimensionProps={dimensionProps}
-          />
+          <div style={{ marginTop: theme.spacing(8), width: "100%" }}>
+            {/* Description is in Media component*/}
+            <Media
+              description={project.description}
+              colors={project.colors}
+              mediaUrls={mediaUrls}
+              dimensionProps={dimensionProps}
+            />
+          </div>
         </div>
       </Content>
       <Footer
@@ -218,6 +263,8 @@ const mapState = (state) => {
   return { isAdminLoggedIn, project };
 };
 
-export default connect(mapState, { getProject, removeProject })(
-  ProjectViewScreen
-);
+export default connect(mapState, {
+  getProject,
+  removeProject,
+  downloadProjectFile,
+})(ProjectViewScreen);

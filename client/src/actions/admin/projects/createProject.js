@@ -1,3 +1,4 @@
+import { convertToRaw } from "draft-js";
 import axios from "axios";
 
 import indexedObjectToArray from "helpers/indexedObjectToArray";
@@ -17,7 +18,7 @@ const validate = (title, description, mediaList) => (dispatch) => {
 
 /*
 title - string
-description - string
+description - DraftJS EditorState
 media - array of objects e.g. [
   { serverFilename: "434576.jpg", clientBlob: null, ...and some more props },
   { serverFilename: null, clientBlob: "blob:http://....", and some more props },
@@ -26,6 +27,10 @@ media - array of objects e.g. [
 const createProject =
   (title, description, colorsObj, mediaList, onSuccessRedirect) =>
   async (dispatch) => {
+    // DraftJS EditorState to Raw JS Object
+    const contentState = description.getCurrentContent();
+    const rawDescription = convertToRaw(contentState);
+
     const colors = indexedObjectToArray(colorsObj);
 
     const { clientLocalUrls = [] } = splitMediaList(mediaList);
@@ -38,7 +43,7 @@ const createProject =
         `${API_URL}/admin/projects`,
         {
           title,
-          description,
+          description: rawDescription,
           colors,
           mediaFilenames: [],
           mediaDataUrls,

@@ -102,8 +102,23 @@ const ProjectsGrid = ({ isAdmin, projects, cardHeightPercentRatio }) => {
                   }
                 </CardMedia>
                 <CardHeader title={project.title} sx={{ paddingBottom: 1 }} />
-                <CardContent sx={{ paddingTop: 1 }}>
-                  <Typography>{project.description}</Typography>
+                <CardContent
+                  sx={{
+                    paddingTop: 1,
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      display: "-webkit-box",
+                      WebkitLineClamp: "3",
+                      WebkitBoxOrient: "vertical",
+                      maxHeight: 70,
+                    }}
+                  >
+                    {project.description}
+                  </Typography>
                 </CardContent>
               </ButtonBase>
               {isAdmin && (
