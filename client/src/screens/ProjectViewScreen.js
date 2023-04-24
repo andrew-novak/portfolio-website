@@ -1,27 +1,17 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
-import Image from "mui-image";
-import {
-  Grid,
-  Box,
-  CardMedia,
-  Container,
-  Button,
-  Typography,
-} from "@mui/material";
-import { Editor, EditorState } from "draft-js";
+import { Container, Typography } from "@mui/material";
+import { Editor } from "draft-js";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import DownloadIcon from "@mui/icons-material/Download";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import Carousel from "react-material-ui-carousel";
 import { connect } from "react-redux";
 
 import { getProject, downloadProjectFile } from "actions/projects";
 import { removeProject } from "actions/admin/projects";
-import getMedia from "helpers/getMedia";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
@@ -30,71 +20,76 @@ import ProjectButtons from "components/ProjectButtons";
 import DisplayProjectImage from "components/DisplayProjectImage";
 import Footer from "components/Footer";
 
-const Media = ({ description, colors, mediaUrls, dimensionProps }) => {
+const Segments = ({ colors, descriptionList, mediaList, dimensionProps }) => {
   const theme = useTheme();
-  const { height, width, isMobile, isVeryMobile } = dimensionProps;
+
+  const mediaUrls = !mediaList ? null : mediaList.map((obj) => obj.serverUrl);
+
+  const { width: textContainerWidth, isMobile, isVeryMobile } = dimensionProps;
+
+  const maxDescriptionsOrMedia = Math.max(
+    descriptionList?.length || 0,
+    mediaUrls?.length || 0
+  );
+
   return (
+    /* All Sections */
     <div
       style={{
         width: "100%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        marginTop: theme.spacing(8),
       }}
     >
-      {mediaUrls.length === 0 && (
-        <div
-          style={{
-            marginBottom: 50,
-            width: width,
-          }}
-        >
-          <Container sx={{ fontSize: isMobile ? 22 : 30 }}>
-            <Editor
-              editorState={description || EditorState.createEmpty()}
-              readOnly={true}
-            />
-          </Container>
-        </div>
-      )}
-      {mediaUrls.map((url, index) => {
-        const color1 = index === 0 ? colors[0] : null;
-        const color2 = index === 0 ? colors[1] : null;
-        return (
-          <div
-            key={index}
-            style={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              marginBottom: isVeryMobile ? 20 : 50,
-            }}
-          >
-            <DisplayProjectImage
-              imageUrl={url}
-              color1={color1}
-              color2={color2}
-            />
-            {description && index === 0 && (
-              <div
-                style={{
-                  marginTop: 50,
-                  marginBottom: isVeryMobile ? 30 : 0,
-                  width: width,
-                }}
-              >
-                <Container sx={{ fontSize: isMobile ? 22 : 30 }}>
+      {/* One Segment */}
+      {Array(maxDescriptionsOrMedia)
+        .fill(null)
+        .map((_, index) => {
+          const color1 = index === 0 && colors[0];
+          const color2 = index === 0 && colors[1];
+          return (
+            <div
+              key={index}
+              style={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                gap: theme.spacing(4),
+                marginBottom: theme.spacing(8),
+              }}
+            >
+              {/* One Description */}
+              {descriptionList[index] && (
+                <Container
+                  sx={{
+                    width: textContainerWidth,
+                    fontSize: isMobile ? 22 : 30,
+                    //marginTop: theme.spacing(4),
+                    marginBottom:
+                      index !== maxDescriptionsOrMedia - 1 && theme.spacing(4),
+                  }}
+                >
                   <Editor
-                    editorState={description || EditorState.createEmpty()}
+                    editorState={descriptionList[index]}
                     readOnly={true}
                   />
                 </Container>
-              </div>
-            )}
-          </div>
-        );
-      })}
+              )}
+              {/* One Media */}
+              {mediaList[index] && (
+                <div style={{ width: "100%" }}>
+                  <DisplayProjectImage
+                    imageUrl={mediaList[index].serverUrl}
+                    color1={color1}
+                    color2={color2}
+                  />
+                </div>
+              )}
+            </div>
+          );
+        })}
     </div>
   );
 };
@@ -140,8 +135,6 @@ const ProjectViewScreen = ({
     getProject(projectId);
   }, [getProject, projectId]);
 
-  const mediaUrls = project.mediaList.map((obj) => obj.serverUrl);
-
   return (
     <Screen>
       <NavBar />
@@ -161,8 +154,10 @@ const ProjectViewScreen = ({
                 variant={theme.custom.muiProps.largeTitleVariant}
                 sx={{
                   fontSize: 40,
-                  marginTop: theme.spacing(2),
-                  marginBottom: theme.spacing(6),
+                  marginTop: theme.spacing(4),
+                  marginBottom: theme.spacing(8),
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
                 }}
               >
                 {project.title || ""}
@@ -176,8 +171,7 @@ const ProjectViewScreen = ({
                       marginBottom: theme.spacing(3),
                     }}
                     styleButton={{
-                      background:
-                        "linear-gradient(30deg, rgb(245, 239, 251) 0%, rgb(239, 242, 252) 100%)",
+                      background: theme.custom.colors.neutralGradient,
                     }}
                     buttonVariant="outlined"
                     buttons={[
@@ -203,9 +197,7 @@ const ProjectViewScreen = ({
               }
               <ProjectButtons
                 styleContainer={{
-                  marginTop: isAdminLoggedIn
-                    ? theme.spacing(3)
-                    : theme.spacing(3),
+                  marginTop: theme.spacing(3),
                 }}
                 buttonVariant="outlined"
                 buttons={[
@@ -229,15 +221,13 @@ const ProjectViewScreen = ({
               />
             </Container>
           </div>
-          <div style={{ marginTop: theme.spacing(8), width: "100%" }}>
-            {/* Description is in Media component*/}
-            <Media
-              description={project.description}
-              colors={project.colors}
-              mediaUrls={mediaUrls}
-              dimensionProps={dimensionProps}
-            />
-          </div>
+          {/* segments of media & descriptions */}
+          <Segments
+            colors={project.colors}
+            descriptionList={project.descriptionList}
+            mediaList={project.mediaList}
+            dimensionProps={dimensionProps}
+          />
         </div>
       </Content>
       <Footer
@@ -246,7 +236,7 @@ const ProjectViewScreen = ({
             ? // mobile
               windowWidth * 0.9 + 50
             : // desktop
-            mediaUrls.length > 1
+            project.mediaList?.length > 1
             ? // make it equal to image above it
               maxImgWidth + 50
             : // make it equal to text above it

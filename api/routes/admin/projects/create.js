@@ -32,16 +32,15 @@ example project in db:
 project {
   id: 12,
   position: 0,
+  colors: [String, String]
   title: "Project Name",
-  description: "Lorem Ipsum...",
-  mediaFilenames: ["media_2321477.jpg", "media_1351776.png"]
+  descriptionList: [RawDraftContentState, RawDraftContentState, ...],
+  mediaFilenames: ["media_2321477.jpg", "media_1351776.png", ...]
 }
 */
 const createProject = async (req, res, next) => {
   logRequestBody(req.body);
-  const { title, description, colors, mediaDataUrls } = req.body;
-  console.log(description);
-  res.status(500).json({ message: "TEST ERROR" });
+  const { title, descriptionList, colors, mediaDataUrls } = req.body;
   const projectId = await Project.getNextId();
   const projectPosition = await Project.getNextPosition();
   try {
@@ -49,9 +48,9 @@ const createProject = async (req, res, next) => {
     await Project.create({
       id: projectId,
       position: projectPosition,
-      title,
-      description,
       colors,
+      title,
+      descriptionList,
       mediaFilenames,
     });
     logSuccess(projectId, title);

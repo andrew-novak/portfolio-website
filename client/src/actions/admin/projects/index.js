@@ -9,9 +9,15 @@ export { openMediaDialog, closeMediaDialog } from "./mediaDialog";
 export { openMediaEditDialog, closeMediaEditDialog } from "./dialogEditMedia";
 // form
 export { default as changePosition } from "./changePosition";
-export { setTitle, setDescription, setColor } from "./simpleInputs";
 export {
-  mediaListAdd,
+  setColor,
+  setTitle,
+  setDescription,
+  selectDescription,
+  clearDescriptionList,
+} from "./simpleInputs";
+export {
+  mediaListAddImage,
   mediaListAddVideo,
   mediaListSwapPlaces,
   mediaListRemove,

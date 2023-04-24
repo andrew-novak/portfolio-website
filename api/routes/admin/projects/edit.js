@@ -41,9 +41,10 @@ example project in db:
 project {
   id: 12,
   position: 0,
+  colors: [String, String]
   title: "Project Name",
-  description: "Lorem Ipsum...",
-  mediaFilenames: ["media_2321477.jpg", "media_1351776.png"]
+  descriptionList: [RawDraftContentState, RawDraftContentState, ...],
+  mediaFilenames: ["media_2321477.jpg", "media_1351776.png", ...]
 }
 */
 const editProjectRoute = async (req, res, next) => {
@@ -51,14 +52,14 @@ const editProjectRoute = async (req, res, next) => {
   const { projectId } = req.params;
   const {
     position,
-    title,
-    description,
     colors,
+    title,
+    descriptionList,
     // TODO: check if these mediaFilenames are equal to existing mediaFilenames
     mediaFilenames: oldMediaFilenames,
     mediaDataUrls,
   } = req.body;
-  console.log(description);
+  console.log(descriptionList);
   let newMediaFilenames = [];
   try {
     // project existence
@@ -94,7 +95,7 @@ const editProjectRoute = async (req, res, next) => {
     // update document (except positions)
     await Project.updateOne(
       { id: projectId },
-      { title, description, colors, mediaFilenames }
+      { colors, title, descriptionList, mediaFilenames }
     );
     logSuccess(projectId, title);
     res.status(200).json({});

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery, Container, Button, Typography } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import { connect } from "react-redux";
 
@@ -12,7 +11,6 @@ import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
 import Intro from "components/Intro";
-import GeometryPattern from "components/GeometryPattern";
 import ProjectsGrid from "components/ProjectsGrid";
 import Footer from "components/Footer";
 
@@ -80,7 +78,7 @@ const HomeScreen = ({
           </Container>
           <Container
             maxWidth="xl"
-            disableGutters
+            disableGutters={projects?.length > 0 ? true : false}
             sx={{
               display: "flex",
               flexDirection: "column",

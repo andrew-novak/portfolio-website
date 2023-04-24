@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { connect } from "react-redux";
@@ -20,7 +20,7 @@ import UploadMediaDropzone from "./UploadMediaDropzone";
 const MediaOrderedInput = ({
   projectId,
   // state
-  mediaList,
+  mediaList: reduxMediaList,
   mediaEditDialog,
   // actions
   mediaListRemove,
@@ -33,14 +33,14 @@ const MediaOrderedInput = ({
 
   const isLg = useMediaQuery(theme.breakpoints.up("lg"));
   const isMd = useMediaQuery(theme.breakpoints.up("md"));
-  const isSm = useMediaQuery(theme.breakpoints.up("sm"));
 
+  const mediaList = reduxMediaList || [];
   const imageUrls = mediaList.map((mediaObj, index) => {
     const {
-      serverFilename,
+      //serverFilename, <- not used in this file
       serverUrl,
       clientLocalUrl,
-      mimeType,
+      //mimeType,  <- not used in this file
       displayType,
       coverUrl,
     } = mediaObj;
@@ -94,7 +94,7 @@ const MediaOrderedInput = ({
         }
       />
       <MediaContainer
-        columns={isLg ? 4 : isMd ? 3 : isSm ? 2 : 1}
+        columns={isLg ? 4 : isMd ? 3 : 2}
         spacing={theme.spacing(1)}
         swapItemPlaces={(sourceIndex, targetIndex) =>
           mediaListSwapPlaces({

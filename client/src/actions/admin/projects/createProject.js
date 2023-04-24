@@ -1,7 +1,7 @@
-import { convertToRaw } from "draft-js";
 import axios from "axios";
 
 import indexedObjectToArray from "helpers/indexedObjectToArray";
+import descriptionToBackend from "helpers/descriptionToBackend";
 import splitMediaList from "helpers/splitMediaList";
 import mediaBlobsToDataUrls from "helpers/mediaBlobsToDataUrls";
 import { API_URL } from "constants/urls";
@@ -17,34 +17,32 @@ const validate = (title, description, mediaList) => (dispatch) => {
 */
 
 /*
+colorsObj - indexed object of color strings
 title - string
-description - DraftJS EditorState
-media - array of objects e.g. [
+descriptionList - array of DraftJS EditorStates
+mediaList - array of media objects e.g. [
   { serverFilename: "434576.jpg", clientBlob: null, ...and some more props },
   { serverFilename: null, clientBlob: "blob:http://....", and some more props },
 ]
 */
 const createProject =
-  (title, description, colorsObj, mediaList, onSuccessRedirect) =>
+  (colorsObj, title, descriptionList, mediaList, onSuccessRedirect) =>
   async (dispatch) => {
-    // DraftJS EditorState to Raw JS Object
-    const contentState = description.getCurrentContent();
-    const rawDescription = convertToRaw(contentState);
-
+    // converting project to backend
     const colors = indexedObjectToArray(colorsObj);
-
-    const { clientLocalUrls = [] } = splitMediaList(mediaList);
+    const descriptionListBackend = descriptionList.map(descriptionToBackend);
+    const { clientLocalUrls = [] } = splitMediaList(mediaList || []);
     const mediaDataUrls = await mediaBlobsToDataUrls(clientLocalUrls);
 
     const idToken = localStorage.getItem("idToken");
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `${API_URL}/admin/projects`,
         {
-          title,
-          description: rawDescription,
           colors,
+          title,
+          descriptionList: descriptionListBackend,
           mediaFilenames: [],
           mediaDataUrls,
         },

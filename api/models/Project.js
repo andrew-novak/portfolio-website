@@ -1,27 +1,33 @@
 const { Schema, Mixed, model } = require("mongoose");
 
-const ProjectSchema = new Schema({
-  id: Number,
-  position: Number,
-  title: String,
-  // DraftJS Raw JS Object
-  description: {
-    blocks: [
+const ProjectSchema = new Schema(
+  {
+    id: Number,
+    position: Number,
+    colors: [String],
+    title: String,
+    // array of descriptions separated by media
+    descriptionList: [
+      // DraftJS Raw JS Object
       {
-        key: String,
-        text: String,
-        type: Mixed,
-        depth: Number,
-        inlineStyleRanges: Array,
-        entityRanges: Array,
-        data: Mixed,
+        blocks: [
+          {
+            key: String,
+            text: String,
+            type: Mixed,
+            depth: Number,
+            inlineStyleRanges: Array,
+            entityRanges: Array,
+            data: Mixed,
+          },
+        ],
+        entityMap: Mixed,
       },
     ],
-    entityMap: Mixed,
+    mediaFilenames: [String],
   },
-  colors: [String],
-  mediaFilenames: [String],
-});
+  { minimize: false }
+);
 
 ProjectSchema.statics.getNextId = async function () {
   // const [project] = await this.model("Project").find(....
@@ -108,6 +114,16 @@ ProjectSchema.statics.move = async function (origin, target) {
       })
   );
   await Promise.all(promises);
+};
+
+ProjectSchema.methods.getFirstDescription = function () {
+  const first = this.descriptionList?.find((description) => description);
+  return first ? first : null;
+};
+
+ProjectSchema.methods.getFirstMediaFilename = function () {
+  const first = this.mediaFilenames?.find((mediaFilename) => mediaFilename);
+  return first ? first : null;
 };
 
 const Project = model("Project", ProjectSchema);

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import {
   closeMediaDialog,
-  mediaListAdd,
+  mediaListAddImage,
   mediaListAddVideo,
 } from "actions/admin/projects";
 import supportedMimeTypes from "constants/supportedMimeTypes";
@@ -15,7 +15,7 @@ const MediaDialogs = ({
   dialogVariant,
   file,
   closeMediaDialog,
-  mediaListAdd,
+  mediaListAddImage,
   mediaListAddVideo,
 }) => {
   const [mimeType, setMimeType] = useState(null);
@@ -43,7 +43,7 @@ const MediaDialogs = ({
         }
         onCancel={closeMediaDialog}
         onConfirm={(croppedImageUrl) =>
-          mediaListAdd({
+          mediaListAddImage({
             localUrl: croppedImageUrl,
             mimeType,
             displayType,
@@ -79,6 +79,6 @@ const mapState = (state) => {
 
 export default connect(mapState, {
   closeMediaDialog,
-  mediaListAdd,
+  mediaListAddImage,
   mediaListAddVideo,
 })(MediaDialogs);

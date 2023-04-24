@@ -1,7 +1,7 @@
-import { convertToRaw } from "draft-js";
 import axios from "axios";
 
 import indexedObjectToArray from "helpers/indexedObjectToArray";
+import descriptionToBackend from "helpers/descriptionToBackend";
 import splitMediaList from "helpers/splitMediaList";
 import mediaBlobsToDataUrls from "helpers/mediaBlobsToDataUrls";
 import { API_URL } from "constants/urls";
@@ -10,37 +10,43 @@ import { setErrorSnackbar, setSuccessSnackbar } from "actions/snackbar";
 /*
 id - number
 position - number
+colorsObj - indexed object of color strings
 title - string
-description - DraftJS EditorState
-mediaList - array of media objects
+descriptionList - array of DraftJS EditorStates
+mediaList - array of media objects e.g. [
+  { serverFilename: "434576.jpg", clientBlob: null, ...and some more props },
+  { serverFilename: null, clientBlob: "blob:http://....", and some more props },
+]
 */
 const editProject =
-  (id, position, title, description, colorsObj, mediaList, onSuccessRedirect) =>
+  (
+    id,
+    position,
+    colorsObj,
+    title,
+    descriptionList,
+    mediaList,
+    onSuccessRedirect
+  ) =>
   async (dispatch) => {
-    // DraftJS EditorState to Raw JS Object
-    const contentState = description.getCurrentContent();
-    const rawDescription = convertToRaw(contentState);
-    console.log(rawDescription);
-
+    // convert project to backend
     const colors = indexedObjectToArray(colorsObj);
-
-    // mediaFilenames, mediaDataUrls
-    // mediaFilenames - array of filenames (strings) (already saved in server)
-    // mediaDataUrls - array of dataUrls (strings) (new files)
+    const descriptionListBackend = descriptionList.map(descriptionToBackend);
     const { serverFilenames = [], clientLocalUrls = [] } =
       splitMediaList(mediaList);
     const mediaDataUrls = await mediaBlobsToDataUrls(clientLocalUrls);
 
     const idToken = localStorage.getItem("idToken");
 
+    console.log(descriptionListBackend);
     try {
-      const response = await axios.post(
+      await axios.post(
         `${API_URL}/admin/projects/${id}`,
         {
           position,
-          title,
-          description: rawDescription,
           colors,
+          title,
+          descriptionList: descriptionListBackend,
           mediaFilenames: serverFilenames,
           mediaDataUrls,
         },

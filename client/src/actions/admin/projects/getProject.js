@@ -13,7 +13,7 @@ export const getProject = (projectId) => async (dispatch) => {
     });
     const { project: receivedProject, projectPositions: positions } =
       response.data;
-    const project = apiProjectToFrontend(receivedProject);
+    const project = apiProjectToFrontend.full(receivedProject);
 
     // position related
     const positionIndex = positions.findIndex(

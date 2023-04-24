@@ -18,14 +18,18 @@ const getProjectsRoute = async (req, res, next) => {
   try {
     const projects = await Project.find({}).sort({ position: "descending" });
     logProjectCount(projects.length);
-    const frontendProjects = projects.map((project) => ({
-      id: project.id,
-      position: project.position,
-      title: project.title,
-      description: project.description,
-      colors: project.colors,
-      mediaFilenames: project.mediaFilenames,
-    }));
+    const frontendProjects = projects.map((project) => {
+      //const { _id: _, ...description } = project.getFirstDescription();
+      //const { _id: __, ...mediaFilename } = project.getFirstMediaFilename();
+      return {
+        id: project.id,
+        position: project.position,
+        colors: project.colors,
+        title: project.title,
+        description: project.getFirstDescription(),
+        mediaFilename: project.getFirstMediaFilename(),
+      };
+    });
     res.status(200).json({ projects: frontendProjects });
   } catch (err) {
     logFailure(err);

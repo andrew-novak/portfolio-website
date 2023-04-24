@@ -58,6 +58,7 @@ router.post("/checkIdToken", (req, res, next) => {
   res.status(200).json({});
 });
 
+// Create or edit intro
 router.post(
   "/intro",
   [
@@ -73,6 +74,7 @@ router.post(
   setIntroRoute
 );
 
+// Get one project
 router.get(
   "/projects/:projectId",
   [param("projectId").exists()],
@@ -80,14 +82,15 @@ router.get(
   getProjectRoute
 );
 
-// Create
+// Create project
 router.post(
   "/projects",
   [
-    body("title").isString().isLength({ min: 1, max: 30 }),
-    //body("description").isString().isLength({ min: 1, max: 3000 }),
     body("colors").isArray(),
     body("colors.*").isString().custom(isHexColor),
+    body("title").isString().isLength({ min: 1, max: 30 }),
+    // TODO: improve descriptionList validation
+    body("descriptionList").isArray(),
     body("mediaFilenames").isArray(),
     body("mediaFilenames.*")
       .optional()
@@ -104,18 +107,20 @@ router.post(
   createProjectRoute
 );
 
-// Edit
+// Edit project
 router.post(
   "/projects/:projectId",
   [
     body("position").notEmpty().isInt(),
     body("title").isString().isLength({ min: 1, max: 30 }),
-    //body("description").isString().isLength({ min: 1, max: 3000 }),
+    // TODO: improve descriptionList validation
+    body("descriptionList").isArray(),
   ],
   handleValidationErrors,
   editProjectRoute
 );
 
+// Remove project
 router.delete(
   "/projects/:projectId",
   [param("projectId").exists()],

@@ -31,9 +31,9 @@ const getProjectRoute = async (req, res, next) => {
     const frontendProject = {
       id: project.id,
       position: project.position,
-      title: project.title,
-      description: project.description,
       colors: project.colors,
+      title: project.title,
+      descriptionList: project.descriptionList,
       mediaFilenames: project.mediaFilenames,
     };
     res.status(200).json({ project: frontendProject });

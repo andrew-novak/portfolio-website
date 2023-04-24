@@ -40,6 +40,11 @@ const theme = createTheme({
       outline: "rgba(0, 0, 0, 0.23)",
       outlineHover: "rgba(0, 0, 0, 0.87)",
       inputLabel: "rgba(0, 0, 0, 0.6)",
+      neutralGradientDegrees: "30deg",
+      neutral1: "rgb(245, 239, 251)",
+      neutral2: "rgb(239, 242, 252)",
+      neutralGradient:
+        "linear-gradient(30deg, rgb(245, 239, 251) 0%, rgb(239, 242, 252) 100%)",
     },
     cssProps: {
       outlineBorderRadius: "4px",

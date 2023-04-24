@@ -13,6 +13,8 @@ import {
   changePosition,
   setTitle,
   setDescription,
+  selectDescription,
+  clearDescriptionList,
   setColor,
   createProject,
   editProject,
@@ -34,7 +36,8 @@ const ProjectSettingsScreen = ({
   positionIndex,
   position,
   title,
-  description,
+  descriptionList,
+  descriptionSelectIndex,
   colors,
   mediaList,
   // actions
@@ -45,6 +48,8 @@ const ProjectSettingsScreen = ({
   changePosition,
   setTitle,
   setDescription,
+  selectDescription,
+  clearDescriptionList,
   setColor,
   createProject,
   editProject,
@@ -58,13 +63,47 @@ const ProjectSettingsScreen = ({
     if (!isNewProject) {
       getProject(projectId);
     }
-  }, [getProject, projectId]);
+  }, [isNewProject, getProject, projectId]);
 
   // for outline color
   const [isHover, setIsHover] = useState(false);
   const outlineColor = isHover
     ? theme.custom.colors.outlineHover
     : theme.custom.colors.outline;
+
+  // select one image from a multi-field media object
+  const imagesList =
+    mediaList === null
+      ? null
+      : mediaList.map(({ displayType, coverUrl, clientLocalUrl, serverUrl }) =>
+          displayType !== "image" ? coverUrl : clientLocalUrl || serverUrl
+        );
+
+  const movePositionItems = [
+    {
+      position: positions?.[positionIndex - 2]?.position,
+      title: positions?.[positionIndex - 2]?.title,
+    },
+    {
+      position: positions?.[positionIndex - 1]?.position,
+      title: positions?.[positionIndex - 1]?.title,
+    },
+    {
+      position: positions?.[positionIndex]?.position,
+      title,
+      isHighlighted: true,
+      onMoveUp: () => changePosition("next", positionIndex, positions),
+      onMoveDown: () => changePosition("previous", positionIndex, positions),
+    },
+    {
+      position: positions?.[positionIndex + 1]?.position,
+      title: positions?.[positionIndex + 1]?.title,
+    },
+    {
+      position: positions?.[positionIndex + 2]?.position,
+      title: positions?.[positionIndex + 2]?.title,
+    },
+  ];
 
   return (
     <Screen>
@@ -85,56 +124,47 @@ const ProjectSettingsScreen = ({
               gap: theme.spacing(3),
             }}
           >
-            <Typography variant={theme.custom.muiProps.largeTitleVariant}>
+            {/* Page Title */}
+            <Typography
+              variant={theme.custom.muiProps.largeTitleVariant}
+              sx={{ marginBottom: theme.spacing(2) }}
+            >
               {isNewProject ? "New Project" : "Edit Project"}
             </Typography>
-            {!isNewProject && (
-              <OutlinedMoveItemList
-                items={[
-                  {
-                    position: positions?.[positionIndex - 2]?.position,
-                    title: positions?.[positionIndex - 2]?.title,
-                  },
-                  {
-                    position: positions?.[positionIndex - 1]?.position,
-                    title: positions?.[positionIndex - 1]?.title,
-                  },
-                  {
-                    position: positions?.[positionIndex]?.position,
-                    title,
-                    isHighlighted: true,
-                    onMoveUp: () =>
-                      changePosition("next", positionIndex, positions),
-                    onMoveDown: () =>
-                      changePosition("previous", positionIndex, positions),
-                  },
-                  {
-                    position: positions?.[positionIndex + 1]?.position,
-                    title: positions?.[positionIndex + 1]?.title,
-                  },
-                  {
-                    position: positions?.[positionIndex + 2]?.position,
-                    title: positions?.[positionIndex + 2]?.title,
-                  },
-                ]}
-              />
-            )}
-            <Typography
-              sx={{ ...theme.custom.styles.inputLabel, paddingLeft: 0 }}
-            >
-              Preview
-            </Typography>
+
+            {
+              /* Position*/
+              !isNewProject && (
+                <div
+                  style={{
+                    width: "100%",
+                    marginTop: theme.spacing(3),
+                  }}
+                >
+                  <OutlinedMoveItemList items={movePositionItems} />
+                </div>
+              )
+            }
           </Container>
 
+          {/* First Media & Colors Preview */}
           <div
             style={{
               marginBottom: theme.spacing(6),
             }}
           >
+            <Container maxWidth="md">
+              <Typography
+                sx={{ ...theme.custom.styles.inputLabel, paddingLeft: 0 }}
+              >
+                Preview
+              </Typography>
+            </Container>
+
             <DisplayProjectImage
-              imageUrl={mediaList[0]?.clientLocalUrl || mediaList[0]?.serverUrl}
-              color1={colors[0]}
-              color2={colors[1]}
+              imageUrl={imagesList?.[0]}
+              color1={colors?.[0]}
+              color2={colors?.[1]}
             />
           </div>
 
@@ -147,6 +177,7 @@ const ProjectSettingsScreen = ({
               gap: theme.spacing(3),
             }}
           >
+            {/* Colors*/}
             <DialogColorPicker
               dialogTitle={`Picking a color ${colorDialog.index}`}
               isOpen={
@@ -159,25 +190,6 @@ const ProjectSettingsScreen = ({
                 setColor(colorDialog.index, color, closeColorDialog)
               }
             />
-            <TextField
-              label="Title"
-              value={title}
-              fullWidth
-              onChange={(event) => setTitle(event.target.value)}
-            />
-            <DescriptionInput
-              description={description}
-              onChange={(newDescription) => setDescription(newDescription)}
-            />
-            {/*
-            <TextField
-              label="Description"
-              value={description}
-              fullWidth
-              multiline
-              onChange={(event) => setDescription(event.target.value)}
-            />
-            */}
             <OutlinedColorPicker
               label="Color 0"
               color={colors[0]}
@@ -191,6 +203,27 @@ const ProjectSettingsScreen = ({
               onClick={() => openColorDialog(1, colors[1])}
             />
 
+            {/* Title */}
+            <TextField
+              label="Title"
+              value={title}
+              fullWidth
+              onChange={(event) => setTitle(event.target.value)}
+            />
+
+            {/* Description */}
+            <DescriptionInput
+              selectIndex={descriptionSelectIndex}
+              descriptionList={descriptionList}
+              images={imagesList}
+              selectDescription={selectDescription}
+              setDescription={(selectIndex, newEditorState) =>
+                setDescription(selectIndex, newEditorState)
+              }
+              clearDescriptionList={clearDescriptionList}
+            />
+
+            {/* Media */}
             <Container
               onMouseEnter={() => setIsHover(true)}
               onMouseLeave={() => setIsHover(false)}
@@ -218,19 +251,25 @@ const ProjectSettingsScreen = ({
                 <MediaOrderedInput projectId={projectId} />
               </div>
             </Container>
+
+            {/* Submit Button*/}
             <Button
               startIcon={<CheckIcon />}
               onClick={() =>
                 isNewProject
-                  ? createProject(title, description, colors, mediaList, () =>
-                      navigate("/")
+                  ? createProject(
+                      colors,
+                      title,
+                      descriptionList,
+                      mediaList,
+                      () => navigate("/")
                     )
                   : editProject(
                       projectId,
                       position,
-                      title,
-                      description,
                       colors,
+                      title,
+                      descriptionList,
                       mediaList,
                       () => navigate("/")
                     )
@@ -253,7 +292,8 @@ const mapState = (state) => {
     positionIndex,
     position,
     title,
-    description,
+    descriptionList,
+    descriptionSelectIndex,
     colors,
     mediaList,
   } = state.project;
@@ -263,7 +303,8 @@ const mapState = (state) => {
     positionIndex,
     position,
     title,
-    description,
+    descriptionList,
+    descriptionSelectIndex,
     colors,
     mediaList,
   };
@@ -277,6 +318,8 @@ export default connect(mapState, {
   changePosition,
   setTitle,
   setDescription,
+  selectDescription,
+  clearDescriptionList,
   setColor,
   createProject,
   editProject,

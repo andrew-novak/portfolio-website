@@ -1,6 +1,15 @@
 import { PROJECTS_SET } from "constants/actionTypes";
 
-const initialState = [];
+/*
+example:
+[
+  { id, order, title, description, media },
+  { id, order, title, description, media },
+  { id, order, title, description, media }
+]
+note: each project in here only contains one media & one description
+*/
+const initialState = null;
 
 const projects = (state = initialState, action) => {
   switch (action.type) {

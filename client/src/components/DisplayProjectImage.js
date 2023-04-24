@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { useTheme, Box, Typography } from "@mui/material";
 import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 
 import useWindowDimensions from "hooks/useWindowDimensions";
@@ -9,9 +9,11 @@ const DisplayProjectImage = ({
   color1: passedColor1,
   color2: passedColor2,
 }) => {
-  const degrees = passedDegrees || "30deg";
-  const color1 = passedColor1 || "#f8f1ff";
-  const color2 = passedColor2 || "#eff2fc";
+  const theme = useTheme();
+
+  const degrees = passedDegrees || theme.custom.colors.neutralGradientDegrees;
+  const color1 = passedColor1 || theme.custom.colors.neutral1;
+  const color2 = passedColor2 || theme.custom.colors.neutral2;
 
   const { width: windowWidth } = useWindowDimensions();
   const maxImgWidth = 800;

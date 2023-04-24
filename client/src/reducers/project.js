@@ -5,11 +5,12 @@ import {
   PROJECT_SET_DIALOG_COLOR,
   PROJECT_SET_DIALOG_MEDIA,
   PROJECT_SET_DIALOG_EDIT_MEDIA,
-  PROJECT_SET_DESCRIPTION,
+  PROJECT_SET_DESCRIPTION_LIST,
+  PROJECT_SET_DESCRIPTION_ELEMENT,
+  PROJECT_SELECT_DESCRIPTION,
   PROJECT_SET_COLOR,
   PROJECT_SET_MEDIA_LIST,
-  PROJECT_MEDIA_LIST_ADD,
-  PROJECT_MEDIA_LIST_ADD_VIDEO,
+  PROJECT_ADD_MEDIA_ELEMENT,
 } from "constants/actionTypes";
 
 const initialState = {
@@ -30,22 +31,24 @@ const initialState = {
   positions: null,
   positionIndex: null,
   position: null,
-  title: "",
-  // DraftJS EditorState
-  description: null,
   colors: {
     0: "#f8f1ff",
     1: "#eff2fc",
   },
-  mediaList: [
-    /*
-    examples:
+  title: "",
+  // array of DraftJS EditorStates
+  descriptionList: null,
+  descriptionSelectIndex: null,
+  /*
+  mediaList example:
+  [
     { serverFilename: "42342.jpg", clientLocalUrl: null, clientMimeType: null }
     { serverFilename: null, clientLocalUrl: "blob:http://...", clientMimeType: "image/png" }
     { serverFilename: null, clientLocalUrl: "blob:http://...", clientMimeType: "video/mp4",  }
-    serverFilename & clientLocalUrl are the only properties sent to server
-    */
-  ],
+  ]
+  note: serverFilename & clientLocalUrl are the only properties send to server
+  */
+  mediaList: null,
 };
 
 const project = (state = initialState, action) => {
@@ -98,11 +101,34 @@ const project = (state = initialState, action) => {
         title: action.title,
       };
 
-    case PROJECT_SET_DESCRIPTION:
+    case PROJECT_SET_DESCRIPTION_LIST:
       return {
         ...state,
-        description: action.description,
+        descriptionList: action.descriptionList,
       };
+
+    case PROJECT_SET_DESCRIPTION_ELEMENT: {
+      const descriptionList = [...(state.descriptionList || [])];
+      descriptionList[action.index] = action.description;
+      return {
+        ...state,
+        descriptionList,
+      };
+    }
+
+    case PROJECT_SELECT_DESCRIPTION: {
+      const descriptionList = [...(state.descriptionList || [])];
+      action.updateDescriptions.forEach((description, index) => {
+        if (description) {
+          descriptionList[index] = description;
+        }
+      });
+      return {
+        ...state,
+        descriptionSelectIndex: action.index,
+        descriptionList,
+      };
+    }
 
     case PROJECT_SET_COLOR:
       return {
@@ -119,31 +145,18 @@ const project = (state = initialState, action) => {
         mediaList: action.newMediaList,
       };
 
-    case PROJECT_MEDIA_LIST_ADD:
+    case PROJECT_ADD_MEDIA_ELEMENT:
       return {
         ...state,
         mediaList: [
-          ...state.mediaList,
+          ...(state.mediaList || []),
           {
             serverFilename: null,
             serverUrl: null,
             clientLocalUrl: action.localUrl,
-            mimeType: action.mimeType,
-            displayType: action.displayType,
-          },
-        ],
-      };
-
-    case PROJECT_MEDIA_LIST_ADD_VIDEO:
-      return {
-        ...state,
-        mediaList: [
-          ...state.mediaList,
-          {
-            serverFilename: null,
-            serverUrl: null,
-            clientLocalUrl: action.videoUrl,
-            coverUrl: action.coverUrl,
+            // use coverUrl if the main source (clientLocalUrl or serverUrl)
+            // is not an image
+            ...(action.coverUrl ? { coverUrl: action.coverUrl } : {}),
             mimeType: action.mimeType,
             displayType: action.displayType,
           },

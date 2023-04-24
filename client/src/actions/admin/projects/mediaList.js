@@ -1,17 +1,16 @@
 import {
   PROJECT_SET_MEDIA_LIST,
-  PROJECT_MEDIA_LIST_ADD,
-  PROJECT_MEDIA_LIST_ADD_VIDEO,
+  PROJECT_ADD_MEDIA_ELEMENT,
 } from "constants/actionTypes";
 //import { unselectAll } from "actions/selection";
 import getVideoCover from "helpers/getVideoCover";
 import { setErrorSnackbar, setSuccessSnackbar } from "actions/snackbar";
 
-export const mediaListAdd =
+export const mediaListAddImage =
   ({ localUrl, mimeType, displayType, closeMediaDialog }) =>
   (dispatch) => {
     dispatch({
-      type: PROJECT_MEDIA_LIST_ADD,
+      type: PROJECT_ADD_MEDIA_ELEMENT,
       localUrl,
       mimeType,
       displayType,
@@ -27,8 +26,8 @@ export const mediaListAddVideo =
     const coverFile = await getVideoCover(videoFile);
     const coverUrl = URL.createObjectURL(coverFile);
     dispatch({
-      type: PROJECT_MEDIA_LIST_ADD_VIDEO,
-      videoUrl,
+      type: PROJECT_ADD_MEDIA_ELEMENT,
+      localUrl: videoUrl,
       coverUrl,
       mimeType,
       displayType,
