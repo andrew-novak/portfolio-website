@@ -1,27 +1,37 @@
-export { default as getProject } from "./getProject";
-// dialogs
+// form
+export { default as changePosition } from "./form/changePosition";
 export {
   openColorDialog,
   closeColorDialog,
   setDialogColor,
-} from "./colorDialog";
-export { openMediaDialog, closeMediaDialog } from "./mediaDialog";
-export { openMediaEditDialog, closeMediaEditDialog } from "./dialogEditMedia";
-// form
-export { default as changePosition } from "./changePosition";
-export {
   setColor,
+} from "./form/color";
+export {
   setTitle,
   setDescription,
   selectDescription,
   clearDescriptionList,
-} from "./simpleInputs";
+} from "./form/text";
+export { openMediaDialog, closeMediaDialog } from "./form/mediaDialog";
+export {
+  openMediaEditDialog,
+  closeMediaEditDialog,
+} from "./form/dialogEditMedia";
 export {
   mediaListAddImage,
   mediaListAddVideo,
   mediaListSwapPlaces,
   mediaListRemove,
-} from "./mediaList";
-export { default as createProject } from "./createProject";
-export { default as editProject } from "./editProject";
-export { default as removeProject } from "./removeProject";
+} from "./form/mediaList";
+export {
+  openButtonDialog,
+  closeButtonDialog,
+  setDialogButton, // sets project.buttonDialog.button
+  setButton,
+} from "./form/buttons";
+
+// requests
+export { default as getProject } from "./requests/getProject";
+export { default as createProject } from "./requests/createProject";
+export { default as editProject } from "./requests/editProject";
+export { default as removeProject } from "./requests/removeProject";

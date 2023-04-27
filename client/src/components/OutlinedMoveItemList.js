@@ -32,7 +32,7 @@ const OutlinedMoveItemList = ({ items }) => {
       onMouseLeave={() => setIsHover(false)}
       style={{
         width: "100%",
-        borderRadius: "4px",
+        borderRadius: theme.custom.cssProps.outlineBorderRadius,
         border: `solid 1px ${outlineColor}`,
       }}
     >

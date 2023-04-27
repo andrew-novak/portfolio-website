@@ -1,10 +1,10 @@
-import { PROJECT_SET_DIALOG_EDIT_MEDIA } from "constants/actionTypes";
+import { PROJECT_SET_EDIT_MEDIA_DIALOG } from "constants/actionTypes";
 import { setErrorSnackbar } from "actions/snackbar";
 
 export const openMediaEditDialog =
   (mediaList, imageUrls, index) => (dispatch) => {
     return dispatch({
-      type: PROJECT_SET_DIALOG_EDIT_MEDIA,
+      type: PROJECT_SET_EDIT_MEDIA_DIALOG,
       mediaEditDialog: {
         index,
         url:
@@ -14,5 +14,5 @@ export const openMediaEditDialog =
   };
 
 export const closeMediaEditDialog = () => (dispatch) => {
-  dispatch({ type: PROJECT_SET_DIALOG_EDIT_MEDIA, mediaEditDialog: null });
+  dispatch({ type: PROJECT_SET_EDIT_MEDIA_DIALOG, mediaEditDialog: null });
 };

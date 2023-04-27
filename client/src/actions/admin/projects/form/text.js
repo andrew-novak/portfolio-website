@@ -1,17 +1,11 @@
 import { EditorState, ContentState } from "draft-js";
 
 import {
-  PROJECT_SET_COLOR,
   PROJECT_SET_TITLE,
   PROJECT_SET_DESCRIPTION_LIST,
   PROJECT_SET_DESCRIPTION_ELEMENT,
   PROJECT_SELECT_DESCRIPTION,
 } from "constants/actionTypes";
-
-export const setColor = (index, color, closeDialog) => (dispatch) => {
-  dispatch({ type: PROJECT_SET_COLOR, index, color });
-  closeDialog();
-};
 
 export const setTitle = (title) => (dispatch) =>
   dispatch({ type: PROJECT_SET_TITLE, title });

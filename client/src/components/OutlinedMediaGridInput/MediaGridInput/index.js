@@ -3,7 +3,6 @@ import { useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { connect } from "react-redux";
 
-//import useMediaDialog from "./MediaDialog/useMediaDialog";
 import {
   mediaListRemove,
   mediaListSwapPlaces,
@@ -17,8 +16,11 @@ import MediaContainer from "./MediaContainer";
 import MediaItem from "./MediaItem";
 import UploadMediaDropzone from "./UploadMediaDropzone";
 
-const MediaOrderedInput = ({
-  projectId,
+// Rectangular drag and drop grid media input component
+// No beautifiers included here:
+// No component title, outline or border radius
+// Dialogs, drag n drop, and on-click preview included though
+const MediaGridInput = ({
   // state
   mediaList: reduxMediaList,
   mediaEditDialog,
@@ -60,7 +62,7 @@ const MediaOrderedInput = ({
   };
 
   return (
-    <>
+    <div>
       <MediaDialogs />
       <DialogMediaEdit
         dialogTitle="Showing Media"
@@ -133,7 +135,7 @@ const MediaOrderedInput = ({
         })}
         <UploadMediaDropzone onDrop={(files) => openMediaDialog(files)} />
       </MediaContainer>
-    </>
+    </div>
   );
 };
 
@@ -148,4 +150,4 @@ export default connect(mapState, {
   openMediaEditDialog,
   closeMediaEditDialog,
   openMediaDialog,
-})(MediaOrderedInput);
+})(MediaGridInput);

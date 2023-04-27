@@ -37,8 +37,10 @@ const theme = createTheme({
       activityInactive: "rgb(184, 184, 184)",
       activity: "rgb(94, 126, 133)",
       //activity: "rgb(92, 92, 92)",
+      outlineLight: "rgb(233, 229, 229)",
       outline: "rgba(0, 0, 0, 0.23)",
       outlineHover: "rgba(0, 0, 0, 0.87)",
+      backgroundHover: "rgba(0, 0, 0, 0.04)",
       inputLabel: "rgba(0, 0, 0, 0.6)",
       neutralGradientDegrees: "30deg",
       neutral1: "rgb(245, 239, 251)",
@@ -50,10 +52,15 @@ const theme = createTheme({
       outlineBorderRadius: "4px",
       outlinePadding: "14px",
     },
+    // Material-UI Component-Specific Properties
     muiProps: {
       largeTitleVariant: "h4",
     },
     styles: {
+      outlineFocus: {
+        borderWidth: "2px",
+        borderColor: "rgba(0,0,0, 0.87)",
+      },
       inputLabel: {
         color: "rgba(0, 0, 0, 0.6)",
         fontWeight: 400,

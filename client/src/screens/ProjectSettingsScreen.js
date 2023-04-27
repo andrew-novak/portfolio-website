@@ -6,16 +6,22 @@ import CheckIcon from "@mui/icons-material/Check";
 import { connect } from "react-redux";
 
 import {
-  getProject,
+  // form
+  changePosition,
   openColorDialog,
   closeColorDialog,
   setDialogColor,
-  changePosition,
+  setColor,
   setTitle,
   setDescription,
   selectDescription,
   clearDescriptionList,
-  setColor,
+  openButtonDialog,
+  closeButtonDialog,
+  setDialogButton,
+  setButton,
+  // requests
+  getProject,
   createProject,
   editProject,
 } from "actions/admin/projects";
@@ -25,32 +31,41 @@ import Content from "components/Content";
 import OutlinedMoveItemList from "components/OutlinedMoveItemList";
 import DisplayProjectImage from "components/DisplayProjectImage";
 import DialogColorPicker from "components/dialogs/DialogColorPicker";
-import DescriptionInput from "components/DescriptionInput";
 import OutlinedColorPicker from "components/OutlinedColorPicker";
-import MediaOrderedInput from "components/MediaOrderedInput";
+import OutlinedDescriptionInput from "components/OutlinedDescriptionInput";
+import OutlinedMediaGridInput from "components/OutlinedMediaGridInput";
+import DialogProjectButton from "components/dialogs/DialogProjectButton";
+import OutlinedProjectButtonsTable from "components/OutlinedProjectButtonsTable";
 import Footer from "components/Footer";
 
 const ProjectSettingsScreen = ({
   colorDialog,
+  buttonDialog,
   positions,
   positionIndex,
   position,
+  colors,
   title,
   descriptionList,
   descriptionSelectIndex,
-  colors,
   mediaList,
-  // actions
-  getProject,
+  buttons,
+  // actions - form
+  changePosition,
   openColorDialog,
   closeColorDialog,
   setDialogColor,
-  changePosition,
+  setColor,
   setTitle,
   setDescription,
   selectDescription,
   clearDescriptionList,
-  setColor,
+  openButtonDialog,
+  closeButtonDialog,
+  setDialogButton,
+  setButton,
+  // actions - requests
+  getProject,
   createProject,
   editProject,
 }) => {
@@ -64,12 +79,6 @@ const ProjectSettingsScreen = ({
       getProject(projectId);
     }
   }, [isNewProject, getProject, projectId]);
-
-  // for outline color
-  const [isHover, setIsHover] = useState(false);
-  const outlineColor = isHover
-    ? theme.custom.colors.outlineHover
-    : theme.custom.colors.outline;
 
   // select one image from a multi-field media object
   const imagesList =
@@ -177,7 +186,8 @@ const ProjectSettingsScreen = ({
               gap: theme.spacing(3),
             }}
           >
-            {/* Colors*/}
+            {/* Colors */}
+            {/* TODO: Try to make the dialog color picker bigger */}
             <DialogColorPicker
               dialogTitle={`Picking a color ${colorDialog.index}`}
               isOpen={
@@ -212,7 +222,7 @@ const ProjectSettingsScreen = ({
             />
 
             {/* Description */}
-            <DescriptionInput
+            <OutlinedDescriptionInput
               selectIndex={descriptionSelectIndex}
               descriptionList={descriptionList}
               images={imagesList}
@@ -224,34 +234,27 @@ const ProjectSettingsScreen = ({
             />
 
             {/* Media */}
-            <Container
-              onMouseEnter={() => setIsHover(true)}
-              onMouseLeave={() => setIsHover(false)}
-              disableGutters
-              style={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "column",
-                border: `solid 1px ${outlineColor}`,
-                borderTopLeftRadius: theme.custom.cssProps.outlineBorderRadius,
-                borderTopRightRadius: theme.custom.cssProps.outlineBorderRadius,
-              }}
-            >
-              <div
-                style={{
-                  width: "100%",
-                  borderBottom: `solid 1px ${outlineColor}`,
-                }}
-              >
-                <Typography sx={theme.custom.styles.inputLabel}>
-                  Media
-                </Typography>
-              </div>
-              <div style={{ width: "100%" }}>
-                <MediaOrderedInput projectId={projectId} />
-              </div>
-            </Container>
+            {/* This component has its onw redux mappings */}
+            <OutlinedMediaGridInput />
 
+            {/* Project Buttons */}
+            <DialogProjectButton
+              dialogTitle={`Project button index ${buttonDialog.index}`}
+              isOpen={typeof buttonDialog.index === "number"}
+              button={buttonDialog.button}
+              onChange={(button) => setDialogButton(button)}
+              onCancel={closeButtonDialog}
+              onConfirm={(button) =>
+                setButton(buttonDialog.index, button, closeButtonDialog)
+              }
+            />
+            <OutlinedProjectButtonsTable
+              buttons={buttons}
+              onCreateClick={() => openButtonDialog((buttons || []).length)}
+              onRemoveClick={(buttonIndex) =>
+                setButton(buttonDialog.index, "remove")
+              }
+            />
             {/* Submit Button*/}
             <Button
               startIcon={<CheckIcon />}
@@ -288,39 +291,49 @@ const ProjectSettingsScreen = ({
 const mapState = (state) => {
   const {
     colorDialog,
+    buttonDialog,
     positions,
     positionIndex,
     position,
+    colors,
     title,
     descriptionList,
     descriptionSelectIndex,
-    colors,
     mediaList,
+    buttons,
   } = state.project;
   return {
     colorDialog,
+    buttonDialog,
     positions,
     positionIndex,
     position,
+    colors,
     title,
     descriptionList,
     descriptionSelectIndex,
-    colors,
     mediaList,
+    buttons,
   };
 };
 
 export default connect(mapState, {
-  getProject,
+  // form
+  changePosition,
   openColorDialog,
   closeColorDialog,
   setDialogColor,
-  changePosition,
+  setColor,
   setTitle,
   setDescription,
   selectDescription,
   clearDescriptionList,
-  setColor,
+  openButtonDialog,
+  closeButtonDialog,
+  setDialogButton,
+  setButton,
+  // requests
+  getProject,
   createProject,
   editProject,
 })(ProjectSettingsScreen);

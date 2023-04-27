@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useTheme, Typography, Button } from "@mui/material";
+import { useState, useRef } from "react";
+import { useTheme, Box, Typography, Button } from "@mui/material";
 import { Editor, EditorState, ContentState, RichUtils } from "draft-js";
 import DeleteIcon from "@mui/icons-material/Delete";
 import NotesIcon from "@mui/icons-material/Notes";
@@ -26,7 +26,7 @@ const INLINE_STYLES = [
   { label: "Monospace", richStyle: "CODE" },
 ];
 
-const DescriptionInput = ({
+const OutlinedDescriptionInput = ({
   descriptionList: descriptionListProp,
   selectIndex: selectIndexProp,
   images,
@@ -58,21 +58,13 @@ const DescriptionInput = ({
     updateEditorState(nextState);
   };
 
-  // on hover outline color
-  const [isHover, setIsHover] = useState(false);
-  const outlineColor = isHover
-    ? theme.custom.colors.outlineHover
-    : theme.custom.colors.outline;
-
-  const lightOutline = "rgb(233, 229, 229)";
-
   const FormButton = ({ startIcon, label, sx, onClick }) => (
     <Button
-      variant="outlined"
       startIcon={startIcon}
+      variant="outlined"
       sx={{
         ...theme.custom.styles.inputLabel,
-        borderColor: lightOutline,
+        borderColor: theme.custom.colors.outlineLight,
         margin: "4px",
         padding: "10px",
         paddingTop: "4px",
@@ -99,14 +91,10 @@ const DescriptionInput = ({
           height: "54px",
           width: "54px",
           ...(index === selectIndex && {
-            borderWidth: "2px",
-            borderColor: "rgba(0, 0, 0, 0.6)",
-            //backgroundImage: theme.custom.colors.neutralGradient,
+            ...theme.custom.styles.outlineFocus,
+            // overwriting MUI default behaviour
             "&:hover": {
-              borderWidth: "2px",
-              borderColor: "rgba(0, 0, 0, 0.6)",
-              backgroundColor: "rgb(233, 229, 229)",
-              backgroundImage: null,
+              ...theme.custom.styles.outlineFocus,
             },
           }),
         }}
@@ -115,20 +103,32 @@ const DescriptionInput = ({
     );
   };
 
+  const { colors } = theme.custom;
+
+  // for Text Input outline
+  const [isInputFocused, setIsInputFocused] = useState(false);
+  const editorRef = useRef(null);
+  const onInputFocus = (event) => {
+    setIsInputFocused(true);
+  };
+  const onInputBlur = (event) => {
+    setIsInputFocused(false);
+  };
+
   return (
+    /* Whole Description Input Component */
     <div
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
       style={{
-        border: `solid 1px ${outlineColor}`,
-        borderRadius: "4px",
         width: "100%",
       }}
     >
-      {/* Top Bar */}
+      {/* Top Bar (Title and Remove Buttons) */}
       <div
         style={{
-          borderBottom: `solid  1px ${outlineColor}`,
+          border: `solid  1px`,
+          borderColor: colors.outline,
+          borderTopLeftRadius: theme.custom.cssProps.outlineBorderRadius,
+          borderRopRightRadius: theme.custom.cssProps.outlineBorderRadius,
           display: "flex",
           justifyContent: "space-between",
         }}
@@ -166,90 +166,113 @@ const DescriptionInput = ({
             )}
         </div>
       </div>
-      {/* Sections */}
+      {/* Buttons-Only Sections */}
       <div
         style={{
-          borderBottom: `solid  1px ${lightOutline}`,
+          borderLeft: "solid  1px",
+          borderRight: "solid  1px",
+          borderTopLeftRadius: theme.custom.cssProps.outlineBorderRadius,
+          borderRopRightRadius: theme.custom.cssProps.outlineBorderRadius,
+          borderColor: colors.outline,
         }}
       >
-        <SelectDescriptionButton index={0} />
-        {
-          // description button after each image
-          images &&
-            images.map((image, index) => (
-              <span key={index}>
-                <span
-                  src={image}
-                  style={{
-                    display: "inline-block",
-                    verticalAlign: "middle",
-                    backgroundImage: `url(${image})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    width: 54,
-                    height: 54,
-                    borderRadius: "4px",
-                    margin: 4,
-                  }}
-                />
-                <SelectDescriptionButton index={index + 1} />
-              </span>
-            ))
-        }
-        {
-          // any description buttons after image description buttons
-          descriptionList &&
-            descriptionList.map((description, index) => {
-              if (index > (images?.length || 0)) {
-                return <SelectDescriptionButton key={index} index={index} />;
-              }
-              return null;
-            })
-        }
-      </div>
-      {/* Block Style Control */}
-      <div
-        style={{
-          borderBottom: `solid  1px ${lightOutline}`,
-        }}
-      >
-        {BLOCK_TYPES.map(({ label, richStyle }) => (
-          <FormButton
-            key={label}
-            label={label}
-            onToggle={() => onBlockClick(richStyle)}
-            richStyle={richStyle}
-          />
-        ))}
-      </div>
-      {/* Inline Style Control */}
-      <div
-        style={{
-          borderBottom: `solid 1px ${outlineColor}`,
-        }}
-      >
-        {INLINE_STYLES.map(({ label, richStyle }) => (
-          <FormButton
-            key={label}
-            label={label}
-            onToggle={() => onInlineClick(richStyle)}
-          />
-        ))}
+        {/* Button-Only Section 1 - Images & Text Segments */}
+        <div
+          style={{
+            borderBottom: "solid  1px",
+            borderColor: colors.outlineLight,
+          }}
+        >
+          <SelectDescriptionButton index={0} />
+          {
+            // description button after each image
+            images &&
+              images.map((image, index) => (
+                <span key={index}>
+                  <span
+                    src={image}
+                    style={{
+                      display: "inline-block",
+                      verticalAlign: "middle",
+                      backgroundImage: `url(${image})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      width: 54,
+                      height: 54,
+                      borderRadius: theme.custom.cssProps.outlineBorderRadius,
+                      margin: 4,
+                    }}
+                  />
+                  <SelectDescriptionButton index={index + 1} />
+                </span>
+              ))
+          }
+          {
+            // any description buttons after image description buttons
+            descriptionList &&
+              descriptionList.map((description, index) => {
+                if (index > (images?.length || 0)) {
+                  return <SelectDescriptionButton key={index} index={index} />;
+                }
+                return null;
+              })
+          }
+        </div>
+        {/* Button-Only Section 2 - Block Style Controls */}
+        <div
+          style={{
+            borderBottom: "solid  1px",
+            borderColor: colors.outlineLight,
+          }}
+        >
+          {BLOCK_TYPES.map(({ label, richStyle }) => (
+            <FormButton
+              key={label}
+              label={label}
+              onToggle={() => onBlockClick(richStyle)}
+              richStyle={richStyle}
+            />
+          ))}
+        </div>
+        {/* Button-Only Section 3 - Inline Style Control */}
+        <div>
+          {INLINE_STYLES.map(({ label, richStyle }) => (
+            <FormButton
+              key={label}
+              label={label}
+              onToggle={() => onInlineClick(richStyle)}
+            />
+          ))}
+        </div>
       </div>
       {/* Text Input */}
-      <div
-        style={{
-          margin: "14px",
-          cursor: "text",
+      <Box
+        sx={{
+          padding: "14px",
+          //cursor: "text",
+          border: "1px solid",
+          borderBottomLeftRadius: theme.custom.cssProps.outlineBorderRadius,
+          borderBottomRightRadius: theme.custom.cssProps.outlineBorderRadius,
+          borderColor: colors.outline,
+          // On Hover
+          "&:hover": {
+            borderColor: colors.outlineHover,
+          },
+          // On Editor Focus
+          ...(isInputFocused ? theme.custom.styles.outlineFocus : {}),
         }}
+        onClick={() => editorRef.current?.focus()}
       >
         <Editor
+          ref={editorRef}
           editorState={editorState}
+          onFocus={onInputFocus}
+          onBlur={onInputBlur}
           onChange={(newEditorState) => updateEditorState(newEditorState)}
         />
-      </div>
+      </Box>
     </div>
   );
 };
 
-export default DescriptionInput;
+export default OutlinedDescriptionInput;

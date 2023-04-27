@@ -1,20 +1,29 @@
 import {
+  // dialogs
+  PROJECT_SET_COLOR_DIALOG,
+  PROJECT_SET_MEDIA_DIALOG,
+  PROJECT_SET_EDIT_MEDIA_DIALOG,
+  PROJECT_SET_BUTTON_DIALOG,
+  PROJECT_SET_BUTTON_DIALOG_BUTTON,
+  // fields
   PROJECT_SET,
   PROJECT_SET_POSITION,
+  PROJECT_SET_COLOR,
   PROJECT_SET_TITLE,
-  PROJECT_SET_DIALOG_COLOR,
-  PROJECT_SET_DIALOG_MEDIA,
-  PROJECT_SET_DIALOG_EDIT_MEDIA,
   PROJECT_SET_DESCRIPTION_LIST,
   PROJECT_SET_DESCRIPTION_ELEMENT,
   PROJECT_SELECT_DESCRIPTION,
-  PROJECT_SET_COLOR,
   PROJECT_SET_MEDIA_LIST,
   PROJECT_ADD_MEDIA_ELEMENT,
+  PROJECT_SET_BUTTON,
 } from "constants/actionTypes";
 
 const initialState = {
   // dialogs
+  colorDialog: {
+    index: null,
+    color: null,
+  },
   mediaDialog: {
     dialogViariant: null,
     file: null,
@@ -23,9 +32,16 @@ const initialState = {
     index: null,
     url: null,
   },
-  colorDialog: {
+  buttonDialog: {
     index: null,
-    color: null,
+    button: {
+      icon: null,
+      label: null,
+      // each button either redirects or downloads a file
+      behaviour: null,
+      redirect: null,
+      file: null,
+    },
   },
   // form
   positions: null,
@@ -49,11 +65,12 @@ const initialState = {
   note: serverFilename & clientLocalUrl are the only properties send to server
   */
   mediaList: null,
+  buttons: null,
 };
 
 const project = (state = initialState, action) => {
   switch (action.type) {
-    case PROJECT_SET_DIALOG_COLOR:
+    case PROJECT_SET_COLOR_DIALOG:
       return {
         ...state,
         colorDialog: {
@@ -63,7 +80,7 @@ const project = (state = initialState, action) => {
         },
       };
 
-    case PROJECT_SET_DIALOG_MEDIA:
+    case PROJECT_SET_MEDIA_DIALOG:
       return {
         ...state,
         mediaDialog: {
@@ -72,13 +89,37 @@ const project = (state = initialState, action) => {
         },
       };
 
-    case PROJECT_SET_DIALOG_EDIT_MEDIA:
+    case PROJECT_SET_EDIT_MEDIA_DIALOG:
       return {
         ...state,
         mediaEditDialog:
           action.mediaEditDialog === null
             ? initialState.mediaEditDialog
             : action.mediaEditDialog,
+      };
+
+    case PROJECT_SET_BUTTON_DIALOG:
+      return {
+        ...state,
+        buttonDialog:
+          action.buttonDialog === "initial"
+            ? initialState.buttonDialog
+            : {
+                ...action.buttonDialog,
+                button:
+                  action.buttonDialog.button === "initial"
+                    ? initialState.buttonDialog.button
+                    : action.buttonDialog.button,
+              },
+      };
+
+    case PROJECT_SET_BUTTON_DIALOG_BUTTON:
+      return {
+        ...state,
+        buttonDialog: {
+          ...state.buttonDialog,
+          button: action.button,
+        },
       };
 
     case PROJECT_SET:
@@ -93,6 +134,15 @@ const project = (state = initialState, action) => {
         positions: action.positions,
         positionIndex: action.positionIndex,
         position: action.position,
+      };
+
+    case PROJECT_SET_COLOR:
+      return {
+        ...state,
+        colors: {
+          ...state.colors,
+          [action.index]: action.color,
+        },
       };
 
     case PROJECT_SET_TITLE:
@@ -130,15 +180,6 @@ const project = (state = initialState, action) => {
       };
     }
 
-    case PROJECT_SET_COLOR:
-      return {
-        ...state,
-        colors: {
-          ...state.colors,
-          [action.index]: action.color,
-        },
-      };
-
     case PROJECT_SET_MEDIA_LIST:
       return {
         ...state,
@@ -162,6 +203,22 @@ const project = (state = initialState, action) => {
           },
         ],
       };
+
+    case PROJECT_SET_BUTTON: {
+      const buttons = [...(state.buttons || [])];
+      // If Remove
+      if (action.button === "remove") {
+        buttons.splice(action.index, 1);
+      }
+      // If Create/Edit
+      else {
+        buttons[action.index] = action.button;
+      }
+      return {
+        ...state,
+        buttons,
+      };
+    }
 
     default:
       return state;
