@@ -1,7 +1,7 @@
 import { convertFromRaw, EditorState } from "draft-js";
 
 import getMedia from "helpers/getMedia";
-import supportedMimeTypes from "constants/supportedMimeTypes";
+import { PROJECT_MEDIA_FILE_FORMATS } from "constants/projects";
 
 // convert raw JS object to DraftJS EditorState
 const rawToEditorState = (rawJSObject) => {
@@ -15,7 +15,7 @@ const rawToEditorState = (rawJSObject) => {
 const mediaFilenameToObject = (projectId, filename) => {
   const serverUrl = getMedia.oneProjectFileUrl(projectId, filename);
   const extension = filename ? filename.split(".").pop() : null;
-  const supportedType = supportedMimeTypes.find(
+  const supportedType = PROJECT_MEDIA_FILE_FORMATS.find(
     (obj) => obj.extension === extension
   );
   const mimeType = supportedType ? supportedType.mimeType : null;

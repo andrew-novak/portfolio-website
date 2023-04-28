@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 
 const RadioGroupForm = ({ radios, currentValue, onChange }) => {
-  console.log(currentValue);
   return (
     <FormControl>
       <FormLabel id="button-behaviour-radio-label">Behaviour</FormLabel>

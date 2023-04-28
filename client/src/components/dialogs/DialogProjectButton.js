@@ -9,17 +9,11 @@ import {
 } from "@mui/material";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import CheckIcon from "@mui/icons-material/Check";
-// selectable icons
-import GitHubIcon from "@mui/icons-material/GitHub";
 
+import { PROJECT_BUTTON_ICONS } from "constants/projects";
 import OutlinedIconPicker from "components/OutlinedIconPicker";
 import RadioGroupForm from "components/RadioGroupForm";
-import UploadMediaDropzone from "components/UploadMediaDropzone";
-
-const PROJECT_BUTTON_ICON_OPTIONS = [
-  { MuiIcon: null, value: null },
-  { MuiIcon: GitHubIcon, value: "GitHub" },
-];
+import UploadFileDropzone from "components/UploadFileDropzone";
 
 const DialogProjectButton = ({
   dialogTitle,
@@ -31,8 +25,6 @@ const DialogProjectButton = ({
 }) => {
   const theme = useTheme();
 
-  const { icon, label, redirect, file } = button;
-
   return (
     <div style={{ position: "absolute" }}>
       <Dialog fullScreen open={isOpen} onClose={onCancel}>
@@ -40,6 +32,8 @@ const DialogProjectButton = ({
           sx={{
             display: "flex",
             justifyContent: "center",
+            borderBottom: "solid 1px",
+            borderColor: theme.custom.colors.outline,
           }}
         >
           {dialogTitle}
@@ -61,12 +55,13 @@ const DialogProjectButton = ({
             }}
           >
             <OutlinedIconPicker
-              buttons={PROJECT_BUTTON_ICON_OPTIONS}
+              buttons={PROJECT_BUTTON_ICONS}
+              currentValue={button.icon}
               onClick={(icon) => onChange({ ...button, icon })}
             />
             <TextField
               label="Label"
-              value={button.label}
+              value={button.label || ""}
               variant="outlined"
               fullWidth
               onChange={(event) =>
@@ -91,7 +86,7 @@ const DialogProjectButton = ({
             {button.behaviour === "redirect" && (
               <TextField
                 label="Redirect Url"
-                value={button.redirect}
+                value={button.redirect || ""}
                 variant="outlined"
                 fullWidth
                 onChange={(event) =>
@@ -100,11 +95,22 @@ const DialogProjectButton = ({
               />
             )}
             {button.behaviour === "file" && (
-              <UploadMediaDropzone style={{ height: 200 }} />
+              <UploadFileDropzone
+                filenames={button.file?.path && [button.file.path]}
+                style={{ maxHeight: 200 }}
+                onDrop={(uploadFiles) => onChange({ ...button, uploadFiles })}
+              />
             )}
           </div>
         </DialogContent>
-        <DialogActions sx={{ justifyContent: "center", alignItems: "center" }}>
+        <DialogActions
+          sx={{
+            justifyContent: "center",
+            alignItems: "center",
+            borderTop: "solid 1px",
+            borderColor: theme.custom.colors.outline,
+          }}
+        >
           <Button
             startIcon={<HighlightOffIcon />}
             variant="contained"

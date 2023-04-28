@@ -6,7 +6,7 @@ import {
   mediaListAddImage,
   mediaListAddVideo,
 } from "actions/admin/projects";
-import supportedMimeTypes from "constants/supportedMimeTypes";
+import { PROJECT_MEDIA_FILE_FORMATS } from "constants/projects";
 import DialogImageCrop from "components/dialogs/DialogImageCrop";
 import DialogVideoPreview from "components/dialogs/DialogVideoPreview";
 
@@ -25,7 +25,7 @@ const MediaDialogs = ({
   useEffect(() => {
     if (file !== null) {
       setMimeType(file.type);
-      const newDisplayType = supportedMimeTypes.find(
+      const newDisplayType = PROJECT_MEDIA_FILE_FORMATS.find(
         (obj) => obj.mimeType === file.type
       ).displayType;
       setDisplayType(newDisplayType);

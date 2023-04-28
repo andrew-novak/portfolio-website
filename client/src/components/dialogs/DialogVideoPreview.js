@@ -32,6 +32,8 @@ const DialogVideoPreview = ({
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
+            borderBottom: "solid 1px",
+            borderColor: theme.custom.colors.outline,
           }}
         >
           {dialogTitle}
@@ -42,7 +44,14 @@ const DialogVideoPreview = ({
             /*poster="/assets/poster.png"*/ src={fileObjectUrl}
           />
         </DialogContent>
-        <DialogActions sx={{ justifyContent: "center", alignItems: "center" }}>
+        <DialogActions
+          sx={{
+            justifyContent: "center",
+            alignItems: "center",
+            borderTop: "solid 1px",
+            borderColor: theme.custom.colors.outline,
+          }}
+        >
           <Button
             startIcon={<HighlightOffIcon />}
             variant="contained"

@@ -19,15 +19,16 @@ mediaList - array of media objects e.g. [
 ]
 */
 const editProject =
-  (
+  ({
     id,
     position,
-    colorsObj,
+    colors: colorsObj,
     title,
     descriptionList,
     mediaList,
-    onSuccessRedirect
-  ) =>
+    buttons,
+    onSuccessRedirect,
+  }) =>
   async (dispatch) => {
     // convert project to backend
     const colors = indexedObjectToArray(colorsObj);
@@ -49,6 +50,7 @@ const editProject =
           descriptionList: descriptionListBackend,
           mediaFilenames: serverFilenames,
           mediaDataUrls,
+          buttons,
         },
         {
           headers: { Authorization: "Bearer " + idToken },

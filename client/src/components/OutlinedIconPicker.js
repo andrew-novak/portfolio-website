@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useTheme, IconButton, Button, Typography } from "@mui/material";
 
-const OutlinedIconPicker = ({ label, buttons, onClick }) => {
+const OutlinedIconPicker = ({ label, buttons, currentValue, onClick }) => {
   const theme = useTheme();
 
   const iconSize = 40;
 
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(currentValue || null);
 
   const handleClick = (value) => {
     setSelected(value);

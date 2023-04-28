@@ -1,39 +1,80 @@
-import React, { useContext } from "react";
-import { useTheme } from "@mui/material/styles";
+import { useTheme, Box, Typography } from "@mui/material";
 import Dropzone from "react-dropzone";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 
-import { MediaItemContext } from "./MediaItem";
-
-const UploadMediaDropzone = ({ onDrop }) => {
+const UploadFileDropzone = ({ filenames, style, onDrop }) => {
   const theme = useTheme();
-  const { style } = useContext(MediaItemContext);
+  //const { style } = useContext(MediaItemContext);
   return (
-    <div style={style}>
-      <Dropzone onDrop={onDrop}>
-        {({ getRootProps, getInputProps }) => (
-          <section>
-            <div
-              style={{
-                width: "100%",
-                aspectRatio: "1 / 1",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-                cursor: "pointer",
-                backgroundColor: theme.custom.colors.activityInactive,
-                padding: theme.spacing(1),
+    <Dropzone onDrop={onDrop}>
+      {({ getRootProps, getInputProps }) => (
+        <section>
+          <Box
+            sx={{
+              width: "100%",
+              aspectRatio: "1 / 1",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              cursor: "pointer",
+              backgroundColor: "rgb(230, 230, 230)",
+              padding: theme.spacing(2),
+              border: "1px solid",
+              borderRadius: "4px",
+              borderColor: theme.custom.colors.outline,
+              "&:hover": {
+                borderColor: theme.custom.colors.outlineHover,
+              },
+              ...style,
+            }}
+            {...getRootProps()}
+          >
+            <input {...getInputProps()} />
+            <Typography
+              sx={{
+                ...theme.custom.styles.inputLabel,
               }}
-              {...getRootProps()}
             >
-              <input {...getInputProps()} />
-              <p>Drag 'n' drop or click to add media</p>
-            </div>
-          </section>
-        )}
-      </Dropzone>
-    </div>
+              Drag 'n' drop or click to upload a file
+            </Typography>
+            {filenames && filenames.length > 0 && (
+              <Box
+                sx={{
+                  marginTop: 2,
+                  marginBottom: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                }}
+              >
+                {filenames.map((filename, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      display: "flex",
+                      gap: 4,
+                    }}
+                  >
+                    <InsertDriveFileIcon />
+                    <Typography
+                      sx={{
+                        fontWeight: 500,
+                        display: "flex",
+                        wordBreak: "break-all",
+                      }}
+                    >
+                      {filename}
+                    </Typography>
+                  </div>
+                ))}
+              </Box>
+            )}
+          </Box>
+        </section>
+      )}
+    </Dropzone>
   );
 };
 
-export default UploadMediaDropzone;
+export default UploadFileDropzone;

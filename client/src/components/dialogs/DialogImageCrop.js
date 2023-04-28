@@ -49,6 +49,8 @@ const DialogImageCrop = ({
           sx={{
             display: "flex",
             justifyContent: "center",
+            borderBottom: "solid 1px",
+            borderColor: theme.custom.colors.outline,
           }}
         >
           {dialogTitle}
@@ -64,7 +66,14 @@ const DialogImageCrop = ({
             onZoomChange={setZoom}
           />
         </DialogContent>
-        <DialogActions sx={{ justifyContent: "center", alignItems: "center" }}>
+        <DialogActions
+          sx={{
+            justifyContent: "center",
+            alignItems: "center",
+            borderTop: "solid 1px",
+            borderColor: theme.custom.colors.outline,
+          }}
+        >
           <Button
             startIcon={<HighlightOffIcon />}
             variant="contained"

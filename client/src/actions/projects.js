@@ -53,3 +53,27 @@ export const downloadProjectFile =
       );
     }
   };
+
+const addProtocolIfNone = (passedUrl) => {
+  let url = passedUrl;
+  if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
+    url = "http://" + url;
+  }
+  return url;
+};
+
+export const runButton = (projectId, button) => (dispatch) => {
+  // Link
+  if (button.behaviour === "redirect") {
+    return (window.location.href = addProtocolIfNone(button.redirect));
+  }
+  // Server-Side File
+  if (button.behaviour === "file" && button.file === "string") {
+    return downloadProjectFile(projectId, button.file);
+  }
+  // Client-Side File
+  if (button.behaviour === "file") {
+    return alert("TODO: Download a local file");
+  }
+  return;
+};

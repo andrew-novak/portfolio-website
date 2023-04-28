@@ -26,7 +26,14 @@ mediaList - array of media objects e.g. [
 ]
 */
 const createProject =
-  (colorsObj, title, descriptionList, mediaList, onSuccessRedirect) =>
+  ({
+    colors: colorsObj,
+    title,
+    descriptionList,
+    mediaList,
+    buttons,
+    onSuccessRedirect,
+  }) =>
   async (dispatch) => {
     // converting project to backend
     const colors = indexedObjectToArray(colorsObj);
@@ -45,6 +52,7 @@ const createProject =
           descriptionList: descriptionListBackend,
           mediaFilenames: [],
           mediaDataUrls,
+          buttons,
         },
         {
           headers: { Authorization: "Bearer " + idToken },

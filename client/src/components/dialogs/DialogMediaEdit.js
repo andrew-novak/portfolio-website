@@ -38,6 +38,8 @@ const DialogMediaEdit = ({
           sx={{
             display: "flex",
             justifyContent: "center",
+            borderBottom: "solid 1px",
+            borderColor: theme.custom.colors.outline,
           }}
         >
           {dialogTitle}
@@ -91,6 +93,8 @@ const DialogMediaEdit = ({
             justifyContent: "center",
             alignItems: "center",
             gap: isMaxSm ? 1 : 4,
+            borderTop: "solid 1px",
+            borderColor: theme.custom.colors.outline,
           }}
         >
           <Button

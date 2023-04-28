@@ -25,6 +25,7 @@ import {
   createProject,
   editProject,
 } from "actions/admin/projects";
+import { runButton } from "actions/projects";
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
@@ -64,6 +65,7 @@ const ProjectSettingsScreen = ({
   closeButtonDialog,
   setDialogButton,
   setButton,
+  runButton,
   // actions - requests
   getProject,
   createProject,
@@ -147,7 +149,6 @@ const ProjectSettingsScreen = ({
                 <div
                   style={{
                     width: "100%",
-                    marginTop: theme.spacing(3),
                   }}
                 >
                   <OutlinedMoveItemList items={movePositionItems} />
@@ -159,6 +160,7 @@ const ProjectSettingsScreen = ({
           {/* First Media & Colors Preview */}
           <div
             style={{
+              marginTop: theme.spacing(3),
               marginBottom: theme.spacing(6),
             }}
           >
@@ -250,32 +252,34 @@ const ProjectSettingsScreen = ({
             />
             <OutlinedProjectButtonsTable
               buttons={buttons}
-              onCreateClick={() => openButtonDialog((buttons || []).length)}
-              onRemoveClick={(buttonIndex) =>
-                setButton(buttonDialog.index, "remove")
-              }
+              onCreate={() => openButtonDialog((buttons || []).length)}
+              onRun={(index) => runButton(projectId, buttons[index])}
+              onEdit={(index) => openButtonDialog(index, buttons[index])}
+              onRemove={(index) => setButton(index, "remove")}
             />
             {/* Submit Button*/}
             <Button
               startIcon={<CheckIcon />}
               onClick={() =>
                 isNewProject
-                  ? createProject(
+                  ? createProject({
                       colors,
                       title,
                       descriptionList,
                       mediaList,
-                      () => navigate("/")
-                    )
-                  : editProject(
-                      projectId,
+                      buttons,
+                      onSuccessRedirect: () => navigate("/"),
+                    })
+                  : editProject({
+                      id: projectId,
                       position,
                       colors,
                       title,
                       descriptionList,
                       mediaList,
-                      () => navigate("/")
-                    )
+                      buttons,
+                      onSuccessRedirect: () => navigate("/"),
+                    })
               }
             >
               Submit
@@ -332,6 +336,7 @@ export default connect(mapState, {
   closeButtonDialog,
   setDialogButton,
   setButton,
+  runButton,
   // requests
   getProject,
   createProject,
