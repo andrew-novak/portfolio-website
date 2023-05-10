@@ -35,6 +35,7 @@ const getProjectRoute = async (req, res, next) => {
       title: project.title,
       descriptionList: project.descriptionList,
       mediaFilenames: project.mediaFilenames,
+      buttons: project.buttons,
     };
     res.status(200).json({ project: frontendProject });
   } catch (err) {

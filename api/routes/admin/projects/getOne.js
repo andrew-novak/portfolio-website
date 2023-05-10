@@ -38,6 +38,7 @@ const getProjectRoute = async (req, res, next) => {
       title: project.title,
       descriptionList: project.descriptionList,
       mediaFilenames: project.mediaFilenames,
+      buttons: project.buttons,
     };
     // get position & name for all projects
     // (for position change)

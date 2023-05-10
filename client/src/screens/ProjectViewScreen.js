@@ -111,6 +111,10 @@ const ProjectViewScreen = ({
   const { projectId } = useParams();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    getProject(projectId);
+  }, [getProject, projectId]);
+
   const { width: windowWidth } = useWindowDimensions();
   const maxImgWidth = 800;
   const fullScreenImageWidth = 600;
@@ -131,9 +135,18 @@ const ProjectViewScreen = ({
     height,
   };
 
-  useEffect(() => {
-    getProject(projectId);
-  }, [getProject, projectId]);
+  const buttons = (project.buttons || []).map((button) => ({
+    icon: icons[button.icon],
+    label: button.label,
+    onClick: () => {
+      if (button.behaviour === "redirect") {
+        return (window.location.href = button.redirect);
+      }
+      if (button.behaviour === "file") {
+        return downloadProjectFile(projectId, button.filename);
+      }
+    },
+  }));
 
   return (
     <Screen>
@@ -200,24 +213,7 @@ const ProjectViewScreen = ({
                   marginTop: theme.spacing(3),
                 }}
                 buttonVariant="outlined"
-                buttons={[
-                  {
-                    label: "Run Demo",
-                    icon: icons["PlayArrow"],
-                    onClick: () =>
-                      (window.location.href = "https://google.com"), // test only
-                  },
-                  {
-                    label: "Download",
-                    icon: icons["Download"],
-                    onClick: () =>
-                      downloadProjectFile(projectId, "anImage.jpg"),
-                  },
-                  {
-                    label: "GitHub Repo",
-                    icon: icons["GitHub"],
-                  },
-                ]}
+                buttons={buttons}
               />
             </Container>
           </div>

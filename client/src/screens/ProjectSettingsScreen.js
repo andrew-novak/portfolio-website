@@ -37,11 +37,15 @@ import OutlinedDescriptionInput from "components/OutlinedDescriptionInput";
 import OutlinedMediaGridInput from "components/OutlinedMediaGridInput";
 import DialogProjectButton from "components/dialogs/DialogProjectButton";
 import OutlinedProjectButtonsTable from "components/OutlinedProjectButtonsTable";
+import DialogProgressList from "components/dialogs/DialogProgressList";
 import Footer from "components/Footer";
 
 const ProjectSettingsScreen = ({
+  // state - dialogs
   colorDialog,
   buttonDialog,
+  submissionDialog,
+  // state - fields
   positions,
   positionIndex,
   position,
@@ -257,7 +261,22 @@ const ProjectSettingsScreen = ({
               onEdit={(index) => openButtonDialog(index, buttons[index])}
               onRemove={(index) => setButton(index, "remove")}
             />
-            {/* Submit Button*/}
+
+            {/* Submition*/}
+            <DialogProgressList
+              dialogTitle="Project Submission"
+              isOpen={submissionDialog.isOpen}
+              progressList={[
+                {
+                  label: "Creating Project",
+                  status: submissionDialog.projectCreationProgress,
+                },
+                {
+                  label: "Uploading Button Files",
+                  status: submissionDialog.buttonFilesUploadProgress,
+                },
+              ]}
+            />
             <Button
               startIcon={<CheckIcon />}
               onClick={() =>
@@ -294,8 +313,11 @@ const ProjectSettingsScreen = ({
 
 const mapState = (state) => {
   const {
+    // dialogs
     colorDialog,
     buttonDialog,
+    submissionDialog,
+    // fields
     positions,
     positionIndex,
     position,
@@ -307,8 +329,11 @@ const mapState = (state) => {
     buttons,
   } = state.project;
   return {
+    // dialogs
     colorDialog,
     buttonDialog,
+    submissionDialog,
+    // fields
     positions,
     positionIndex,
     position,

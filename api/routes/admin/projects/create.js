@@ -2,6 +2,7 @@ const logger = require("../../../debug/logger");
 const utf8Chars = require("../../../constants/utf8Chars");
 const Project = require("../../../models/Project");
 const saveProjectMedia = require("../../../localFiles/saveProjectMedia");
+const buttonFieldsToBackend = require("../../../helpers/buttonFieldsToBackend");
 
 // server-side logs
 const logRequestBody = (body) => {
@@ -36,15 +37,23 @@ project {
   title: "Project Name",
   descriptionList: [RawDraftContentState, RawDraftContentState, ...],
   mediaFilenames: ["media_2321477.jpg", "media_1351776.png", ...]
+  buttons: [{
+    icon: "GitHub",
+    label: "Repository",
+    behaviour: "redirect",
+    redirect: "http://.....",
+    filename: null,
+  }]
 }
 */
 const createProject = async (req, res, next) => {
   logRequestBody(req.body);
-  const { title, descriptionList, colors, mediaDataUrls } = req.body;
-  const projectId = await Project.getNextId();
-  const projectPosition = await Project.getNextPosition();
+  const { title, descriptionList, colors, mediaDataUrls, buttons } = req.body;
   try {
+    const projectId = await Project.getNextId();
+    const projectPosition = await Project.getNextPosition();
     const mediaFilenames = await saveProjectMedia(projectId, mediaDataUrls);
+    const backendButtons = await buttonFieldsToBackend(projectId, buttons);
     await Project.create({
       id: projectId,
       position: projectPosition,
@@ -52,9 +61,10 @@ const createProject = async (req, res, next) => {
       title,
       descriptionList,
       mediaFilenames,
+      buttons: backendButtons,
     });
     logSuccess(projectId, title);
-    res.status(200).json({});
+    res.status(200).json({ newProjectId: projectId });
   } catch (err) {
     logFailure(err);
     res.status(500).json({ message: messageFailure });

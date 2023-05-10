@@ -1,5 +1,7 @@
 const { Schema, Mixed, model } = require("mongoose");
 
+const projectConstants = require("../constants/projects");
+
 const ProjectSchema = new Schema(
   {
     id: Number,
@@ -25,6 +27,19 @@ const ProjectSchema = new Schema(
       },
     ],
     mediaFilenames: [String],
+    buttons: [
+      {
+        icon: String,
+        label: String,
+        behaviour: {
+          type: String,
+          enum: projectConstants.behaviours,
+        },
+        redirect: String,
+        filename: String,
+        isAwaitingFileUpload: Boolean,
+      },
+    ],
   },
   { minimize: false }
 );

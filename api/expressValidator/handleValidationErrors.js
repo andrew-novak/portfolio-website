@@ -11,6 +11,7 @@ const handleValidationErrors = (req, res, next) => {
   const result = validationResult(req);
   if (!result.isEmpty()) {
     const { errors } = result;
+    //console.log("errors", errors);
     const errorsNoDuplicates = errors.filter(
       (error, index, array) =>
         index ===

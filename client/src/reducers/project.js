@@ -5,6 +5,7 @@ import {
   PROJECT_SET_EDIT_MEDIA_DIALOG,
   PROJECT_SET_BUTTON_DIALOG,
   PROJECT_SET_BUTTON_DIALOG_BUTTON,
+  PROJECT_SET_SUBMISSION_DIALOG,
   // fields
   PROJECT_SET,
   PROJECT_SET_POSITION,
@@ -42,6 +43,12 @@ const initialState = {
       redirect: null,
       file: null,
     },
+  },
+  submissionDialog: {
+    isOpen: false,
+    // possible progress values: "awaiting", "pending", and "completed"
+    projectCreationProgress: null,
+    buttonFilesUploadProgress: null,
   },
   // form
   positions: null,
@@ -120,6 +127,15 @@ const project = (state = initialState, action) => {
           ...state.buttonDialog,
           button: action.button,
         },
+      };
+
+    case PROJECT_SET_SUBMISSION_DIALOG:
+      return {
+        ...state,
+        submissionDialog:
+          action.submissionDialog === "initial"
+            ? initialState
+            : { ...state.submissionDialog, ...action.submissionDialog },
       };
 
     case PROJECT_SET:

@@ -40,8 +40,12 @@ export const getProject = (projectId) => async (dispatch) => {
 export const downloadProjectFile =
   (projectId, filename) => async (dispatch) => {
     try {
-      const response = await axios.get(`${MEDIA_URL}/projects/${projectId}`);
+      const response = await axios.get(
+        `${MEDIA_URL}/projects/${projectId}/button-files/${filename}`
+      );
       const { file } = response.data;
+      console.log("filename:", filename);
+      console.log("file:", file);
       //const projects = receivedProjects.map(apiProjectToFrontend);
       return; //dispatch({ type: PROJECTS_SET, projects });
     } catch (err) {
