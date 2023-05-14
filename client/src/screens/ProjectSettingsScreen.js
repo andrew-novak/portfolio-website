@@ -25,7 +25,7 @@ import {
   createProject,
   editProject,
 } from "actions/admin/projects";
-import { runButton } from "actions/projects";
+import { runProjectButton } from "actions/projects";
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
@@ -69,7 +69,7 @@ const ProjectSettingsScreen = ({
   closeButtonDialog,
   setDialogButton,
   setButton,
-  runButton,
+  runProjectButton,
   // actions - requests
   getProject,
   createProject,
@@ -257,7 +257,7 @@ const ProjectSettingsScreen = ({
             <OutlinedProjectButtonsTable
               buttons={buttons}
               onCreate={() => openButtonDialog((buttons || []).length)}
-              onRun={(index) => runButton(projectId, buttons[index])}
+              onRun={(index) => runProjectButton(projectId, buttons[index])}
               onEdit={(index) => openButtonDialog(index, buttons[index])}
               onRemove={(index) => setButton(index, "remove")}
             />
@@ -361,7 +361,7 @@ export default connect(mapState, {
   closeButtonDialog,
   setDialogButton,
   setButton,
-  runButton,
+  runProjectButton,
   // requests
   getProject,
   createProject,

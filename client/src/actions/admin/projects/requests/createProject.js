@@ -92,6 +92,7 @@ const createProject =
       dispatch(setSuccessSnackbar("Project created"));
       return onSuccessRedirect();
     } catch (err) {
+      dispatch(submissionDialog.reset());
       return dispatch(
         setErrorSnackbar(
           err.response?.data?.message || "Unable to create the project"

@@ -10,7 +10,7 @@ const buttonsToBackend = (buttons) => {
             label,
             behaviour,
             redirect,
-            filename,
+            filename: file?.name || filename,
             isAwaitingFileUpload: !!file,
           },
         ],
@@ -22,11 +22,12 @@ const buttonsToBackend = (buttons) => {
     { buttonFields: [], hasFiles: false, buttonFiles: [] }
   );
   const { buttonFields, hasFiles, buttonFiles } = finalAccumulator;
+  console.log("buttonFields:", buttonFields);
   let form = null;
   if (hasFiles) {
     form = new FormData();
     buttonFiles.forEach((file, index) => {
-      file && form.append(index, file, index);
+      file && form.append(index, file, file.name);
     });
   }
   return { buttonFields, buttonFilesForm: form };

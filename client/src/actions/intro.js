@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { API_URL } from "constants/urls";
 import indexedObjectFromArray from "helpers/indexedObjectFromArray";
-import getMedia from "helpers/getMedia";
+import getUrl from "helpers/getUrl";
 import { INTRO_SET } from "constants/actionTypes";
 import { setErrorSnackbar } from "actions/snackbar";
 
@@ -23,7 +23,7 @@ export const getIntro = () => async (dispatch) => {
     const colors = colorsArray && indexedObjectFromArray(colorsArray);
     const image = serverFilename && {
       serverFilename,
-      serverUrl: getMedia.introFileUrl(serverFilename),
+      serverUrl: getUrl.introMediaFile(serverFilename),
     };
 
     return dispatch({

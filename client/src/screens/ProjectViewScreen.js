@@ -10,7 +10,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { connect } from "react-redux";
 
-import { getProject, downloadProjectFile } from "actions/projects";
+import { getProject, runProjectButton } from "actions/projects";
 import { removeProject } from "actions/admin/projects";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import Screen from "components/Screen";
@@ -105,7 +105,7 @@ const ProjectViewScreen = ({
   project,
   getProject,
   removeProject,
-  downloadProjectFile,
+  runProjectButton,
 }) => {
   const theme = useTheme();
   const { projectId } = useParams();
@@ -134,19 +134,6 @@ const ProjectViewScreen = ({
     width,
     height,
   };
-
-  const buttons = (project.buttons || []).map((button) => ({
-    icon: icons[button.icon],
-    label: button.label,
-    onClick: () => {
-      if (button.behaviour === "redirect") {
-        return (window.location.href = button.redirect);
-      }
-      if (button.behaviour === "file") {
-        return downloadProjectFile(projectId, button.filename);
-      }
-    },
-  }));
 
   return (
     <Screen>
@@ -213,7 +200,11 @@ const ProjectViewScreen = ({
                   marginTop: theme.spacing(3),
                 }}
                 buttonVariant="outlined"
-                buttons={buttons}
+                buttons={(project.buttons || []).map((button) => ({
+                  icon: icons[button.icon],
+                  label: button.label,
+                  onClick: () => runProjectButton(project.id, button),
+                }))}
               />
             </Container>
           </div>
@@ -252,5 +243,5 @@ const mapState = (state) => {
 export default connect(mapState, {
   getProject,
   removeProject,
-  downloadProjectFile,
+  runProjectButton,
 })(ProjectViewScreen);

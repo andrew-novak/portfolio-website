@@ -43,6 +43,7 @@ project {
     behaviour: "redirect",
     redirect: "http://.....",
     filename: null,
+    isAwaitingFileUpload: false,
   }]
 }
 */

@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 const logger = require("../../debug/logger");
 const utf8Chars = require("../../constants/utf8Chars");
 const parseMultipartForm = require("../../helpers/parseMultipartForm");
@@ -19,7 +21,7 @@ const messageSuccess = "Project button files uploaded";
 const messageFailure = "Unable to set project button files";
 
 const getButtonFileRoute = async (req, res, next) => {
-  const { projectId } = req.params;
+  const { projectId, filename } = req.params;
   try {
     const files = await parseMultipartForm(req);
     await saveProjectButtonFiles(projectId, files);

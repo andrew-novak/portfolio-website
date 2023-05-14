@@ -2,9 +2,10 @@ const express = require("express");
 const passport = require("passport");
 const { body, param } = require("express-validator");
 
-const projectConstants = require("../../constants/projects");
 const logger = require("../../debug/logger");
+const customButtonCheck = require("../../expressValidator/customButtonCheck");
 const handleValidationErrors = require("../../expressValidator/handleValidationErrors");
+// subroutes
 const loginRoute = require("./login");
 const setIntroRoute = require("./setIntro");
 const createProjectRoute = require("./projects/create");
@@ -27,25 +28,6 @@ const isHexColor = (value) => {
 };
 const isBase64 = (value) => {
   return base64Regex.test(value);
-};
-
-const isCorrectBehaviour = (passedBehaviour) => {
-  const isFound = projectConstants.behaviours.some(
-    (behaviour) => passedBehaviour === behaviour
-  );
-  return isFound;
-};
-
-const customButtonCheck = (button, { req }) => {
-  const { behaviour, redirect, filename, isAwaitingFileUpload } = button;
-  console.log([redirect, filename, isAwaitingFileUpload]);
-  if (!isCorrectBehaviour(behaviour)) return false;
-  // Check if only one of fields 'redirect', 'file' & 'filename' exists
-  const howManyValues = [redirect, filename, isAwaitingFileUpload].filter(
-    (value) => !!value
-  ).length;
-  if (howManyValues === 1) return true;
-  return false;
 };
 
 // ROUTER METHODS

@@ -36,9 +36,16 @@ export const endButtonFiles = () => (dispatch) =>
     },
   });
 
+export const reset = () => (dispatch) =>
+  dispatch({
+    type: PROJECT_SET_SUBMISSION_DIALOG,
+    submissionDialog: "initial",
+  });
+
 export default {
   startFields,
   endFields,
   startButtonFiles,
   endButtonFiles,
+  reset,
 };

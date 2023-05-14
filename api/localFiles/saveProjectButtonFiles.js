@@ -2,16 +2,28 @@ const path = require("path");
 const fs = require("fs");
 
 const Project = require("../models/Project");
-const mediaDirs = require("./mediaDirs");
+const downloadDirs = require("./downloadDirs");
+const logger = require("../debug/logger");
 
 // VALIDATION
 
+const getAwaitingFilenames = async (projectId) => {
+  const awaitingFilenames = [];
+  const project = await Project.findOne({ id: projectId });
+  (project?.buttons || []).forEach((button, index) => {
+    if (button.isAwaitingFileUpload && button.filename) {
+      awaitingFilenames.push(button.filename);
+    }
+  });
+  return awaitingFilenames;
+};
 const findDuplicates = (arr) =>
   arr.filter((item, index) => arr.indexOf(item) !== index);
 const intersect = (arr1, arr2) =>
   arr1.filter((element) => arr2.includes(element));
 
-const areIndexesOk = (arr1, arr2) => {
+const areFilenamesOk = (arr1, arr2) => {
+  if (arr1.length < 1) return false;
   if (arr1?.length !== arr2?.length) return false;
   if (findDuplicates(arr1).length !== 0) return false;
   if (findDuplicates(arr2).length !== 0) return false;
@@ -21,22 +33,10 @@ const areIndexesOk = (arr1, arr2) => {
 };
 
 const validate = async (projectId, files) => {
-  const project = await Project.findOne({ id: projectId });
-  const awaitingButtonIndexes = [];
-  (project?.buttons || []).forEach((button, index) => {
-    if (button.isAwaitingFileUpload) {
-      awaitingButtonIndexes.push(index);
-    }
-  });
-  if (awaitingButtonIndexes.length < 1) {
-    throw new Error(
-      `Project with id ${projectId} is not awaiting any button files`
-    );
-    //return res.status(400).json({ message: notAwaitingMessage });
-  }
-  const fileIndexes = files.map((file) => parseInt(file.filename));
-  const areOk = areIndexesOk(fileIndexes, awaitingButtonIndexes);
-  if (!areOk) throw new Error("Indexes failed validation");
+  const awaitingFilenames = await getAwaitingFilenames(projectId);
+  const uploadedFilenames = files.map((file) => file.filename);
+  const areOk = areFilenamesOk(uploadedFilenames, awaitingFilenames);
+  if (!areOk) throw new Error("Filenames failed validation");
   // no erors - validation successful
 };
 
@@ -44,21 +44,36 @@ const validate = async (projectId, files) => {
 
 const saveFiles = async (projectId, files) => {
   const promises = [];
-  const createOnePromise = (file) =>
-    new Promise((resolve, reject) => {
-      const projectPath = mediaDirs.getProjectPath(projectId);
-      // 'file.filename' should be an index
-      const filename = `download-${file.filename}`;
-      const filePath = path.join(projectPath, filename);
-      if (fs.existsSync(filePath)) {
-        throw new Error("A file with this name already exists");
+
+  const saveFile = (file) =>
+    new Promise(async (resolve, reject) => {
+      const projectPath = downloadDirs.getProjectPath(projectId);
+      const filePath = path.join(projectPath, file.filename);
+
+      // 1. create project directory if none
+      if (!downloadDirs.isThereProjectDir(projectId)) {
+        await downloadDirs.createProjectDir(projectId);
       }
+
+      // 2. check if file already exists
+      if (fs.existsSync(filePath)) {
+        logger.error("A file with this name already exists");
+        return reject("A file with this name already exists");
+      }
+
+      // 3. create file
       fs.writeFile(filePath, file.fileBuffer, (err) => {
-        if (err) return reject(err);
+        if (err) {
+          logger.error("fs.writeFile error:");
+          logger.error(err);
+          return reject(err);
+        }
         return resolve();
       });
     });
-  files.forEach((file) => promises.push(createOnePromise(file)));
+
+  files.forEach((file) => promises.push(saveFile(file)));
+
   await Promise.all(promises);
 };
 

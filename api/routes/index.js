@@ -1,9 +1,11 @@
 const express = require("express");
 const { body, param } = require("express-validator");
+const contentDisposition = require("content-disposition");
 
+const mediaDirs = require("../localFiles/mediaDirs");
+const downloadDirs = require("../localFiles/downloadDirs");
 const handleValidationErrors = require("../expressValidator/handleValidationErrors");
 // subroutes
-const mediaDirs = require("../localFiles/mediaDirs");
 const getIntroRoute = require("./getIntro");
 const projectsRoute = require("./projects");
 const sendEmailRoute = require("./sendEmail");
@@ -25,11 +27,18 @@ router.options("/*", (req, res, next) => {
   res.sendStatus(200);
 });
 
-// serve development media
+// serve media and download files
 if (NODE_ENV === "development") {
+  // media
   const mediaRoot = mediaDirs.getRootPath();
   router.use("/media", require("serve-index")(mediaRoot));
   router.use("/media", express.static(mediaRoot));
+  // download
+  const downloadRoot = downloadDirs.getRootPath();
+  const setHeaders = (res, path) => {
+    res.setHeader("Content-Disposition", contentDisposition(path));
+  };
+  router.use("/download", express.static(downloadRoot, { setHeaders }));
 }
 
 router.get("/intro", getIntroRoute);

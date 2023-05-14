@@ -7,6 +7,7 @@ const checkEnvVars = require("./beforeRun/checkEnvVars");
 const logger = require("./debug/logger");
 const configPassport = require("./config/passport");
 const mediaDirs = require("./localFiles/mediaDirs");
+const downloadDirs = require("./localFiles/downloadDirs");
 const rootRouter = require("./routes");
 
 checkEnvVars();
@@ -30,6 +31,7 @@ configPassport(passport);
 app.use(passport.initialize());
 
 mediaDirs.createNeccessaryDirs();
+downloadDirs.createNeccessaryDirs();
 
 mongoose
   .connect(MONGO_URL)

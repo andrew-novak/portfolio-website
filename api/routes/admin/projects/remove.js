@@ -2,6 +2,7 @@ const logger = require("../../../debug/logger");
 const utf8Chars = require("../../../constants/utf8Chars");
 const Project = require("../../../models/Project");
 const mediaDirs = require("../../../localFiles/mediaDirs");
+const downloadDirs = require("../../../localFiles/downloadDirs");
 
 // server-side logs
 const logSuccess = (id, title) =>
@@ -34,6 +35,7 @@ const removeProjectRoute = async (req, res, next) => {
     }
     projectTitle = deletedProject.title;
     await mediaDirs.removeProjectDir(projectId);
+    await downloadDirs.removeProjectDir(projectId);
     logSuccess(projectId, projectTitle);
     res.status(200).json({});
   } catch (err) {

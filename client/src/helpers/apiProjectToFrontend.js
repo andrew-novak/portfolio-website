@@ -1,6 +1,6 @@
 import { convertFromRaw, EditorState } from "draft-js";
 
-import getMedia from "helpers/getMedia";
+import getUrl from "helpers/getUrl";
 import { PROJECT_MEDIA_FILE_FORMATS } from "constants/projects";
 
 // convert raw JS object to DraftJS EditorState
@@ -13,7 +13,7 @@ const rawToEditorState = (rawJSObject) => {
 // convert one backend mediaFilename to frontend media object
 // e.g. "myImage.jpg" -> { serverFilename, serverUrl, mimeType, displayType }
 const mediaFilenameToObject = (projectId, filename) => {
-  const serverUrl = getMedia.oneProjectFileUrl(projectId, filename);
+  const serverUrl = getUrl.projectMediaFile(projectId, filename);
   const extension = filename ? filename.split(".").pop() : null;
   const supportedType = PROJECT_MEDIA_FILE_FORMATS.find(
     (obj) => obj.extension === extension

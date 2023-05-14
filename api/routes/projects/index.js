@@ -4,7 +4,7 @@ const { param } = require("express-validator");
 const handleValidationErrors = require("../../expressValidator/handleValidationErrors");
 const getProjectsRoute = require("./getMany.js");
 const getProjectRoute = require("./getOne.js");
-const getButtonFileRoute = require("./getButtonFile");
+//const getButtonFileRoute = require("./getButtonFile");
 
 const router = express.Router();
 
@@ -17,6 +17,7 @@ router.get(
   getProjectRoute
 );
 
+/*
 router.get(
   "/:projectId/button-files/:filename",
   [param("projectId").exists()],
@@ -24,5 +25,6 @@ router.get(
   handleValidationErrors,
   getButtonFileRoute
 );
+*/
 
 module.exports = router;

@@ -134,7 +134,7 @@ const project = (state = initialState, action) => {
         ...state,
         submissionDialog:
           action.submissionDialog === "initial"
-            ? initialState
+            ? initialState.submissionDialog
             : { ...state.submissionDialog, ...action.submissionDialog },
       };
 

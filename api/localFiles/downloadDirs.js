@@ -3,21 +3,21 @@ const fs = require("fs");
 
 const { staticFilesRoot } = require("../constants/paths");
 
-const mediaRoot = path.join(staticFilesRoot, "media");
-const getRootPath = () => mediaRoot;
+const downloadRoot = path.join(staticFilesRoot, "download");
+const getRootPath = () => downloadRoot;
 
 const createNeccessaryDirs = () => {
-  const projectsPath = path.join(mediaRoot, "projects");
-  const dirPaths = [staticFilesRoot, mediaRoot, projectsPath];
+  const projectsPath = path.join(downloadRoot, "projects");
+  const dirPaths = [staticFilesRoot, downloadRoot, projectsPath];
   dirPaths.forEach((path) => {
     if (!fs.existsSync(path)) fs.mkdirSync(path);
   });
 };
 
 // a single-project dir path:
-// <static dir>/media/projects/project_<id>
+// <static dir>/download/projects/project_<id>
 const getProjectPath = (projectId) =>
-  path.join(mediaRoot, "projects", `project_${projectId}`);
+  path.join(downloadRoot, "projects", `project_${projectId}`);
 
 const isThereProjectDir = (projectId) => {
   const projectDir = getProjectPath(projectId);
@@ -41,21 +41,16 @@ const removeProjectDir = async (projectId) => {
     });
 };
 
-const removeIntroImage = async (filename) => {
-  const imagePath = path.join(mediaRoot, filename);
-  await fs.promises.rm(imagePath);
-};
-
-const removeMediaFile = async (projectId, filename) => {
+const removeFile = async (projectId, filename) => {
   const projectDir = getProjectPath(projectId);
   const mediaPath = path.join(projectDir, filename);
   await fs.promises.rm(mediaPath);
 };
 
-const removeMediaFiles = async (projectId, filenames) => {
+const removeFiles = async (projectId, filenames) => {
   await Promise.all(
     filenames.map((filename) =>
-      !filename ? null : removeMediaFile(projectId, filename)
+      !filename ? null : removeFile(projectId, filename)
     )
   );
 };
@@ -66,8 +61,7 @@ module.exports = {
   getProjectPath,
   isThereProjectDir,
   createProjectDir,
-  removeIntroImage,
   removeProjectDir,
-  removeMediaFile,
-  removeMediaFiles,
+  removeFile,
+  removeFiles,
 };

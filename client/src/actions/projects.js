@@ -1,9 +1,10 @@
 import axios from "axios";
 
-import { API_URL, MEDIA_URL } from "constants/urls";
+import { API_URL, DOWNLOAD_URL } from "constants/urls";
 import apiProjectToFrontend from "helpers/apiProjectToFrontend";
 import { PROJECTS_SET, PROJECT_SET } from "constants/actionTypes";
 import { setErrorSnackbar } from "actions/snackbar";
+import getUrl from "../helpers/getUrl";
 
 export const getProjects = () => async (dispatch) => {
   try {
@@ -37,17 +38,41 @@ export const getProject = (projectId) => async (dispatch) => {
   }
 };
 
-export const downloadProjectFile =
+/*
+export const downloadLocalBlobProjectFile =
   (projectId, filename) => async (dispatch) => {
     try {
+      const fileUrl = getUrl.projectButtonFile(projectId, filename);
+      return window.open(fileUrl);
+      /*
       const response = await axios.get(
-        `${MEDIA_URL}/projects/${projectId}/button-files/${filename}`
+        `${DOWNLOAD_URL}/projects/project_${projectId}/${filename}`,
+        {
+          responseType: "blob",
+        }
       );
-      const { file } = response.data;
+      const file = response.data;
       console.log("filename:", filename);
       console.log("file:", file);
-      //const projects = receivedProjects.map(apiProjectToFrontend);
-      return; //dispatch({ type: PROJECTS_SET, projects });
+
+      // -----------------------------------
+
+      // create file link in browser's memory
+      const href = URL.createObjectURL(response.data);
+
+      // create "a" HTML element with href to file & click
+      const link = document.createElement("a");
+      link.href = href;
+      link.setAttribute("download", filename); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+
+      // clean up "a" element & remove ObjectURL
+      document.body.removeChild(link);
+      URL.revokeObjectURL(href);
+
+      // -----------------------------------
+      *`/
     } catch (err) {
       console.error(err);
       return dispatch(
@@ -57,8 +82,9 @@ export const downloadProjectFile =
       );
     }
   };
+  */
 
-const addProtocolIfNone = (passedUrl) => {
+const addProtocolPrefixIfNone = (passedUrl) => {
   let url = passedUrl;
   if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
     url = "http://" + url;
@@ -66,18 +92,37 @@ const addProtocolIfNone = (passedUrl) => {
   return url;
 };
 
-export const runButton = (projectId, button) => (dispatch) => {
+const openLocalFile = (file) => {
+  // create file link in browser's memory
+  const href = URL.createObjectURL(file);
+
+  // create "a" HTML element with href to file & click
+  const link = document.createElement("a");
+  link.href = href;
+  link.setAttribute("download", file.name); //or any other extension
+  document.body.appendChild(link);
+  link.click();
+
+  // clean up "a" element & remove ObjectURL
+  document.body.removeChild(link);
+  URL.revokeObjectURL(href);
+};
+
+export const runProjectButton = (projectId, button) => (dispatch) => {
   // Link
   if (button.behaviour === "redirect") {
-    return (window.location.href = addProtocolIfNone(button.redirect));
-  }
-  // Server-Side File
-  if (button.behaviour === "file" && button.file === "string") {
-    return downloadProjectFile(projectId, button.file);
+    const url = addProtocolPrefixIfNone(button.redirect);
+    return (window.location.href = url);
   }
   // Client-Side File
-  if (button.behaviour === "file") {
-    return alert("TODO: Download a local file");
+  if (button.behaviour === "file" && button.file) {
+    return openLocalFile(button.file);
   }
-  return;
+  // Server-Side File
+  if (button.behaviour === "file" && projectId && button.filename) {
+    const fileUrl = getUrl.projectButtonFile(projectId, button.filename);
+    return window.open(fileUrl);
+  }
+  // Unable to run
+  return dispatch(setErrorSnackbar("Unable to run the button"));
 };
