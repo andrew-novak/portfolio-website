@@ -17,14 +17,4 @@ router.get(
   getProjectRoute
 );
 
-/*
-router.get(
-  "/:projectId/button-files/:filename",
-  [param("projectId").exists()],
-  [param("filename").exists()],
-  handleValidationErrors,
-  getButtonFileRoute
-);
-*/
-
 module.exports = router;

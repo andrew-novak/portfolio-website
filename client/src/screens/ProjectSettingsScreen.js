@@ -268,8 +268,10 @@ const ProjectSettingsScreen = ({
               isOpen={submissionDialog.isOpen}
               progressList={[
                 {
-                  label: "Creating Project",
-                  status: submissionDialog.projectCreationProgress,
+                  label: isNewProject
+                    ? "Creating Project Fields"
+                    : "Editing Project Fields",
+                  status: submissionDialog.projectFieldsProgress,
                 },
                 {
                   label: "Uploading Button Files",

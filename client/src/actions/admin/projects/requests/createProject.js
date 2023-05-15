@@ -39,6 +39,7 @@ const createProject =
     onSuccessRedirect,
   }) =>
   async (dispatch) => {
+    // buttons first, so we can show correct submissionDialog
     const { buttonFields, buttonFilesForm } = buttonsToBackend(buttons || []);
 
     dispatch(
@@ -72,7 +73,10 @@ const createProject =
         }
       );
       const { newProjectId } = response.data;
-      if (!newProjectId) throw new Error();
+      if (newProjectId == null) {
+        console.error("New project ID not received");
+        throw new Error();
+      }
       dispatch(submissionDialog.endFields());
       // Upload button files if any
       if (buttonFilesForm) {

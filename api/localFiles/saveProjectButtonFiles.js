@@ -7,9 +7,8 @@ const logger = require("../debug/logger");
 
 // VALIDATION
 
-const getAwaitingFilenames = async (projectId) => {
+const getAwaitingFilenames = async (project) => {
   const awaitingFilenames = [];
-  const project = await Project.findOne({ id: projectId });
   (project?.buttons || []).forEach((button, index) => {
     if (button.isAwaitingFileUpload && button.filename) {
       awaitingFilenames.push(button.filename);
@@ -32,8 +31,8 @@ const areFilenamesOk = (arr1, arr2) => {
   return true;
 };
 
-const validate = async (projectId, files) => {
-  const awaitingFilenames = await getAwaitingFilenames(projectId);
+const validate = async (project, files) => {
+  const awaitingFilenames = await getAwaitingFilenames(project);
   const uploadedFilenames = files.map((file) => file.filename);
   const areOk = areFilenamesOk(uploadedFilenames, awaitingFilenames);
   if (!areOk) throw new Error("Filenames failed validation");
@@ -42,45 +41,47 @@ const validate = async (projectId, files) => {
 
 // ACTUAL FILE SAVE
 
-const saveFiles = async (projectId, files) => {
-  const promises = [];
+const saveFile = (projectId, project, file) =>
+  new Promise(async (resolve, reject) => {
+    const projectPath = downloadDirs.getProjectPath(projectId);
+    const filePath = path.join(projectPath, file.filename);
 
-  const saveFile = (file) =>
-    new Promise(async (resolve, reject) => {
-      const projectPath = downloadDirs.getProjectPath(projectId);
-      const filePath = path.join(projectPath, file.filename);
+    // 1. create project directory if none
+    if (!downloadDirs.isThereProjectDir(projectId)) {
+      await downloadDirs.createProjectDir(projectId);
+    }
 
-      // 1. create project directory if none
-      if (!downloadDirs.isThereProjectDir(projectId)) {
-        await downloadDirs.createProjectDir(projectId);
+    // 2. check if file already exists
+    if (fs.existsSync(filePath)) {
+      logger.error("A file with this name already exists");
+      return reject("A file with this name already exists");
+    }
+
+    // 3. create file
+    fs.writeFile(filePath, file.fileBuffer, async (err) => {
+      if (err) {
+        logger.error("fs.writeFile error:");
+        logger.error(err);
+        return reject(err);
       }
-
-      // 2. check if file already exists
-      if (fs.existsSync(filePath)) {
-        logger.error("A file with this name already exists");
-        return reject("A file with this name already exists");
-      }
-
-      // 3. create file
-      fs.writeFile(filePath, file.fileBuffer, (err) => {
-        if (err) {
-          logger.error("fs.writeFile error:");
-          logger.error(err);
-          return reject(err);
-        }
-        return resolve();
-      });
+      const buttonIndex = project.buttons.findIndex(
+        (button) => button.filename === file.filename
+      );
+      project.buttons[buttonIndex].isAwaitingFileUpload = false;
+      await Project.updateOne({ id: projectId }, project);
+      return resolve();
     });
+  });
 
-  files.forEach((file) => promises.push(saveFile(file)));
-
+const saveFiles = async (projectId, project, files) => {
+  const promises = [];
+  files.forEach((file) => promises.push(saveFile(projectId, project, file)));
   await Promise.all(promises);
 };
 
 /*
 ROOT FUNCTION
-'files' prop - array of object
-one file obj in 'files' prop:
+each file obj in files:
 {
   fileBuffer,
   filename,
@@ -88,9 +89,9 @@ one file obj in 'files' prop:
   encoding,
 }
 */
-const saveProjectButtonFiles = async (projectId, files) => {
-  await validate(projectId, files);
-  await saveFiles(projectId, files);
+const saveProjectButtonFiles = async (projectId, project, files) => {
+  await validate(project, files);
+  await saveFiles(projectId, project, files);
 };
 
 module.exports = saveProjectButtonFiles;

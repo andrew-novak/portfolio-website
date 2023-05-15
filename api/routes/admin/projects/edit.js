@@ -3,6 +3,8 @@ const utf8Chars = require("../../../constants/utf8Chars");
 const Project = require("../../../models/Project");
 const saveProjectMedia = require("../../../localFiles/saveProjectMedia");
 const mergeMediaFilenames = require("../../../helpers/mergeMediaFilenames");
+const buttonFieldsToBackend = require("../../../helpers/buttonFieldsToBackend");
+const removeDeletedButtonFiles = require("../../../localFiles/removeDeletedButtonFiles");
 const mediaDirs = require("../../../localFiles/mediaDirs");
 
 // server-side logs
@@ -58,8 +60,8 @@ const editProjectRoute = async (req, res, next) => {
     // TODO: check if these mediaFilenames are equal to existing mediaFilenames
     mediaFilenames: oldMediaFilenames,
     mediaDataUrls,
+    buttons,
   } = req.body;
-  console.log(descriptionList);
   let newMediaFilenames = [];
   try {
     // project existence
@@ -92,10 +94,24 @@ const editProjectRoute = async (req, res, next) => {
       oldMediaFilenames
     );
 
+    // buttons
+    const newButtons = await buttonFieldsToBackend(projectId, buttons);
+    await removeDeletedButtonFiles(
+      projectId,
+      newButtons,
+      originalProject.buttons
+    );
+
     // update document (except positions)
     await Project.updateOne(
       { id: projectId },
-      { colors, title, descriptionList, mediaFilenames }
+      {
+        colors,
+        title,
+        descriptionList,
+        mediaFilenames,
+        buttons: newButtons,
+      }
     );
     logSuccess(projectId, title);
     res.status(200).json({});

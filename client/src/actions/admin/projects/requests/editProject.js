@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import buttonsToBackend from "helpers/buttonsToBackend";
+import submissionDialog from "./submissionDialog";
 import indexedObjectToArray from "helpers/indexedObjectToArray";
 import descriptionToBackend from "helpers/descriptionToBackend";
 import splitMediaList from "helpers/splitMediaList";
@@ -20,7 +22,7 @@ mediaList - array of media objects e.g. [
 */
 const editProject =
   ({
-    id,
+    id: projectId,
     position,
     colors: colorsObj,
     title,
@@ -30,6 +32,13 @@ const editProject =
     onSuccessRedirect,
   }) =>
   async (dispatch) => {
+    // buttons first, so we can show correct submissionDialog
+    const { buttonFields, buttonFilesForm } = buttonsToBackend(buttons || []);
+
+    dispatch(
+      submissionDialog.startFields({ anyButtonFiles: !!buttonFilesForm })
+    );
+
     // convert project to backend
     const colors = indexedObjectToArray(colorsObj);
     const descriptionListBackend = descriptionList.map(descriptionToBackend);
@@ -39,10 +48,11 @@ const editProject =
 
     const idToken = localStorage.getItem("idToken");
 
-    console.log(descriptionListBackend);
+    console.log("buttons:", buttons);
     try {
+      // Upload fields
       await axios.post(
-        `${API_URL}/admin/projects/${id}`,
+        `${API_URL}/admin/projects/${projectId}`,
         {
           position,
           colors,
@@ -50,12 +60,28 @@ const editProject =
           descriptionList: descriptionListBackend,
           mediaFilenames: serverFilenames,
           mediaDataUrls,
-          buttons,
+          buttons: buttonFields,
         },
         {
           headers: { Authorization: "Bearer " + idToken },
         }
       );
+      dispatch(submissionDialog.endFields());
+      // Upload button files if any
+      if (buttonFilesForm) {
+        dispatch(submissionDialog.startButtonFiles());
+        await axios.post(
+          `${API_URL}/admin/projects/${projectId}/button-files`,
+          buttonFilesForm,
+          {
+            headers: {
+              Authorization: "Bearer " + idToken,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+      }
+      dispatch(submissionDialog.endButtonFiles());
       dispatch(setSuccessSnackbar("Project edited"));
       return onSuccessRedirect();
     } catch (err) {

@@ -7,7 +7,7 @@ export const startFields =
       type: PROJECT_SET_SUBMISSION_DIALOG,
       submissionDialog: {
         isOpen: true,
-        projectCreationProgress: "pending",
+        projectFieldsProgress: "pending",
         buttonFilesUploadProgress: anyButtonFiles ? "awaiting" : null,
       },
     });
@@ -16,7 +16,7 @@ export const endFields = () => (dispatch) =>
   dispatch({
     type: PROJECT_SET_SUBMISSION_DIALOG,
     submissionDialog: {
-      projectCreationProgress: "completed",
+      projectFieldsProgress: "completed",
     },
   });
 

@@ -47,7 +47,7 @@ const initialState = {
   submissionDialog: {
     isOpen: false,
     // possible progress values: "awaiting", "pending", and "completed"
-    projectCreationProgress: null,
+    projectFieldsProgress: null,
     buttonFilesUploadProgress: null,
   },
   // form

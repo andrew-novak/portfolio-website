@@ -119,7 +119,7 @@ export const runProjectButton = (projectId, button) => (dispatch) => {
     return openLocalFile(button.file);
   }
   // Server-Side File
-  if (button.behaviour === "file" && projectId && button.filename) {
+  if (button.behaviour === "file" && projectId != null && button.filename) {
     const fileUrl = getUrl.projectButtonFile(projectId, button.filename);
     return window.open(fileUrl);
   }

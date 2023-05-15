@@ -3,7 +3,7 @@ const passport = require("passport");
 const { body, param } = require("express-validator");
 
 const logger = require("../../debug/logger");
-const customButtonCheck = require("../../expressValidator/customButtonCheck");
+const { areButtonsOk, isButtonOk } = require("../../expressValidator/buttons");
 const handleValidationErrors = require("../../expressValidator/handleValidationErrors");
 // subroutes
 const loginRoute = require("./login");
@@ -87,38 +87,40 @@ router.get(
   getProjectRoute
 );
 
+const sharedValidation = [
+  body("colors").isArray(),
+  body("colors.*").isString().custom(isHexColor),
+  body("title").isString().isLength({ min: 1, max: 30 }),
+  // TODO: improve descriptionList validation
+  body("descriptionList").isArray(),
+  body("mediaFilenames").isArray(),
+  body("mediaFilenames.*").optional().isString().isLength({ min: 1, max: 50 }),
+  body("mediaDataUrls").isArray(),
+  body("mediaDataUrls.*")
+    .optional()
+    .isString()
+    .isLength({ min: 1 })
+    .custom(isBase64),
+  // filename + isAwaitingFileUpload: true = new file
+  // filename + isAwaitingFileUpload: false = existing file
+  // redirect is just redirect url
+  // TODO: improve buttons validation
+  body("buttons").isArray(),
+  body("buttons.*").isObject(),
+  body("buttons.*.icon").optional({ nullable: true }).isString(),
+  body("buttons.*.label").isString(),
+  body("buttons.*.behaviour").isString(),
+  body("buttons.*.redirect").optional({ nullable: true }).isString(),
+  body("buttons.*.filename").optional({ nullable: true }).isString(),
+  body("buttons.*.isAwaitingFileUpload").isBoolean(),
+  body("buttons").custom(areButtonsOk),
+  body("buttons.*").custom(isButtonOk),
+];
+
 // Create project
 router.post(
   "/projects",
-  [
-    body("colors").isArray(),
-    body("colors.*").isString().custom(isHexColor),
-    body("title").isString().isLength({ min: 1, max: 30 }),
-    // TODO: improve descriptionList validation
-    body("descriptionList").isArray(),
-    body("mediaFilenames").isArray(),
-    body("mediaFilenames.*")
-      .optional()
-      .isString()
-      .isLength({ min: 1, max: 50 }),
-    body("mediaDataUrls").isArray(),
-    body("mediaDataUrls.*")
-      .optional()
-      .isString()
-      .isLength({ min: 1 })
-      .custom(isBase64),
-    // TODO: improve buttons validation
-    body("buttons").isArray(),
-    body("buttons.*").isObject(),
-    body("buttons.*.icon").optional({ nullable: true }).isString(),
-    body("buttons.*.label").isString(),
-    body("buttons.*.behaviour").isString(),
-    body("buttons.*.redirect").optional({ nullable: true }).isString(),
-    body("buttons.*.filename").optional({ nullable: true }).isString(),
-    body("buttons.*.isAwaitingFileUpload").isBoolean(),
-    body("buttons.*").custom(customButtonCheck),
-  ],
-  //validateButtonFiles,
+  sharedValidation,
   handleValidationErrors,
   createProjectRoute
 );
@@ -126,12 +128,7 @@ router.post(
 // Edit project
 router.post(
   "/projects/:projectId",
-  [
-    body("position").notEmpty().isInt(),
-    body("title").isString().isLength({ min: 1, max: 30 }),
-    // TODO: improve descriptionList validation
-    body("descriptionList").isArray(),
-  ],
+  [body("position").notEmpty().isInt(), ...sharedValidation],
   handleValidationErrors,
   editProjectRoute
 );
