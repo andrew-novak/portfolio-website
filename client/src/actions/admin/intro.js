@@ -65,6 +65,9 @@ export const setImage = (clientLocalUrl, closeDialog) => (dispatch) => {
   closeDialog();
 };
 
+export const removeImage = () => (dispatch) =>
+  dispatch({ type: INTRO_SET_IMAGE, image: "default" });
+
 export const setText = (text) => (dispatch) => {
   dispatch({ type: INTRO_SET_TEXT, text });
 };
@@ -73,7 +76,9 @@ export const setIntro =
   (text, colorsObj, image, onSuccessRedirect) => async (dispatch) => {
     const colors = indexedObjectToArray(colorsObj);
 
-    const [imageDataUrl] = await mediaBlobsToDataUrls([image.clientLocalUrl]);
+    const [imageDataUrl] = await mediaBlobsToDataUrls([
+      image.clientLocalUrl || null,
+    ]);
 
     const idToken = localStorage.getItem("idToken");
 
@@ -84,6 +89,7 @@ export const setIntro =
           text,
           colors,
           ...(imageDataUrl && { imageDataUrl }),
+          ...(image.serverFilename && { imageFilename: image.serverFilename }),
         },
         {
           headers: { Authorization: "Bearer " + idToken },

@@ -6,6 +6,8 @@ import NotesIcon from "@mui/icons-material/Notes";
 import AddIcon from "@mui/icons-material/Add";
 import "draft-js/dist/Draft.css";
 
+import OutlinedFormButton from "./OutlinedFormButton";
+
 const BLOCK_TYPES = [
   { label: "H1", richStyle: "header-one" },
   { label: "H2", richStyle: "header-two" },
@@ -58,26 +60,6 @@ const OutlinedDescriptionInput = ({
     updateEditorState(nextState);
   };
 
-  const FormButton = ({ startIcon, label, sx, onClick }) => (
-    <Button
-      startIcon={startIcon}
-      variant="outlined"
-      sx={{
-        ...theme.custom.styles.inputLabel,
-        borderColor: theme.custom.colors.outlineLight,
-        margin: "4px",
-        padding: "10px",
-        paddingTop: "4px",
-        paddingBottom: "4px",
-        minWidth: 40,
-        ...sx,
-      }}
-      onMouseDown={onClick}
-    >
-      {label}
-    </Button>
-  );
-
   const SelectDescriptionButton = ({ index }) => {
     const icon = descriptionList[index]?.getCurrentContent()?.hasText() ? (
       <NotesIcon sx={{ transform: "scale(1.3)" }} />
@@ -85,7 +67,7 @@ const OutlinedDescriptionInput = ({
       <AddIcon sx={{ transform: "scale(1.3)" }} />
     );
     return (
-      <FormButton
+      <OutlinedFormButton
         label={icon}
         sx={{
           height: "54px",
@@ -144,7 +126,7 @@ const OutlinedDescriptionInput = ({
         {/* Remove Description Buttons */}
         <div style={{ display: "flex" }}>
           {descriptionList[selectIndex]?.getCurrentContent()?.hasText() && (
-            <FormButton
+            <OutlinedFormButton
               startIcon={<DeleteIcon />}
               label="Selected"
               onClick={() =>
@@ -158,7 +140,7 @@ const OutlinedDescriptionInput = ({
             descriptionList.some((description) =>
               description?.getCurrentContent()?.hasText()
             ) && (
-              <FormButton
+              <OutlinedFormButton
                 startIcon={<DeleteIcon />}
                 label="Everything"
                 onClick={() => clearDescriptionList(descriptionList)}
@@ -226,7 +208,7 @@ const OutlinedDescriptionInput = ({
           }}
         >
           {BLOCK_TYPES.map(({ label, richStyle }) => (
-            <FormButton
+            <OutlinedFormButton
               key={label}
               label={label}
               onToggle={() => onBlockClick(richStyle)}
@@ -237,7 +219,7 @@ const OutlinedDescriptionInput = ({
         {/* Button-Only Section 3 - Inline Style Control */}
         <div>
           {INLINE_STYLES.map(({ label, richStyle }) => (
-            <FormButton
+            <OutlinedFormButton
               key={label}
               label={label}
               onToggle={() => onInlineClick(richStyle)}

@@ -14,6 +14,7 @@ import {
   closeImageDialog,
   setColor,
   setImage,
+  removeImage,
   setText,
   setIntro,
 } from "actions/admin/intro";
@@ -44,6 +45,7 @@ const IntroSettingsScreen = ({
   closeImageDialog,
   setColor,
   setImage,
+  removeImage,
   setText,
   setIntro,
 }) => {
@@ -162,6 +164,7 @@ const IntroSettingsScreen = ({
               <OutlinedSingleMediaInput
                 title="Image"
                 image={image.serverUrl || image.clientLocalUrl}
+                onFileRemove={removeImage}
                 onFileUpload={(event) => openImageDialog(event.target.files)}
               />
             </div>
@@ -214,6 +217,7 @@ export default connect(mapState, {
   closeImageDialog,
   setColor,
   setImage,
+  removeImage,
   setText,
   setIntro,
 })(IntroSettingsScreen);

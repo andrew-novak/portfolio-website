@@ -1,35 +1,41 @@
-import { useState } from "react";
 import { useTheme, Box, Typography, Button } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import useWindowDimensions from "hooks/useWindowDimensions";
+import OutlinedFormButton from "./OutlinedFormButton";
 
-const OutlinedSingleMediaInput = ({ title, image, onFileUpload }) => {
+const OutlinedSingleMediaInput = ({
+  title,
+  image,
+  onFileRemove,
+  onFileUpload,
+}) => {
   const { width: windowWidth } = useWindowDimensions();
-  const [isHover, setIsHover] = useState(false);
   const theme = useTheme();
-  const outlineColor = isHover
-    ? theme.custom.colors.outlineHover
-    : theme.custom.colors.outline;
   return (
-    <Box
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-      sx={{
-        border: `solid 1px ${outlineColor}`,
-        borderRadius: "4px",
-      }}
-    >
-      <Typography
-        align="center"
-        sx={{
-          ...theme.custom.styles.inputLabel,
-          borderBottom: `solid 1px ${outlineColor}`,
-          padding: theme.custom.cssProps.outlinePadding,
+    <Box sx={{}}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          border: "solid 1px",
+          borderColor: theme.custom.colors.outline,
+          borderTopLeftRadius: "4px",
+          borderTopRightRadius: "4px",
         }}
       >
-        Image
-      </Typography>
+        <Typography
+          align="center"
+          sx={{
+            ...theme.custom.styles.inputLabel,
+            padding: theme.custom.cssProps.outlinePadding,
+          }}
+        >
+          Image
+        </Typography>
+        <OutlinedFormButton label={<DeleteIcon />} onClick={onFileRemove} />
+      </div>
       <Box
         sx={{
           paddingTop: "100%",
@@ -38,23 +44,29 @@ const OutlinedSingleMediaInput = ({ title, image, onFileUpload }) => {
           backgroundImage: `url(${image})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          borderLeft: "solid 1px",
+          borderRight: "solid 1px",
+          borderColor: theme.custom.colors.outline,
         }}
       />
-      <div style={{ borderTop: `solid 1px ${outlineColor}` }}>
-        <Button
-          fullWidth
-          component="label"
-          startIcon={<FileUploadIcon />}
-          sx={{
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-            padding: theme.custom.cssProps.outlinePadding,
-          }}
-        >
-          Upload File
-          <input type="file" hidden onChange={onFileUpload} />
-        </Button>
-      </div>
+      <Button
+        fullWidth
+        component="label"
+        startIcon={<FileUploadIcon />}
+        sx={{
+          padding: theme.custom.cssProps.outlinePadding,
+          border: "solid 1px",
+          borderColor: theme.custom.colors.outline,
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
+          "&:hover": {
+            borderColor: theme.custom.colors.outlineHover,
+          },
+        }}
+      >
+        Upload File
+        <input type="file" hidden onChange={onFileUpload} />
+      </Button>
     </Box>
   );
 };

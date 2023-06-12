@@ -68,7 +68,7 @@ const intro = (state = initialState, action) => {
     case INTRO_SET_IMAGE:
       return {
         ...state,
-        image: action.image,
+        image: action.image === "default" ? initialState.image : action.image,
       };
 
     case INTRO_SET_TEXT:
