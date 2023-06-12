@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useMediaQuery, Typography } from "@mui/material";
 
 import { WEBSITE_NAME } from "../../constants/general";
+import logo from "./logo.png";
 
 const HomeButton = ({ min350px, min450px, smUp }) => {
   const theme = useTheme();
@@ -21,18 +22,15 @@ const HomeButton = ({ min350px, min450px, smUp }) => {
       }}
       onClick={() => navigate("/")}
     >
-      {
-        /* No Icon For Now */
-        false && (
-          <img
-            style={{
-              height: smUp ? 50 : 46,
-              marginRight: 10,
-            }}
-            alt="logo"
-          />
-        )
-      }
+      <img
+        style={{
+          height: smUp ? 50 : 46,
+          marginRight: 10,
+          borderRadius: "100%",
+        }}
+        alt="logo"
+        src={logo}
+      />
       <Typography
         sx={{
           lineHeight: 2,
@@ -42,7 +40,8 @@ const HomeButton = ({ min350px, min450px, smUp }) => {
           background: theme.custom.colors.activity,
           WebkitBackgroundClip: "text",
           textFillColor: "transparent",
-          background: "rgba(0, 0, 0, 87)",
+          //background: "rgba(0, 0, 0, 87)",
+          background: "#3E003F",
         }}
         color="inherit"
       >

@@ -1,5 +1,7 @@
 # My portfolio website
 
+Explore my projects, skills, and expertise in web and mobile app development. Discover how I build robust applications and APIs to power seamless user experiences and unlock innovative features and functionalities.
+
 ## To run in development:
 
 1. Make sure you are in the project root directory.
