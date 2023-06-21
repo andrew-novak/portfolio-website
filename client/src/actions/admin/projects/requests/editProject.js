@@ -48,7 +48,6 @@ const editProject =
 
     const idToken = localStorage.getItem("idToken");
 
-    console.log("buttons:", buttons);
     try {
       // Upload fields
       await axios.post(

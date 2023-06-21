@@ -1,8 +1,10 @@
 const express = require("express");
+const base64JS = require("base64-js");
 const passport = require("passport");
 const { body, param } = require("express-validator");
 
 const logger = require("../../debug/logger");
+// validation
 const { areButtonsOk, isButtonOk } = require("../../expressValidator/buttons");
 const handleValidationErrors = require("../../expressValidator/handleValidationErrors");
 // subroutes
@@ -19,15 +21,30 @@ const router = express.Router();
 // VALIDATION
 
 const hexColorRegex = /^#[0-9A-F]{6}$/i;
-// Base 64 Beginning Example:
-// data:image/jpeg;base64,/9j/4AAQSkZJ
-const base64Regex = /^data:.*\/.*;base64,([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
-
 const isHexColor = (value) => {
   return hexColorRegex.test(value);
 };
+
+// Base 64 Data URL Beginning Example:
+// data:image/jpeg;base64,/9j/4AAQSkZJ....
 const isBase64 = (value) => {
-  return base64Regex.test(value);
+  const segments = value.split(",");
+  // Check if there are two segments
+  if (segments.length !== 2) {
+    return false;
+  }
+  const regex = /^data:.*\/.*;base64$/;
+  // Validate the first segment using the regular expression
+  if (!regex.test(segments[0])) {
+    return false;
+  }
+  // Validate the second segment using base64.toByteArray()
+  try {
+    base64JS.toByteArray(segments[1]);
+    return true;
+  } catch (error) {
+    return false;
+  }
 };
 
 // ROUTER METHODS
@@ -94,10 +111,13 @@ const sharedValidation = [
   // TODO: improve descriptionList validation
   body("descriptionList").isArray(),
   body("mediaFilenames").isArray(),
-  body("mediaFilenames.*").optional().isString().isLength({ min: 1, max: 50 }),
+  body("mediaFilenames.*")
+    .optional({ nullable: true })
+    .isString()
+    .isLength({ min: 1, max: 50 }),
   body("mediaDataUrls").isArray(),
   body("mediaDataUrls.*")
-    .optional()
+    .optional({ nullable: true })
     .isString()
     .isLength({ min: 1 })
     .custom(isBase64),
@@ -128,6 +148,15 @@ router.post(
 // Edit project
 router.post(
   "/projects/:projectId",
+  (req, res, next) => {
+    console.log(req.body.mediaFilenames);
+    console.log(
+      req.body.mediaDataUrls.map((dataUrl) =>
+        dataUrl === null ? dataUrl : dataUrl.slice(0, 50) + "..."
+      )
+    );
+    next();
+  },
   [body("position").notEmpty().isInt(), ...sharedValidation],
   handleValidationErrors,
   editProjectRoute

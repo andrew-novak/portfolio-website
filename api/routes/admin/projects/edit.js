@@ -57,8 +57,7 @@ const editProjectRoute = async (req, res, next) => {
     colors,
     title,
     descriptionList,
-    // TODO: check if these mediaFilenames are equal to existing mediaFilenames
-    mediaFilenames: oldMediaFilenames,
+    mediaFilenames: keptMediaFilenames,
     mediaDataUrls,
     buttons,
   } = req.body;
@@ -82,16 +81,23 @@ const editProjectRoute = async (req, res, next) => {
       );
     }
 
-    // media files
-    // TODO: add media deletion
+    // media
+    // --- remove deleted files ---
+    originalProject.mediaFilenames.forEach((filename) => {
+      if (!keptMediaFilenames.includes(filename)) {
+        mediaDirs.removeMediaFile(projectId, filename);
+      }
+    });
+    // --- save new files ----
     newMediaFilenames = await saveProjectMedia(
       projectId,
       mediaDataUrls,
-      oldMediaFilenames
+      keptMediaFilenames
     );
+    // --- merge recently added and kept filenames ---
     const mediaFilenames = mergeMediaFilenames(
       newMediaFilenames,
-      oldMediaFilenames
+      keptMediaFilenames
     );
 
     // buttons

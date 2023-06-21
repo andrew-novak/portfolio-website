@@ -8,6 +8,7 @@ import {
 } from "actions/admin/projects";
 import { PROJECT_MEDIA_FILE_FORMATS } from "constants/projects";
 import DialogImageCrop from "components/dialogs/DialogImageCrop";
+import DialogGifPreview from "components/dialogs/DialogGifPreview";
 import DialogVideoPreview from "components/dialogs/DialogVideoPreview";
 
 // displays a specific dialog based on media type
@@ -45,6 +46,20 @@ const MediaDialogs = ({
         onConfirm={(croppedImageUrl) =>
           mediaListAddImage({
             localUrl: croppedImageUrl,
+            mimeType,
+            displayType,
+            closeMediaDialog,
+          })
+        }
+      />
+      <DialogGifPreview
+        dialogTitle="Uploading a gif"
+        isOpen={dialogVariant === "gif"}
+        fileObjectUrl={dialogVariant === "gif" && objectUrl ? objectUrl : null}
+        onCancel={closeMediaDialog}
+        onConfirm={() =>
+          mediaListAddImage({
+            localUrl: objectUrl,
             mimeType,
             displayType,
             closeMediaDialog,

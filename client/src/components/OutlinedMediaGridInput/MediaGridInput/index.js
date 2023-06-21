@@ -46,7 +46,7 @@ const MediaGridInput = ({
       displayType,
       coverUrl,
     } = mediaObj;
-    if (displayType === "image") {
+    if (displayType === "image" || displayType === "gif") {
       return serverUrl ? serverUrl : clientLocalUrl;
     }
     if (displayType === "video") {

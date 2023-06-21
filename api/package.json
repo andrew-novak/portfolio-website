@@ -9,6 +9,7 @@
     "cli:dev": "NODE_ENV=development node --require dotenv/config ./cli/cli.js"
   },
   "dependencies": {
+    "base64-js": "^1.5.1",
     "bcrypt": "^5.1.0",
     "busboy": "^1.6.0",
     "content-disposition": "^0.5.4",
