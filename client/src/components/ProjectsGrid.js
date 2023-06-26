@@ -71,7 +71,7 @@ const ProjectMedia = ({ project, cardHeightPercentRatio }) => {
               backgroundPosition: "center center",
             }}
           />
-          <VideoCoverOverlay />
+          {project?.media?.displayType === "video" && <VideoCoverOverlay />}
         </>
       )}
       {
@@ -93,8 +93,9 @@ const ProjectMedia = ({ project, cardHeightPercentRatio }) => {
           >
             {image === "loading" ? (
               // loading
-              <Typography>Loading...</Typography>
-            ) : image === "unsupportedFormat" ? (
+              <CircularProgress />
+            ) : /*<Typography>Loading...</Typography>*/
+            image === "unsupportedFormat" ? (
               // unsupportedFormat
               <Typography>
                 Unsupported
