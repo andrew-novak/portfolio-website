@@ -49,7 +49,6 @@ const ProjectMedia = ({ project, cardHeightPercentRatio }) => {
 
   return (
     <CardMedia
-      /*image={isImage ? image : null}*/
       sx={{
         height: 0,
         paddingTop: cardHeightPercentRatio,

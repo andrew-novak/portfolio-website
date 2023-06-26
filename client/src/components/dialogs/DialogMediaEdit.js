@@ -62,7 +62,7 @@ const DialogMediaEdit = ({
                 width: {
                   xs: "100%",
                   sm: "80%",
-                  md: 800,
+                  md: 700,
                 },
               }}
             >

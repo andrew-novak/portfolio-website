@@ -31,8 +31,9 @@ const DisplayProjectImage = ({
     : isMobile
     ? windowWidth * 0.9
     : maxImgWidth;
-  const height =
-    mediaDisplayType === "video" ? squareHeight * 0.5625 : squareHeight;
+  const height = squareHeight;
+  //const height =
+  //  mediaDisplayType === "video" ? squareHeight * 0.5625 : squareHeight;
 
   return (
     <div
@@ -78,12 +79,7 @@ const DisplayProjectImage = ({
             objectFit: "cover",
           }}
         >
-          <VideoPlayer
-            playsInline
-            /* aspectRatio="1:1" */
-            /* poster="/assets/poster.png" */
-            src={mediaUrl}
-          />
+          <VideoPlayer src={mediaUrl} />
         </Box>
       )}
       {mediaDisplayType !== "video" && (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Player, BigPlayButton } from "video-react";
 import "video-react/dist/video-react.css";
 
@@ -17,7 +17,13 @@ const MyVideoPlayer = (props) => {
   };
 
   return (
-    <Player {...props} onPlay={handlePlay} onPause={handlePause}>
+    <Player
+      playsInline
+      aspectRatio="1:1"
+      onPlay={handlePlay}
+      onPause={handlePause}
+      {...props}
+    >
       {!isVideoPlaying && (
         <VideoCoverOverlay style={{ zIndex: 1, pointerEvents: "none" }} />
       )}
