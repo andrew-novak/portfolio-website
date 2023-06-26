@@ -17,7 +17,7 @@ import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
 import ProjectButtons from "components/ProjectButtons";
-import DisplayProjectImage from "components/DisplayProjectImage";
+import DisplayProjectMedia from "components/DisplayProjectMedia";
 import Footer from "components/Footer";
 
 const Segments = ({ colors, descriptionList, mediaList, dimensionProps }) => {
@@ -80,8 +80,8 @@ const Segments = ({ colors, descriptionList, mediaList, dimensionProps }) => {
               {/* One Media */}
               {mediaList[index] && (
                 <div style={{ width: "100%" }}>
-                  <DisplayProjectImage
-                    imageUrl={mediaList[index].serverUrl}
+                  <DisplayProjectMedia
+                    media={mediaList[index]}
                     color1={color1}
                     color2={color2}
                   />

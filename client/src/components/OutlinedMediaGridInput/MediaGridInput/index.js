@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { connect } from "react-redux";
@@ -10,10 +10,12 @@ import {
   closeMediaEditDialog,
   openMediaDialog,
 } from "actions/admin/projects";
+import getVideoCover from "helpers/getVideoCover";
 import MediaDialogs from "./MediaDialogs";
 import DialogMediaEdit from "components/dialogs/DialogMediaEdit";
 import MediaContainer from "./MediaContainer";
 import MediaItem from "./MediaItem";
+import VideoCoverOverlay from "components/VideoCoverOverlay";
 import UploadMediaDropzone from "./UploadMediaDropzone";
 
 // Rectangular drag and drop grid media input component
@@ -37,6 +39,35 @@ const MediaGridInput = ({
   const isMd = useMediaQuery(theme.breakpoints.up("md"));
 
   const mediaList = reduxMediaList || [];
+
+  /*
+  // Prepare images for each media
+  const [imageUrls, setImageUrls] = useState(null);
+  useEffect(() => {
+    const setImages = async () => {
+      const urls = await Promise.all(
+        mediaList.map(async (mediaObj, index) => {
+          const { serverUrl, clientLocalUrl, displayType, coverUrl } = mediaObj;
+          if (displayType === "image" || displayType === "gif") {
+            return serverUrl || clientLocalUrl;
+          }
+          if (displayType === "video") {
+            // client-side video
+            if (coverUrl) return coverUrl;
+            // server-side video
+            const blob = await getVideoCover(serverUrl);
+            const url = URL.createObjectURL(blob);
+            return url;
+          }
+          return null;
+        })
+      );
+      setImageUrls(urls);
+    };
+    setImages();
+  }, []);
+  */
+
   const imageUrls = mediaList.map((mediaObj, index) => {
     const {
       //serverFilename, <- not used in this file
@@ -47,10 +78,10 @@ const MediaGridInput = ({
       coverUrl,
     } = mediaObj;
     if (displayType === "image" || displayType === "gif") {
-      return serverUrl ? serverUrl : clientLocalUrl;
+      return { imageUrl: serverUrl || clientLocalUrl, displayType };
     }
     if (displayType === "video") {
-      return coverUrl;
+      return { imageUrl: coverUrl, displayType };
     }
     return null;
   });
@@ -61,12 +92,15 @@ const MediaGridInput = ({
     setIsDialogOpeningCanceled(true);
   };
 
+  if (!imageUrls) return null;
+
   return (
     <div>
       <MediaDialogs />
       <DialogMediaEdit
         dialogTitle="Showing Media"
         isOpen={mediaEditDialog.index != null && mediaEditDialog.url != null}
+        displayType={mediaEditDialog.displayType}
         mediaUrl={mediaEditDialog.url}
         disableMoveLeft={mediaEditDialog.index < 1}
         disableMoveRight={mediaEditDialog.index > mediaList.length - 2}
@@ -106,7 +140,9 @@ const MediaGridInput = ({
           })
         }
       >
-        {imageUrls.map((url, index) => {
+        {imageUrls.map((obj, index) => {
+          const imageUrl = obj?.imageUrl || null;
+          const displayType = obj?.displayType || null;
           return (
             // parent div just for cancelation of mediaEditDialog opening
             <div
@@ -120,15 +156,15 @@ const MediaGridInput = ({
             >
               <MediaItem cancelDialogOpening={cancelDialogOpening}>
                 <div
-                  src={url}
                   style={{
-                    backgroundImage: `url(${url})`,
+                    backgroundImage: `url(${imageUrl})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     width: "100%",
                     height: "100%",
                   }}
                 />
+                {displayType === "video" && <VideoCoverOverlay />}
               </MediaItem>
             </div>
           );

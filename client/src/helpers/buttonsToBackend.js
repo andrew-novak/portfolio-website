@@ -22,7 +22,6 @@ const buttonsToBackend = (buttons) => {
     { buttonFields: [], hasFiles: false, buttonFiles: [] }
   );
   const { buttonFields, hasFiles, buttonFiles } = finalAccumulator;
-  console.log("buttonFields:", buttonFields);
   let form = null;
   if (hasFiles) {
     form = new FormData();

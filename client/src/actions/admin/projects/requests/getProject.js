@@ -2,6 +2,7 @@ import axios from "axios";
 
 import { API_URL } from "constants/urls";
 import apiProjectToFrontend from "helpers/apiProjectToFrontend";
+import getVideoCover from "helpers/getVideoCover";
 import { PROJECT_SET } from "constants/actionTypes";
 import { setErrorSnackbar } from "actions/snackbar";
 
@@ -18,6 +19,17 @@ export const getProject = (projectId) => async (dispatch) => {
     // position related
     const positionIndex = positions.findIndex(
       (obj) => obj.position === project.position
+    );
+
+    // create video cover images
+    await Promise.all(
+      project.mediaList.map(async (media, index) => {
+        if (media.displayType === "video") {
+          const coverBlob = await getVideoCover(media.serverUrl);
+          const coverUrl = URL.createObjectURL(coverBlob) || null;
+          project.mediaList[index].coverUrl = coverUrl;
+        }
+      })
     );
 
     return dispatch({

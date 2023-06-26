@@ -5,6 +5,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Box,
   Typography,
   Container,
   ButtonGroup,
@@ -16,10 +17,13 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import VideoPlayer from "components/VideoPlayer";
+
 const DialogMediaEdit = ({
   dialogTitle,
   isOpen,
   // state
+  displayType,
   mediaUrl,
   disableMoveLeft,
   disableMoveRight,
@@ -52,16 +56,29 @@ const DialogMediaEdit = ({
             alignItems: "center",
           }}
         >
-          <div
-            src={mediaUrl}
-            style={{
-              backgroundImage: `url(${mediaUrl})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              width: 400,
-              height: 400,
-            }}
-          />
+          {displayType === "video" ? (
+            <Box
+              sx={{
+                width: {
+                  xs: "100%",
+                  sm: "80%",
+                  md: 800,
+                },
+              }}
+            >
+              <VideoPlayer playsInline src={mediaUrl} />
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                backgroundImage: `url(${mediaUrl})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                height: 400,
+                width: 400,
+              }}
+            />
+          )}
         </DialogContent>
         {isMaxSm && (
           <DialogActions

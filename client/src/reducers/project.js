@@ -31,6 +31,7 @@ const initialState = {
   },
   mediaEditDialog: {
     index: null,
+    displayType: null,
     url: null,
   },
   buttonDialog: {

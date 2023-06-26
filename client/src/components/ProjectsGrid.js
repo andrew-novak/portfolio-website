@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Grid,
@@ -14,29 +15,112 @@ import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 
 import getVideoCover from "helpers/getVideoCover";
+import VideoCoverOverlay from "components/VideoCoverOverlay";
 
-const ProjectsGrid = ({ isAdmin, projects, cardHeightPercentRatio }) => {
-  const navigate = useNavigate();
+const ProjectMedia = ({ project, cardHeightPercentRatio }) => {
+  const [image, setImage] = useState("loading");
+  const [isImage, setIsImage] = useState(false);
 
-  const selectImage = (project) => {
+  const selectImage = async (project) => {
     // No media:
     if (!project.media) {
       return null;
     }
-
     // Supported format:
     const { displayType, serverUrl } = project.media;
-    if (displayType === "image") return serverUrl;
+    if (displayType === "image" || displayType === "gif") return serverUrl;
     if (displayType === "video") {
-      const coverFile = getVideoCover(serverUrl);
+      const coverFile = await getVideoCover(serverUrl);
       const coverUrl = URL.createObjectURL(coverFile);
       return coverUrl;
     }
-
     // Unsupported format:
     return "unsupportedFormat";
   };
 
+  useEffect(() => {
+    selectImage(project).then((value) => {
+      const isImage =
+        value !== "loading" && value !== "unsupportedFormat" && value !== null;
+      setImage(value);
+      setIsImage(isImage);
+    });
+  }, [project]);
+
+  return (
+    <CardMedia
+      /*image={isImage ? image : null}*/
+      sx={{
+        height: 0,
+        paddingTop: cardHeightPercentRatio,
+        position: "relative",
+        boxShadow: 1,
+      }}
+    >
+      {isImage && (
+        <>
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              backgroundColor: "rgb(230, 230, 230)",
+              backgroundImage: `url(${image})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center center",
+            }}
+          />
+          <VideoCoverOverlay />
+        </>
+      )}
+      {
+        // replacement text container when no image
+        !isImage && (
+          <div
+            style={{
+              backgroundColor: "rgb(231, 231, 231)",
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {image === "loading" ? (
+              // loading
+              <Typography>Loading...</Typography>
+            ) : image === "unsupportedFormat" ? (
+              // unsupportedFormat
+              <Typography>
+                Unsupported
+                <br />
+                media
+                <br />
+                type
+              </Typography>
+            ) : (
+              // any other case
+              <Typography>
+                No
+                <br />
+                media
+              </Typography>
+            )}
+          </div>
+        )
+      }
+    </CardMedia>
+  );
+};
+
+const ProjectsGrid = ({ isAdmin, projects, cardHeightPercentRatio }) => {
+  const navigate = useNavigate();
   return (
     <Grid container spacing={1}>
       {projects?.length < 1 && (
@@ -59,7 +143,6 @@ const ProjectsGrid = ({ isAdmin, projects, cardHeightPercentRatio }) => {
       )}
       {projects?.length > 0 &&
         projects.map((project, index) => {
-          const image = selectImage(project);
           return (
             <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
               <Card
@@ -74,51 +157,10 @@ const ProjectsGrid = ({ isAdmin, projects, cardHeightPercentRatio }) => {
                   sx={{ display: "block", textAlign: "initial", width: "100%" }}
                   onClick={() => navigate(`/project/${project.id}`)}
                 >
-                  <CardMedia
-                    image={image}
-                    sx={{
-                      height: 0,
-                      paddingTop: cardHeightPercentRatio,
-                      position: "relative",
-                      boxShadow: 1,
-                    }}
-                  >
-                    {
-                      // replacement text when no image
-                      (image === "unsupportedFormat" || image === null) && (
-                        <div
-                          style={{
-                            backgroundColor: "rgb(231, 231, 231)",
-                            position: "absolute",
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            textAlign: "center",
-                          }}
-                        >
-                          {image === "unsupportedFormat" ? (
-                            <Typography>
-                              Unsupported
-                              <br />
-                              media
-                              <br />
-                              type
-                            </Typography>
-                          ) : (
-                            <Typography>
-                              No
-                              <br />
-                              media
-                            </Typography>
-                          )}
-                        </div>
-                      )
-                    }
-                  </CardMedia>
+                  <ProjectMedia
+                    project={project}
+                    cardHeightPercentRatio={cardHeightPercentRatio}
+                  />
                   <CardHeader title={project.title} sx={{ paddingBottom: 1 }} />
                   <CardContent
                     sx={{

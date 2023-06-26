@@ -172,7 +172,6 @@ const OutlinedDescriptionInput = ({
               images.map((image, index) => (
                 <span key={index}>
                   <span
-                    src={image}
                     style={{
                       display: "inline-block",
                       verticalAlign: "middle",

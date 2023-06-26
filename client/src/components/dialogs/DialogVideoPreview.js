@@ -4,16 +4,16 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Box,
   Typography,
   Container,
   Button,
 } from "@mui/material";
-import { Player } from "video-react";
 import "video-react/dist/video-react.css";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import CheckIcon from "@mui/icons-material/Check";
 
-import cropImage from "helpers/cropImage";
+import VideoPlayer from "components/VideoPlayer";
 
 const DialogVideoPreview = ({
   dialogTitle,
@@ -38,11 +38,25 @@ const DialogVideoPreview = ({
         >
           {dialogTitle}
         </DialogTitle>
-        <DialogContent sx={{ position: "relative" }}>
-          <Player
-            playsInline
-            /*poster="/assets/poster.png"*/ src={fileObjectUrl}
-          />
+        <DialogContent
+          sx={{
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            sx={{
+              width: {
+                xs: "100%",
+                sm: "80%",
+                md: 800,
+              },
+            }}
+          >
+            <VideoPlayer playsInline src={fileObjectUrl} />
+          </Box>
         </DialogContent>
         <DialogActions
           sx={{

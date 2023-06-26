@@ -30,7 +30,7 @@ import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
 import OutlinedMoveItemList from "components/OutlinedMoveItemList";
-import DisplayProjectImage from "components/DisplayProjectImage";
+import DisplayProjectMedia from "components/DisplayProjectMedia";
 import DialogColorPicker from "components/dialogs/DialogColorPicker";
 import OutlinedColorPicker from "components/OutlinedColorPicker";
 import OutlinedDescriptionInput from "components/OutlinedDescriptionInput";
@@ -91,7 +91,7 @@ const ProjectSettingsScreen = ({
     mediaList === null
       ? null
       : mediaList.map(({ displayType, coverUrl, clientLocalUrl, serverUrl }) =>
-          displayType !== "image" ? coverUrl : clientLocalUrl || serverUrl
+          displayType === "video" ? coverUrl : clientLocalUrl || serverUrl
         );
 
   const movePositionItems = [
@@ -176,8 +176,8 @@ const ProjectSettingsScreen = ({
               </Typography>
             </Container>
 
-            <DisplayProjectImage
-              imageUrl={imagesList?.[0]}
+            <DisplayProjectMedia
+              media={mediaList?.[0]}
               color1={colors?.[0]}
               color2={colors?.[1]}
             />
