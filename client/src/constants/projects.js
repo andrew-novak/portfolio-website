@@ -8,6 +8,7 @@ export const PROJECT_MEDIA_FILE_FORMATS = [
   { mimeType: "image/png", extension: "png", displayType: "image" },
   { mimeType: "image/gif", extension: "gif", displayType: "gif" },
   { mimeType: "video/mp4", extension: "mp4", displayType: "video" },
+  { mimeType: "video/webm", extension: "webm", displayType: "video" },
 ];
 
 export const PROJECT_BUTTON_ICONS = [
