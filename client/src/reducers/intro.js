@@ -9,6 +9,7 @@ import {
 
 const initialState = {
   // dialog input
+  isLoaded: false,
   dialogColor: {
     index: null,
     color: null,
@@ -35,6 +36,7 @@ const intro = (state = initialState, action) => {
     case INTRO_SET:
       return {
         ...initialState,
+        isLoaded: true,
         colors: action.colors || initialState.colors,
         image: action.image || initialState.image,
         text: action.text || initialState.text,

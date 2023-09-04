@@ -2,8 +2,8 @@ const express = require("express");
 const { body, param } = require("express-validator");
 const contentDisposition = require("content-disposition");
 
-const mediaDirs = require("../localFiles/mediaDirs");
-const downloadDirs = require("../localFiles/downloadDirs");
+const mediaDirs = require("../helpers/localFiles/mediaDirs");
+const downloadDirs = require("../helpers/localFiles/downloadDirs");
 const handleValidationErrors = require("../expressValidator/handleValidationErrors");
 // subroutes
 const getIntroRoute = require("./getIntro");

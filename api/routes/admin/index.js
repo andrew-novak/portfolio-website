@@ -4,6 +4,7 @@ const passport = require("passport");
 const { body, param } = require("express-validator");
 
 const logger = require("../../debug/logger");
+const ongoingDataUpdate = require("../../state/ongoingDataUpdate");
 // validation
 const { areButtonsOk, isButtonOk } = require("../../expressValidator/buttons");
 const handleValidationErrors = require("../../expressValidator/handleValidationErrors");
@@ -83,6 +84,7 @@ router.post("/checkIdToken", (req, res, next) => {
 // Create or edit intro
 router.post(
   "/intro",
+  ongoingDataUpdate.start,
   [
     body("text").isString().isLength({ min: 1, max: 400 }),
     body("imageFilename").optional().isString().isLength({ min: 1, max: 50 }),
@@ -140,6 +142,7 @@ const sharedValidation = [
 // Create project
 router.post(
   "/projects",
+  ongoingDataUpdate.start,
   sharedValidation,
   handleValidationErrors,
   createProjectRoute
@@ -148,6 +151,7 @@ router.post(
 // Edit project
 router.post(
   "/projects/:projectId",
+  ongoingDataUpdate.start,
   (req, res, next) => {
     console.log(req.body.mediaFilenames);
     console.log(
@@ -163,11 +167,12 @@ router.post(
 );
 
 // Set project button files
-router.post("/projects/:projectId/button-files", setButtonFilesRoute);
+router.post("/projects/:projectId/button-files", ongoingDataUpdate.start, setButtonFilesRoute);
 
 // Remove project
 router.delete(
   "/projects/:projectId",
+  ongoingDataUpdate.start,
   [param("projectId").exists()],
   handleValidationErrors,
   removeProjectRoute

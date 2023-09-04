@@ -11,6 +11,7 @@ import {
   INTRO_SET_TEXT,
 } from "constants/actionTypes";
 import { setErrorSnackbar, setSuccessSnackbar } from "actions/snackbar";
+import handleNetworkError from "actions/handleNetworkError";
 
 export const openColorDialog = (index, passedColor) => (dispatch) => {
   const color = passedColor || "rgb(255, 255, 255)";
@@ -83,7 +84,7 @@ export const setIntro =
     const idToken = localStorage.getItem("idToken");
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `${API_URL}/admin/intro`,
         {
           text,
@@ -98,6 +99,10 @@ export const setIntro =
       dispatch(setSuccessSnackbar("Intro edited"));
       onSuccessRedirect();
     } catch (err) {
+      console.error(err);
+      if (err.message === 'Network Error') {
+        return dispatch(handleNetworkError());
+      }
       return dispatch(
         setErrorSnackbar(
           err.response?.data?.message || "Unable to edit the intro"

@@ -1,7 +1,8 @@
 const logger = require("../../../debug/logger");
 const utf8Chars = require("../../../constants/utf8Chars");
 const Project = require("../../../models/Project");
-const saveProjectMedia = require("../../../localFiles/saveProjectMedia");
+const ongoingDataUpdate = require("../../../state/ongoingDataUpdate");
+const saveProjectMedia = require("../../../helpers/localFiles/saveProjectMedia");
 const buttonFieldsToBackend = require("../../../helpers/buttonFieldsToBackend");
 
 // server-side logs
@@ -66,9 +67,11 @@ const createProject = async (req, res, next) => {
     });
     logSuccess(projectId, title);
     res.status(200).json({ newProjectId: projectId });
+    return ongoingDataUpdate.end();
   } catch (err) {
     logFailure(err);
     res.status(500).json({ message: messageFailure });
+    return ongoingDataUpdate.end();
   }
 };
 

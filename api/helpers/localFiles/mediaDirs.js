@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 
-const { staticFilesRoot } = require("../constants/paths");
+const { staticFilesRoot } = require("../../constants/paths");
 
 const mediaRoot = path.join(staticFilesRoot, "media");
 const getRootPath = () => mediaRoot;

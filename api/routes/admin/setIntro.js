@@ -1,7 +1,7 @@
 const logger = require("../../debug/logger");
 const utf8Chars = require("../../constants/utf8Chars");
-const mediaDirs = require("../../localFiles/mediaDirs");
-const saveIntroImage = require("../../localFiles/saveIntroImage");
+const mediaDirs = require("../../helpers/localFiles/mediaDirs");
+const saveIntroImage = require("../../helpers/localFiles/saveIntroImage");
 const Intro = require("../../models/Intro");
 
 // server-side logs

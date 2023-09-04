@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 
+import general from "./general";
 import snackbar from "./snackbar";
 import adminAuth from "./adminAuth";
 import projects from "./projects";
@@ -8,6 +9,7 @@ import project from "./project";
 import { RESET_STATE } from "constants/actionTypes";
 
 const appReducer = combineReducers({
+  general,
   snackbar,
   adminAuth,
   projects,

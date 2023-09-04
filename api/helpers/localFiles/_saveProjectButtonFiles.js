@@ -1,9 +1,9 @@
 const path = require("path");
 const fs = require("fs");
 
-const Project = require("../models/Project");
+const Project = require("../../models/Project");
 const downloadDirs = require("./downloadDirs");
-const logger = require("../debug/logger");
+const logger = require("../../debug/logger");
 
 // VALIDATION
 

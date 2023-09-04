@@ -56,19 +56,26 @@ const AdminLoginScreen = ({ login }) => {
               label="Email"
               value={email}
               fullWidth
+              inputProps={{
+                autoComplete: 'off',
+              }}
               onChange={(event) => setEmail(event.target.value)}
             />
             <TextField
               label="Password"
               value={password}
+              type="password"
               fullWidth
+              inputProps={{
+                autoComplete: 'off',
+              }}
               onChange={(event) => setPassword(event.target.value)}
             />
             {/*<Link sx={{ color: "rgb(250, 44, 143)" }}>Forgot password</Link>*/}
             <Button
               fullWidth
               onClick={() =>
-                login({ email, password, redirect: () => navigate("/") })
+                login({ email, password, onSuccessRedirect: () => navigate("/") })
               }
             >
               Login

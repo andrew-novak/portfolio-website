@@ -2,18 +2,23 @@ import axios from "axios";
 
 import { API_URL } from "constants/urls";
 import { setErrorSnackbar, setSuccessSnackbar } from "actions/snackbar";
+import handleNetworkError from "actions/handleNetworkError";
 
 const sendEmail =
   ({ clientEmail, message, onSuccessRedirect }) =>
   async (dispatch) => {
     try {
-      const response = await axios.post(`${API_URL}/sendEmail`, {
+      await axios.post(`${API_URL}/sendEmail`, {
         clientEmail,
         message,
       });
       dispatch(setSuccessSnackbar("Email sent successfully"));
       onSuccessRedirect();
     } catch (err) {
+      console.error(err);
+      if (err.message === 'Network Error') {
+        return dispatch(handleNetworkError());
+      }
       const { status } = err.response;
       const { message } = err.response.data;
       // Wrong email & message fields

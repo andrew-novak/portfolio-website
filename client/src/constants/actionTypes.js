@@ -1,4 +1,5 @@
 export const RESET_STATE = "RESET_STATE";
+export const NETWORK_ERROR = "NETWORK_ERROR";
 
 export const SET_SNACKBAR = "SET_SNACKBAR";
 export const CLOSE_SNACKBAR = "CLOSE_SNACKBAR";

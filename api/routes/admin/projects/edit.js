@@ -1,11 +1,12 @@
 const logger = require("../../../debug/logger");
 const utf8Chars = require("../../../constants/utf8Chars");
 const Project = require("../../../models/Project");
-const saveProjectMedia = require("../../../localFiles/saveProjectMedia");
+const ongoingDataUpdate = require("../../../state/ongoingDataUpdate");
+const saveProjectMedia = require("../../../helpers/localFiles/saveProjectMedia");
 const mergeMediaFilenames = require("../../../helpers/mergeMediaFilenames");
 const buttonFieldsToBackend = require("../../../helpers/buttonFieldsToBackend");
-const removeDeletedButtonFiles = require("../../../localFiles/removeDeletedButtonFiles");
-const mediaDirs = require("../../../localFiles/mediaDirs");
+const removeDeletedButtonFiles = require("../../../helpers/localFiles/removeDeletedButtonFiles");
+const mediaDirs = require("../../../helpers/localFiles/mediaDirs");
 
 // server-side logs
 const logRequestBody = (body) => {
@@ -67,7 +68,8 @@ const editProjectRoute = async (req, res, next) => {
     const originalProject = await Project.findOne({ id: projectId });
     if (!originalProject) {
       logNotFound(projectId);
-      return res.status(400).json({ message: messageNotFound });
+      res.status(400).json({ message: messageNotFound });
+      return ongoingDataUpdate.end();
     }
 
     // positions
@@ -121,11 +123,13 @@ const editProjectRoute = async (req, res, next) => {
     );
     logSuccess(projectId, title);
     res.status(200).json({});
+    return ongoingDataUpdate.end();
   } catch (err) {
-    // remove added filenames
-    mediaDirs.removeMediaFiles(projectId, newMediaFilenames);
     logFailure(err);
     res.status(500).json({ message: messageFailure });
+    // remove added filenames
+    await mediaDirs.removeMediaFiles(projectId, newMediaFilenames);
+    return ongoingDataUpdate.end();
   }
 };
 

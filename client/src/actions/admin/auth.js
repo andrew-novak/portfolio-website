@@ -3,9 +3,10 @@ import axios from "axios";
 import { ADMIN_AUTH_SET_IS_LOGGED_IN } from "constants/actionTypes";
 import { API_URL } from "constants/urls";
 import { setErrorSnackbar } from "actions/snackbar";
+import handleNetworkError from "actions/handleNetworkError";
 
 export const login =
-  ({ email, password, redirect }) =>
+  ({ email, password, onSuccessRedirect }) =>
   async (dispatch) => {
     try {
       const response = await axios.post(`${API_URL}/admin/login`, {
@@ -16,11 +17,14 @@ export const login =
         const idToken = response.data.idToken;
         localStorage.setItem("idToken", idToken);
         dispatch({ type: ADMIN_AUTH_SET_IS_LOGGED_IN, isAdminLoggedIn: true });
-        return redirect();
+        return onSuccessRedirect();
       }
       new Error("No id token");
     } catch (err) {
       console.error(err);
+      if (err.message === 'Network Error') {
+        return dispatch(handleNetworkError());
+      }
       return dispatch(
         setErrorSnackbar(err.response?.data?.message || "Unable to login")
       );
@@ -47,7 +51,7 @@ export const retrieveIdToken = () => async (dispatch) => {
 
   // if idToken in localStorage
   try {
-    const response = await axios.post(
+    await axios.post(
       `${API_URL}/admin/checkIdToken`,
       {},
       {
@@ -58,6 +62,9 @@ export const retrieveIdToken = () => async (dispatch) => {
     return;
   } catch (err) {
     console.error(err);
+    if (err.message === 'Network Error') {
+      return dispatch(handleNetworkError());
+    }
     dispatch(
       setErrorSnackbar(err.response?.data?.message || "ID token check failed")
     );

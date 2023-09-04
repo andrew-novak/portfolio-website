@@ -1,38 +1,57 @@
 import { PROJECT_SET_SUBMISSION_DIALOG } from "constants/actionTypes";
 
-export const startFields =
-  ({ anyButtonFiles }) =>
+export const start =
+  ({ projectId, buttonFilesProgresses }) =>
   (dispatch) =>
     dispatch({
       type: PROJECT_SET_SUBMISSION_DIALOG,
       submissionDialog: {
         isOpen: true,
+        ...(projectId ? { projectId } : {}),
         projectFieldsProgress: "pending",
-        buttonFilesUploadProgress: anyButtonFiles ? "awaiting" : null,
+        overallButtonFilesProgress: Object.keys(buttonFilesProgresses).length > 0 ? "awaiting" : null,
+        buttonFilesProgresses,
       },
     });
 
-export const endFields = () => (dispatch) =>
+export const completeFields = (projectId) => (dispatch) =>
   dispatch({
     type: PROJECT_SET_SUBMISSION_DIALOG,
     submissionDialog: {
+      ...(projectId ? { projectId } : {}),
       projectFieldsProgress: "completed",
     },
   });
 
-export const startButtonFiles = () => (dispatch) =>
+export const pendFiles = () => (dispatch) =>
   dispatch({
     type: PROJECT_SET_SUBMISSION_DIALOG,
     submissionDialog: {
-      buttonFilesUploadProgress: "pending",
+      overallButtonFilesProgress: "pending",
     },
   });
 
-export const endButtonFiles = () => (dispatch) =>
+export const completeFiles = () => (dispatch) =>
   dispatch({
     type: PROJECT_SET_SUBMISSION_DIALOG,
     submissionDialog: {
-      buttonFilesUploadProgress: "completed",
+      overallButtonFilesProgress: "completed",
+    },
+  });
+
+export const failFiles = () => dispatch =>
+  dispatch({
+    type: PROJECT_SET_SUBMISSION_DIALOG,
+    submissionDialog: {
+      overallButtonFilesProgress: "failed",
+    },
+  });
+
+export const showButtons = () => (dispatch) =>
+  dispatch({
+    type: PROJECT_SET_SUBMISSION_DIALOG,
+    submissionDialog: {
+      isShowingButtons: true,
     },
   });
 
@@ -43,9 +62,11 @@ export const reset = () => (dispatch) =>
   });
 
 export default {
-  startFields,
-  endFields,
-  startButtonFiles,
-  endButtonFiles,
+  start,
+  completeFields,
+  pendFiles,
+  completeFiles,
+  failFiles,
+  showButtons,
   reset,
 };

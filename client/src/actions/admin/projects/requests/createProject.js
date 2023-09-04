@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import buttonsToBackend from "helpers/buttonsToBackend";
+import buttonsForSubmit from "helpers/buttonsForSubmit";
 import submissionDialog from "./submissionDialog";
 import indexedObjectToArray from "helpers/indexedObjectToArray";
 import descriptionToBackend from "helpers/descriptionToBackend";
@@ -8,8 +8,7 @@ import splitMediaList from "helpers/splitMediaList";
 import mediaBlobsToDataUrls from "helpers/mediaBlobsToDataUrls";
 import { API_URL } from "constants/urls";
 import { setErrorSnackbar, setSuccessSnackbar } from "actions/snackbar";
-
-// const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+import handleNetworkError from "actions/handleNetworkError";
 
 /*
 const validate = (title, description, mediaList) => (dispatch) => {
@@ -40,10 +39,10 @@ const createProject =
   }) =>
   async (dispatch) => {
     // buttons first, so we can show correct submissionDialog
-    const { buttonFields, buttonFilesForm } = buttonsToBackend(buttons || []);
+    const { buttonFields, buttonFilesForm, buttonFilesProgresses } = buttonsForSubmit(buttons || []);
 
     dispatch(
-      submissionDialog.startFields({ anyButtonFiles: !!buttonFilesForm })
+      submissionDialog.start({ buttonFilesProgresses })
     );
 
     // converting project to backend
@@ -55,6 +54,8 @@ const createProject =
     const mediaDataUrls = await mediaBlobsToDataUrls(clientLocalUrls);
 
     const idToken = localStorage.getItem("idToken");
+
+    let areFieldsSuccessful = false;
 
     try {
       // Upload fields
@@ -77,10 +78,11 @@ const createProject =
         console.error("New project ID not received");
         throw new Error();
       }
-      dispatch(submissionDialog.endFields());
+      dispatch(submissionDialog.completeFields(newProjectId));
+      areFieldsSuccessful = true;
       // Upload button files if any
       if (buttonFilesForm) {
-        dispatch(submissionDialog.startButtonFiles());
+        dispatch(submissionDialog.pendFiles());
         await axios.post(
           `${API_URL}/admin/projects/${newProjectId}/button-files`,
           buttonFilesForm,
@@ -92,11 +94,20 @@ const createProject =
           }
         );
       }
-      dispatch(submissionDialog.endButtonFiles());
+      dispatch(submissionDialog.completeFiles());
       dispatch(setSuccessSnackbar("Project created"));
       return onSuccessRedirect();
     } catch (err) {
-      dispatch(submissionDialog.reset());
+      console.error(err);
+      if (err.message === 'Network Error') {
+        return dispatch(handleNetworkError());
+      }
+      if (areFieldsSuccessful) {
+        dispatch(submissionDialog.failFiles());
+        dispatch(submissionDialog.showButtons());
+      } else {
+        dispatch(submissionDialog.reset());
+      }
       return dispatch(
         setErrorSnackbar(
           err.response?.data?.message || "Unable to create the project"

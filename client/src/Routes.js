@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import {
   Navigate,
   useLocation,
+  useNavigate,
   Routes as RouterRoutes,
   Route,
 } from "react-router-dom";
@@ -10,6 +11,7 @@ import { connect } from "react-redux";
 import resetState from "actions/resetState";
 import { retrieveIdToken } from "actions/admin/auth";
 import HomeScreen from "screens/HomeScreen";
+import NoConnectionScreen from "screens/NoConnectionScreen";
 import ProjectViewScreen from "screens/ProjectViewScreen";
 import ContactScreen from "screens/ContactScreen";
 import IntroSettingsScreen from "screens/IntroSettingsScreen";
@@ -27,8 +29,9 @@ const UnauthOnly = ({ isAdminLoggedIn, children }) => {
   return <Navigate to="/" />;
 };
 
-const Routes = ({ isAdminLoggedIn, resetState, retrieveIdToken }) => {
+const Routes = ({ isNetworkError, isAdminLoggedIn, resetState, retrieveIdToken }) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   // on redirect
   useEffect(() => {
@@ -38,13 +41,21 @@ const Routes = ({ isAdminLoggedIn, resetState, retrieveIdToken }) => {
     resetState();
     // set idToken & set redux state based on it
     retrieveIdToken();
-  }, [location.pathname]);
+  }, [location.pathname, resetState, retrieveIdToken]);
+
+  // on network error
+  useEffect(() => {
+    if (isNetworkError) {
+      navigate("/no-connection");
+    }
+  }, [isNetworkError, navigate])
 
   // Router and routes are separated due to this error:
   // Error: useLocation() may be used only in the context of a <Router> component.
   return (
     <RouterRoutes>
       <Route path="/" exact element={<HomeScreen />} />
+      <Route path="/no-connection" exact element={<NoConnectionScreen />} />
       <Route path="/project/:projectId" exact element={<ProjectViewScreen />} />
       <Route path="/contact" exact element={<ContactScreen />} />
       <Route
@@ -89,8 +100,9 @@ const Routes = ({ isAdminLoggedIn, resetState, retrieveIdToken }) => {
 };
 
 const mapState = (state) => {
+  const { isNetworkError } = state.general;
   const { isAdminLoggedIn } = state.adminAuth;
-  return { isAdminLoggedIn };
+  return { isNetworkError, isAdminLoggedIn };
 };
 
 export default connect(mapState, { resetState, retrieveIdToken })(Routes);

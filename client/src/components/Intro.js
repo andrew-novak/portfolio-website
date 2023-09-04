@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import {
   useMediaQuery,
+  CircularProgress,
   Container,
   Box,
   Button,
@@ -19,7 +20,7 @@ import Content from "components/Content";
 import GeometryPattern from "components/GeometryPattern";
 import Footer from "components/Footer";
 
-const Intro = ({ hideEditButton, isAdminLoggedIn, colors, image, text }) => {
+const Intro = ({ hideEditButton, isAdminLoggedIn, isLoaded, colors, image, text }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const isSmallerThan1600 = useMediaQuery("(min-width:1600px)");
@@ -31,6 +32,20 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, colors, image, text }) => {
   const geometryColor = "#3c3b3b";
   const desktopTextColor = "#525252";
   const mobileTextColor = "#464444";
+  if (!isLoaded) {
+    return (
+      <div style={{
+        height: 300,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        borderBottom: "solid 1px",
+        borderColor: theme.custom.colors.lightBorder,
+      }}>
+        <CircularProgress />
+      </div>
+    )
+  }
   return (
     <div style={{ position: "relative" }}>
       {/* Edit Button Section (Admin-Accessible) */}
@@ -178,8 +193,8 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, colors, image, text }) => {
 
 const mapState = (state) => {
   const { isAdminLoggedIn } = state.adminAuth;
-  const { colors, image, text } = state.intro;
-  return { isAdminLoggedIn, colors, image, text };
+  const { isLoaded, colors, image, text } = state.intro;
+  return { isAdminLoggedIn, isLoaded, colors, image, text };
 };
 
 export default connect(mapState)(Intro);

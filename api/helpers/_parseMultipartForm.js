@@ -8,6 +8,11 @@ const parseMultipartForm = async (req) => {
     form.on("file", (field, file, { filename, encoding, mimeType }) => {
       buffers[field] = []; // add a new key to the buffers object
       file.on("data", (data) => {
+        /*
+        TODO: get percentage progress of downloaded file, something like this:
+        uploadedBytes += data.length;
+        const progress = (uploadedBytes / totalBytes) * 100;
+        */
         buffers[field].push(data);
       });
       file.on("end", () => {

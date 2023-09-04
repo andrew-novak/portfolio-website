@@ -46,10 +46,34 @@ const initialState = {
     },
   },
   submissionDialog: {
-    isOpen: false,
-    // possible progress values: "awaiting", "pending", and "completed"
+    isOpen: null,
+    isShowingButtons: null,
+    // on edit: projectIndex is received on successful fields set
+    // on create: projectIndex is set straight away
+    projectId: null,
+    // possible progress values: "awaiting" / "pending" / <number> / "completed"
     projectFieldsProgress: null,
-    buttonFilesUploadProgress: null,
+    overallButtonFilesProgress: null,
+    buttonFilesProgresses: {
+      /* e.g.
+      0: {
+        filename: "abc.def",
+        progress: "completed",
+      },
+      1: {
+        filename: "file.ext",
+        progress: 55.5,
+      },
+      2: {
+        filename: "elo.elo",
+        progress: "awaiting",
+      },
+      3: {
+        filename: "longername.longerextension",
+        progress: "failed",
+      },
+      */
+    },
   },
   // form
   positions: null,

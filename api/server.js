@@ -6,8 +6,8 @@ const mongoose = require("mongoose");
 const checkEnvVars = require("./beforeRun/checkEnvVars");
 const logger = require("./debug/logger");
 const configPassport = require("./config/passport");
-const mediaDirs = require("./localFiles/mediaDirs");
-const downloadDirs = require("./localFiles/downloadDirs");
+const mediaDirs = require("./helpers/localFiles/mediaDirs");
+const downloadDirs = require("./helpers/localFiles/downloadDirs");
 const rootRouter = require("./routes");
 
 checkEnvVars();

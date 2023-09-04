@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import buttonsToBackend from "helpers/buttonsToBackend";
+import buttonsForSubmit from "helpers/buttonsForSubmit";
 import submissionDialog from "./submissionDialog";
 import indexedObjectToArray from "helpers/indexedObjectToArray";
 import descriptionToBackend from "helpers/descriptionToBackend";
@@ -8,6 +8,7 @@ import splitMediaList from "helpers/splitMediaList";
 import mediaBlobsToDataUrls from "helpers/mediaBlobsToDataUrls";
 import { API_URL } from "constants/urls";
 import { setErrorSnackbar, setSuccessSnackbar } from "actions/snackbar";
+import handleNetworkError from "actions/handleNetworkError";
 
 /*
 id - number
@@ -33,10 +34,10 @@ const editProject =
   }) =>
   async (dispatch) => {
     // buttons first, so we can show correct submissionDialog
-    const { buttonFields, buttonFilesForm } = buttonsToBackend(buttons || []);
+    const { buttonFields, buttonFilesForm, buttonFilesProgresses } = buttonsForSubmit(buttons || []);
 
     dispatch(
-      submissionDialog.startFields({ anyButtonFiles: !!buttonFilesForm })
+      submissionDialog.start({ projectId, buttonFilesProgresses })
     );
 
     // convert project to backend
@@ -47,6 +48,8 @@ const editProject =
     const mediaDataUrls = await mediaBlobsToDataUrls(clientLocalUrls);
 
     const idToken = localStorage.getItem("idToken");
+
+    let areFieldsSuccessful = false;
 
     try {
       // Upload fields
@@ -65,10 +68,11 @@ const editProject =
           headers: { Authorization: "Bearer " + idToken },
         }
       );
-      dispatch(submissionDialog.endFields());
+      dispatch(submissionDialog.completeFields());
+      areFieldsSuccessful = true;
       // Upload button files if any
       if (buttonFilesForm) {
-        dispatch(submissionDialog.startButtonFiles());
+        dispatch(submissionDialog.pendFiles());
         await axios.post(
           `${API_URL}/admin/projects/${projectId}/button-files`,
           buttonFilesForm,
@@ -80,10 +84,19 @@ const editProject =
           }
         );
       }
-      dispatch(submissionDialog.endButtonFiles());
+      dispatch(submissionDialog.completeFiles());
       dispatch(setSuccessSnackbar("Project edited"));
       return onSuccessRedirect();
     } catch (err) {
+      console.error(err);
+      if (err.message === 'Network Error') {
+        return dispatch(handleNetworkError());
+      }
+      if (areFieldsSuccessful) {
+        dispatch(submissionDialog.showButtons());
+      } else {
+        dispatch(submissionDialog.reset());
+      }
       return dispatch(
         setErrorSnackbar(
           err.response?.data?.message || "Unable to edit the project"

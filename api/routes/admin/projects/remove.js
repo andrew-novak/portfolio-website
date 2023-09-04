@@ -1,8 +1,9 @@
 const logger = require("../../../debug/logger");
 const utf8Chars = require("../../../constants/utf8Chars");
 const Project = require("../../../models/Project");
-const mediaDirs = require("../../../localFiles/mediaDirs");
-const downloadDirs = require("../../../localFiles/downloadDirs");
+const ongoingDataUpdate = require("../../../state/ongoingDataUpdate");
+const mediaDirs = require("../../../helpers/localFiles/mediaDirs");
+const downloadDirs = require("../../../helpers/localFiles/downloadDirs");
 
 // server-side logs
 const logSuccess = (id, title) =>
@@ -31,16 +32,19 @@ const removeProjectRoute = async (req, res, next) => {
     const deletedProject = await Project.deleteOne({ id: projectId });
     if (!deletedProject) {
       logNotFound(projectId);
-      return res.status(400).json({ message: messageNotFound(projectId) });
+      res.status(400).json({ message: messageNotFound(projectId) });
+      return ongoingDataUpdate.end();
     }
     projectTitle = deletedProject.title;
     await mediaDirs.removeProjectDir(projectId);
     await downloadDirs.removeProjectDir(projectId);
     logSuccess(projectId, projectTitle);
     res.status(200).json({});
+    return ongoingDataUpdate.end();
   } catch (err) {
     logError(err);
     res.status(500).json({ message: messageError });
+    return ongoingDataUpdate.end();
   }
 };
 

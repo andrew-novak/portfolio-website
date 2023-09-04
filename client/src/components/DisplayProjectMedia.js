@@ -77,6 +77,9 @@ const DisplayProjectImage = ({
             justifyContent: "center",
             alignItems: "center",
             objectFit: "cover",
+            borderTop: "1px solid",
+            borderBottom: "1px solid",
+            borderColor: theme.custom.colors.lightBorder,
           }}
         >
           <VideoPlayer src={mediaUrl} />
@@ -97,6 +100,9 @@ const DisplayProjectImage = ({
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            borderTop: "1px solid",
+            borderBottom: "1px solid",
+            borderColor: theme.custom.colors.lightBorder,
           }}
         >
           {!mediaUrl && (

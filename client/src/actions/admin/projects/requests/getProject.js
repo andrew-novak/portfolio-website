@@ -5,6 +5,7 @@ import apiProjectToFrontend from "helpers/apiProjectToFrontend";
 import getVideoCover from "helpers/getVideoCover";
 import { PROJECT_SET } from "constants/actionTypes";
 import { setErrorSnackbar } from "actions/snackbar";
+import handleNetworkError from "actions/handleNetworkError";
 
 export const getProject = (projectId) => async (dispatch) => {
   const idToken = localStorage.getItem("idToken");
@@ -38,6 +39,9 @@ export const getProject = (projectId) => async (dispatch) => {
     });
   } catch (err) {
     console.error(err);
+    if (err.message === 'Network Error') {
+      return dispatch(handleNetworkError());
+    }
     return dispatch(
       setErrorSnackbar(
         err.response?.data?.message || "Unable to retrieve the project"

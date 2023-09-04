@@ -3,7 +3,9 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "rgba(0, 0, 0, 0.87)",
+      main: "#525252",
+      //main: "rgb(60, 59, 59)",
+      //main: "rgba(0, 0, 0, 0.87)",
       //contrastText: "#716f6f",
     },
     text: {
@@ -34,6 +36,7 @@ const theme = createTheme({
     },
 
     colors: {
+      lightBorder: "rgb(219, 219, 219)",
       activityInactive: "rgb(184, 184, 184)",
       activity: "rgb(94, 126, 133)",
       //activity: "rgb(92, 92, 92)",

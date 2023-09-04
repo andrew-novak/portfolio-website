@@ -1,9 +1,10 @@
 import axios from "axios";
 
-import { API_URL, DOWNLOAD_URL } from "constants/urls";
+import { API_URL } from "constants/urls";
 import apiProjectToFrontend from "helpers/apiProjectToFrontend";
 import { PROJECTS_SET, PROJECT_SET } from "constants/actionTypes";
 import { setErrorSnackbar } from "actions/snackbar";
+import handleNetworkError from "actions/handleNetworkError";
 import getUrl from "../helpers/getUrl";
 
 export const getProjects = () => async (dispatch) => {
@@ -14,6 +15,9 @@ export const getProjects = () => async (dispatch) => {
     return dispatch({ type: PROJECTS_SET, projects });
   } catch (err) {
     console.error(err);
+    if (err.message === 'Network Error') {
+      return dispatch(handleNetworkError());
+    }
     return dispatch(
       setErrorSnackbar(
         err.response?.data?.message || "Unable to retrieve projects"
@@ -30,6 +34,9 @@ export const getProject = (projectId) => async (dispatch) => {
     return dispatch({ type: PROJECT_SET, project });
   } catch (err) {
     console.error(err);
+    if (err.message === 'Network Error') {
+      return dispatch(handleNetworkError());
+    }
     return dispatch(
       setErrorSnackbar(
         err.response?.data?.message || "Unable to retrieve the project"
@@ -86,7 +93,7 @@ export const downloadLocalBlobProjectFile =
 
 const addProtocolPrefixIfNone = (passedUrl) => {
   let url = passedUrl;
-  if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
+  if (!/^(?:f|ht)tps?:\/\//.test(url)) {
     url = "http://" + url;
   }
   return url;

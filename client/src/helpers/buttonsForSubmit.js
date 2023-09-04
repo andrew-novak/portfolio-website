@@ -1,4 +1,4 @@
-const buttonsToBackend = (buttons) => {
+const buttonsForSubmit = (buttons) => {
   const finalAccumulator = buttons.reduce(
     (accumulator, button) => {
       const { icon, label, behaviour, redirect, filename, file } = button;
@@ -23,13 +23,24 @@ const buttonsToBackend = (buttons) => {
   );
   const { buttonFields, hasFiles, buttonFiles } = finalAccumulator;
   let form = null;
+  const buttonFilesProgresses = {};
   if (hasFiles) {
     form = new FormData();
     buttonFiles.forEach((file, index) => {
-      file && form.append(index, file, file.name);
+      if (file) {
+        buttonFilesProgresses[index] = {
+          filename: file.name,
+          progress: "awaiting",
+        };
+        form.append(index, file, file.name);
+      }
     });
   }
-  return { buttonFields, buttonFilesForm: form };
+  return {
+    buttonFields,
+    buttonFilesForm: form,
+    buttonFilesProgresses,
+  };
 };
 
-export default buttonsToBackend;
+export default buttonsForSubmit;

@@ -275,8 +275,23 @@ const ProjectSettingsScreen = ({
                 },
                 {
                   label: "Uploading Button Files",
-                  status: submissionDialog.buttonFilesUploadProgress,
+                  status: submissionDialog.overallButtonFilesProgress,
+                  sublist: Object.entries(submissionDialog.buttonFilesProgresses)
+                    .map(([_, {filename, progress}]) => ({
+                      label: filename,
+                      status: progress,
+                    })),
                 },
+              ]}
+              buttons={submissionDialog.isShowingButtons && [
+                {
+                  label: "Homepage",
+                  onClick: () => navigate("/"),
+                },
+                typeof submissionDialog.projectId === "number" && {
+                  label: "Edit Project",
+                  onClick: () => navigate(`/edit-project/${submissionDialog.projectId}`),
+                }
               ]}
             />
             <Button

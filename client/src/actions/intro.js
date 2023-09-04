@@ -5,6 +5,7 @@ import indexedObjectFromArray from "helpers/indexedObjectFromArray";
 import getUrl from "helpers/getUrl";
 import { INTRO_SET } from "constants/actionTypes";
 import { setErrorSnackbar } from "actions/snackbar";
+import handleNetworkError from "actions/handleNetworkError";
 
 export const getIntro = () => async (dispatch) => {
   try {
@@ -34,6 +35,9 @@ export const getIntro = () => async (dispatch) => {
     });
   } catch (err) {
     console.error(err);
+    if (err.message === 'Network Error') {
+      return dispatch(handleNetworkError());
+    }
     return dispatch(
       setErrorSnackbar(
         err.response?.data?.message || "Unable to retrieve the intro"
