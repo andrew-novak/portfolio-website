@@ -2,6 +2,10 @@ const downloadDirs = require("./downloadDirs");
 
 const checkOldButton = (projectId, newButtons, oldButton) =>
   new Promise(async (resolve, reject) => {
+    // if old button doesn't have "file" bahaviour then nothing to delete
+    if (oldButton.behaviour !== "file") {
+      return resolve();
+    }
     const newButtonSameFilename = newButtons.find(
       (newButton) => newButton.filename === oldButton.filename
     );
@@ -11,10 +15,7 @@ const checkOldButton = (projectId, newButtons, oldButton) =>
       return resolve();
     }
     // same filename, but uploading a new file (remove file)
-    if (
-      oldButton.isAwaitingFileUpload === false &&
-      newButtonSameFilename.isAwaitingFileUpload === true
-    ) {
+    if (newButtonSameFilename.isAwaitingFileUpload === true) {
       await downloadDirs.removeFile(projectId, oldButton.filename);
       return resolve();
     }
