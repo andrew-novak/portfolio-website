@@ -28,7 +28,8 @@ const logFailure = (err) => {
 // client-side messages
 const messageProjectNotFound = "Project does not exist.";
 const messageNoAwaitingButtons = "Project does not await any button files.";
-const messageFinish = (successfulCount, totalCount) => `${successfulCount}/${totalCount} project button files uploaded successfully.`;
+const messageFinish = (successfulCount, totalCount) =>
+  `${successfulCount}/${totalCount} project button files uploaded successfully.`;
 const messageFailure = "Unable to set project button files";
 
 const setButtonFilesRoute = async (req, res, next) => {
@@ -49,16 +50,22 @@ const setButtonFilesRoute = async (req, res, next) => {
     }
     //const files = await parseMultipartForm(req);
     //await saveProjectButtonFiles(projectId, project, files);
-    const { successfulCount, totalCount } = await saveButtonFilesForm(req, projectId, awaitingButtons);
-    logFinish(successfulCount, totalCount, projectId, project.title)
-    res.status(200).json({ message: messageFinish(successfulCount, totalCount) });
+    const { successfulCount, totalCount } = await saveButtonFilesForm(
+      req,
+      projectId,
+      awaitingButtons
+    );
+    logFinish(successfulCount, totalCount, projectId, project.title);
+    res
+      .status(200)
+      .json({ message: messageFinish(successfulCount, totalCount) });
   } catch (err) {
     logFailure(err);
     res.status(500).json({ message: messageFailure });
   }
   // remove started but unsuccessful files
   const startedUnsuccessful = ongoingDataUpdate.buttonFiles.startedFilenames.filter(
-    item => !ongoingDataUpdate.buttonFiles.successfulFilenames.includes(item)
+    (item) => !ongoingDataUpdate.buttonFiles.successfulFilenames.includes(item)
   );
   await downloadDirs.removeFiles(projectId, startedUnsuccessful);
   return ongoingDataUpdate.end();

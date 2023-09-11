@@ -73,7 +73,7 @@ const editProjectRoute = async (req, res, next) => {
     }
 
     // positions
-    if (position) {
+    if (position !== originalProject.position) {
       await Project.move(originalProject.position, position);
       logProjectMoved(
         originalProject.id,
