@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { Container, Button, Typography, TextField } from "@mui/material";
@@ -13,6 +13,8 @@ import {
   setDialogColor,
   setColor,
   setTitle,
+  setCategoryTags,
+  setFeatureTags,
   setDescription,
   selectDescription,
   clearDescriptionList,
@@ -33,6 +35,7 @@ import OutlinedMoveItemList from "components/OutlinedMoveItemList";
 import DisplayProjectMedia from "components/DisplayProjectMedia";
 import DialogColorPicker from "components/dialogs/DialogColorPicker";
 import OutlinedColorPicker from "components/OutlinedColorPicker";
+import TagsInput from "components/TagsInput";
 import OutlinedDescriptionInput from "components/OutlinedDescriptionInput";
 import OutlinedMediaGridInput from "components/OutlinedMediaGridInput";
 import DialogProjectButton from "components/dialogs/DialogProjectButton";
@@ -51,6 +54,8 @@ const ProjectSettingsScreen = ({
   position,
   colors,
   title,
+  categoryTags,
+  featureTags,
   descriptionList,
   descriptionSelectIndex,
   mediaList,
@@ -62,6 +67,8 @@ const ProjectSettingsScreen = ({
   setDialogColor,
   setColor,
   setTitle,
+  setCategoryTags,
+  setFeatureTags,
   setDescription,
   selectDescription,
   clearDescriptionList,
@@ -227,6 +234,30 @@ const ProjectSettingsScreen = ({
               onChange={(event) => setTitle(event.target.value)}
             />
 
+            {/* Category Tags */}
+            <TagsInput
+              tags={categoryTags || []}
+              fullWidth
+              variant="outlined"
+              id="categoryTags"
+              name="categoryTags"
+              placeholder="Add Tags"
+              label="Category Tags"
+              onTagListChange={(tags) => setCategoryTags(tags)}
+            />
+
+            {/* Feature Tags */}
+            <TagsInput
+              tags={featureTags || []}
+              fullWidth
+              variant="outlined"
+              id="featureTags"
+              name="featureTags"
+              placeholder="Add Tags"
+              label="Feature Tags"
+              onTagListChange={(tags) => setFeatureTags(tags)}
+            />
+
             {/* Description */}
             <OutlinedDescriptionInput
               selectIndex={descriptionSelectIndex}
@@ -276,23 +307,27 @@ const ProjectSettingsScreen = ({
                 {
                   label: "Uploading Button Files",
                   status: submissionDialog.overallButtonFilesProgress,
-                  sublist: Object.entries(submissionDialog.buttonFilesProgresses)
-                    .map(([_, {filename, progress}]) => ({
-                      label: filename,
-                      status: progress,
-                    })),
+                  sublist: Object.entries(
+                    submissionDialog.buttonFilesProgresses
+                  ).map(([_, { filename, progress }]) => ({
+                    label: filename,
+                    status: progress,
+                  })),
                 },
               ]}
-              buttons={submissionDialog.isShowingButtons && [
-                {
-                  label: "Homepage",
-                  onClick: () => navigate("/"),
-                },
-                typeof submissionDialog.projectId === "number" && {
-                  label: "Edit Project",
-                  onClick: () => navigate(`/edit-project/${submissionDialog.projectId}`),
-                }
-              ]}
+              buttons={
+                submissionDialog.isShowingButtons && [
+                  {
+                    label: "Homepage",
+                    onClick: () => navigate("/"),
+                  },
+                  typeof submissionDialog.projectId === "number" && {
+                    label: "Edit Project",
+                    onClick: () =>
+                      navigate(`/edit-project/${submissionDialog.projectId}`),
+                  },
+                ]
+              }
             />
             <Button
               startIcon={<CheckIcon />}
@@ -301,6 +336,8 @@ const ProjectSettingsScreen = ({
                   ? createProject({
                       colors,
                       title,
+                      categoryTags,
+                      featureTags,
                       descriptionList,
                       mediaList,
                       buttons,
@@ -311,6 +348,8 @@ const ProjectSettingsScreen = ({
                       position,
                       colors,
                       title,
+                      categoryTags,
+                      featureTags,
                       descriptionList,
                       mediaList,
                       buttons,
@@ -339,6 +378,8 @@ const mapState = (state) => {
     positionIndex,
     position,
     colors,
+    categoryTags,
+    featureTags,
     title,
     descriptionList,
     descriptionSelectIndex,
@@ -355,6 +396,8 @@ const mapState = (state) => {
     positionIndex,
     position,
     colors,
+    categoryTags,
+    featureTags,
     title,
     descriptionList,
     descriptionSelectIndex,
@@ -371,6 +414,8 @@ export default connect(mapState, {
   setDialogColor,
   setColor,
   setTitle,
+  setCategoryTags,
+  setFeatureTags,
   setDescription,
   selectDescription,
   clearDescriptionList,

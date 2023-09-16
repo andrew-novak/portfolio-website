@@ -50,7 +50,15 @@ project {
 */
 const createProject = async (req, res, next) => {
   logRequestBody(req.body);
-  const { title, descriptionList, colors, mediaDataUrls, buttons } = req.body;
+  const {
+    title,
+    colors,
+    categoryTags,
+    featureTags,
+    descriptionList,
+    mediaDataUrls,
+    buttons,
+  } = req.body;
   try {
     const projectId = await Project.getNextId();
     const projectPosition = await Project.getNextPosition();
@@ -61,6 +69,8 @@ const createProject = async (req, res, next) => {
       position: projectPosition,
       colors,
       title,
+      categoryTags,
+      featureTags,
       descriptionList,
       mediaFilenames,
       buttons: backendButtons,

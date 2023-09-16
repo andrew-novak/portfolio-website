@@ -8,6 +8,8 @@ export {
 } from "./form/color";
 export {
   setTitle,
+  setCategoryTags,
+  setFeatureTags,
   setDescription,
   selectDescription,
   clearDescriptionList,

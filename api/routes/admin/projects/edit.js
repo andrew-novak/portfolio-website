@@ -57,6 +57,8 @@ const editProjectRoute = async (req, res, next) => {
     position,
     colors,
     title,
+    categoryTags,
+    featureTags,
     descriptionList,
     mediaFilenames: keptMediaFilenames,
     mediaDataUrls,
@@ -116,6 +118,8 @@ const editProjectRoute = async (req, res, next) => {
       {
         colors,
         title,
+        categoryTags,
+        featureTags,
         descriptionList,
         mediaFilenames,
         buttons: newButtons,

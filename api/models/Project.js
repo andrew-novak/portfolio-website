@@ -8,6 +8,8 @@ const ProjectSchema = new Schema(
     position: Number,
     colors: [String],
     title: String,
+    categoryTags: [String],
+    featureTags: [String],
     // array of descriptions separated by media
     descriptionList: [
       // DraftJS Raw JS Object

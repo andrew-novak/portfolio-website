@@ -16,6 +16,8 @@ import EditIcon from "@mui/icons-material/Edit";
 
 import getVideoCover from "helpers/getVideoCover";
 import VideoCoverOverlay from "components/VideoCoverOverlay";
+import CategoryTags from "components/CategoryTags";
+import FeatureTags from "components/FeatureTags";
 
 const ProjectMedia = ({ project, cardHeightPercentRatio }) => {
   const [image, setImage] = useState("loading");
@@ -161,14 +163,38 @@ const ProjectsGrid = ({ isAdmin, projects, cardHeightPercentRatio }) => {
                     project={project}
                     cardHeightPercentRatio={cardHeightPercentRatio}
                   />
-                  <CardHeader title={project.title} sx={{ paddingBottom: 1 }} />
+                  <CardHeader
+                    title={
+                      <span style={{ fontWeight: "500" }}>{project.title}</span>
+                    }
+                    subheader={
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 5,
+                        }}
+                      >
+                        <CategoryTags
+                          tags={project.categoryTags}
+                          fontSize={20}
+                        />
+                        <FeatureTags tags={project.featureTags} />
+                      </div>
+                    }
+                    sx={{ paddingBottom: 1 }}
+                  />
                   <CardContent
                     sx={{
+                      display: "flex",
+                      flexDirection: "column",
                       paddingTop: 1,
+                      gap: 0.5,
                     }}
                   >
                     <Typography
                       sx={{
+                        marginBottom: project.featureTags?.length > 0 && 2,
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         display: "-webkit-box",

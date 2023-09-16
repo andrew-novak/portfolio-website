@@ -36,7 +36,8 @@ const getSimplifiedProject = (project) => {
     ? null
     : rawToEditorState(rawDescription)
         .getCurrentContent()
-        .getPlainText("\u0001");
+        .getPlainText("\u0001")
+        .replace(/\x01/g, " "); // Replace single newline characters with spaces
   // Media: media filename -> media object
   const media = !mediaFilename
     ? null

@@ -11,6 +11,8 @@ import {
   PROJECT_SET_POSITION,
   PROJECT_SET_COLOR,
   PROJECT_SET_TITLE,
+  PROJECT_SET_CATEGORY_TAGS,
+  PROJECT_SET_FEATURE_TAGS,
   PROJECT_SET_DESCRIPTION_LIST,
   PROJECT_SET_DESCRIPTION_ELEMENT,
   PROJECT_SELECT_DESCRIPTION,
@@ -84,6 +86,8 @@ const initialState = {
     1: "#eff2fc",
   },
   title: "",
+  categoryTags: null,
+  featureTags: null,
   // array of DraftJS EditorStates
   descriptionList: null,
   descriptionSelectIndex: null,
@@ -190,6 +194,17 @@ const project = (state = initialState, action) => {
       return {
         ...state,
         title: action.title,
+      };
+
+    case PROJECT_SET_CATEGORY_TAGS:
+      return {
+        ...state,
+        categoryTags: action.categoryTags,
+      };
+    case PROJECT_SET_FEATURE_TAGS:
+      return {
+        ...state,
+        featureTags: action.featureTags,
       };
 
     case PROJECT_SET_DESCRIPTION_LIST:

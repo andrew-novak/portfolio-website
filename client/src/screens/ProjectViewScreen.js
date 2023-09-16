@@ -16,6 +16,8 @@ import useWindowDimensions from "hooks/useWindowDimensions";
 import Screen from "components/Screen";
 import NavBar from "components/NavBar";
 import Content from "components/Content";
+import CategoryTags from "components/CategoryTags";
+import FeatureTags from "components/FeatureTags";
 import ProjectButtons from "components/ProjectButtons";
 import DisplayProjectMedia from "components/DisplayProjectMedia";
 import Footer from "components/Footer";
@@ -27,7 +29,7 @@ const Segments = ({ colors, descriptionList, mediaList, dimensionProps }) => {
 
   const { width: textContainerWidth, isMobile, isVeryMobile } = dimensionProps;
 
-  const maxDescriptionsOrMedia = Math.max(
+  const segmentsCount = Math.max(
     descriptionList?.length || 0,
     mediaUrls?.length || 0
   );
@@ -40,11 +42,11 @@ const Segments = ({ colors, descriptionList, mediaList, dimensionProps }) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(7),
       }}
     >
       {/* One Segment */}
-      {Array(maxDescriptionsOrMedia)
+      {Array(segmentsCount)
         .fill(null)
         .map((_, index) => {
           const color1 = index === 0 && colors[0];
@@ -67,8 +69,12 @@ const Segments = ({ colors, descriptionList, mediaList, dimensionProps }) => {
                     width: textContainerWidth,
                     fontSize: isMobile ? 22 : 30,
                     //marginTop: theme.spacing(4),
+                    //marginBottom: theme.spacing(4),
+                    // if last segment and without media
                     marginBottom:
-                      index !== maxDescriptionsOrMedia - 1 && theme.spacing(4),
+                      index < segmentsCount &&
+                      mediaUrls[index] != null &&
+                      theme.spacing(4),
                   }}
                 >
                   <Editor
@@ -150,62 +156,81 @@ const ProjectViewScreen = ({
         >
           <div style={{ width }}>
             <Container>
-              <Typography
-                variant={theme.custom.muiProps.largeTitleVariant}
-                sx={{
-                  fontSize: 40,
+              <div
+                style={{
                   marginTop: theme.spacing(4),
-                  marginBottom: theme.spacing(8),
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
+                  //marginBottom: theme.spacing(8),
                 }}
               >
-                {project.title || ""}
-              </Typography>
-              {
-                // Admin Buttons
-                isAdminLoggedIn && (
+                <Typography
+                  variant={theme.custom.muiProps.largeTitleVariant}
+                  sx={{
+                    fontSize: 40,
+                    fontWeight: 500,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {project.title || ""}
+                </Typography>
+                <div
+                  style={{ display: "flex", flexDirection: "column", gap: 5 }}
+                >
+                  <CategoryTags tags={project.categoryTags} fontSize={20} />
+                  <FeatureTags tags={project.featureTags} />
+                </div>
+              </div>
+              {/* All Buttons */}
+              {(isAdminLoggedIn || project.buttons?.length > 0) && (
+                <div
+                  style={{
+                    marginTop: theme.spacing(7),
+                  }}
+                >
+                  {
+                    // Admin Buttons
+                    isAdminLoggedIn && (
+                      <ProjectButtons
+                        styleContainer={{}}
+                        styleButton={{
+                          background: theme.custom.colors.neutralGradient,
+                        }}
+                        buttonVariant="outlined"
+                        buttons={[
+                          {
+                            label: "Edit Project",
+                            icon: <EditIcon />,
+                            onClick: () =>
+                              navigate(`/edit-project/${projectId}`),
+                          },
+                          {
+                            label: "Remove Project",
+                            icon: <DeleteIcon />,
+                            onClick: () =>
+                              removeProject(projectId, () => navigate("/")),
+                          },
+                        ]}
+                      />
+                    )
+                  }
+                  {
+                    // Normal User Buttons
+                    //(project.links?.length > 0 ||
+                    //  project.downloadFiles?.length > 1) && (
+                  }
                   <ProjectButtons
                     styleContainer={{
-                      marginTop: theme.spacing(3),
-                      marginBottom: theme.spacing(3),
-                    }}
-                    styleButton={{
-                      background: theme.custom.colors.neutralGradient,
+                      marginTop: theme.spacing(1),
                     }}
                     buttonVariant="outlined"
-                    buttons={[
-                      {
-                        label: "Edit Project",
-                        icon: <EditIcon />,
-                        onClick: () => navigate(`/edit-project/${projectId}`),
-                      },
-                      {
-                        label: "Remove Project",
-                        icon: <DeleteIcon />,
-                        onClick: () =>
-                          removeProject(projectId, () => navigate("/")),
-                      },
-                    ]}
+                    buttons={(project.buttons || []).map((button) => ({
+                      icon: icons[button.icon],
+                      label: button.label,
+                      onClick: () => runProjectButton(project.id, button),
+                    }))}
                   />
-                )
-              }
-              {
-                // Normal User Buttons
-                //(project.links?.length > 0 ||
-                //  project.downloadFiles?.length > 1) && (
-              }
-              <ProjectButtons
-                styleContainer={{
-                  marginTop: theme.spacing(3),
-                }}
-                buttonVariant="outlined"
-                buttons={(project.buttons || []).map((button) => ({
-                  icon: icons[button.icon],
-                  label: button.label,
-                  onClick: () => runProjectButton(project.id, button),
-                }))}
-              />
+                </div>
+              )}
             </Container>
           </div>
           {/* segments of media & descriptions */}

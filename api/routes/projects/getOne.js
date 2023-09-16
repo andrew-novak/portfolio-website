@@ -33,6 +33,8 @@ const getProjectRoute = async (req, res, next) => {
       position: project.position,
       colors: project.colors,
       title: project.title,
+      categoryTags: project.categoryTags,
+      featureTags: project.featureTags,
       descriptionList: project.descriptionList,
       mediaFilenames: project.mediaFilenames,
       buttons: project.buttons,

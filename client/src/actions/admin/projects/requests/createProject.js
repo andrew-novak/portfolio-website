@@ -22,6 +22,8 @@ const validate = (title, description, mediaList) => (dispatch) => {
 /*
 colorsObj - indexed object of color strings
 title - string
+categoryTags - array of strings
+featureTags - array of strings
 descriptionList - array of DraftJS EditorStates
 mediaList - array of media objects e.g. [
   { serverFilename: "434576.jpg", clientBlob: null, ...and some more props },
@@ -32,6 +34,8 @@ const createProject =
   ({
     colors: colorsObj,
     title,
+    categoryTags,
+    featureTags,
     descriptionList,
     mediaList,
     buttons,
@@ -39,11 +43,10 @@ const createProject =
   }) =>
   async (dispatch) => {
     // buttons first, so we can show correct submissionDialog
-    const { buttonFields, buttonFilesForm, buttonFilesProgresses } = buttonsForSubmit(buttons || []);
+    const { buttonFields, buttonFilesForm, buttonFilesProgresses } =
+      buttonsForSubmit(buttons || []);
 
-    dispatch(
-      submissionDialog.start({ buttonFilesProgresses })
-    );
+    dispatch(submissionDialog.start({ buttonFilesProgresses }));
 
     // converting project to backend
     const colors = indexedObjectToArray(colorsObj);
@@ -64,6 +67,8 @@ const createProject =
         {
           colors,
           title,
+          categoryTags: categoryTags || [],
+          featureTags: featureTags || [],
           descriptionList: descriptionListBackend,
           mediaFilenames: [],
           mediaDataUrls,
@@ -99,7 +104,7 @@ const createProject =
       return onSuccessRedirect();
     } catch (err) {
       console.error(err);
-      if (err.message === 'Network Error') {
+      if (err.message === "Network Error") {
         return dispatch(handleNetworkError());
       }
       if (areFieldsSuccessful) {

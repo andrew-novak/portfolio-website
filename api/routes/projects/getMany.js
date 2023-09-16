@@ -26,6 +26,8 @@ const getProjectsRoute = async (req, res, next) => {
         position: project.position,
         colors: project.colors,
         title: project.title,
+        categoryTags: project.categoryTags,
+        featureTags: project.featureTags,
         description: project.getFirstDescription(),
         mediaFilename: project.getFirstMediaFilename(),
       };

@@ -2,6 +2,8 @@ import { EditorState, ContentState } from "draft-js";
 
 import {
   PROJECT_SET_TITLE,
+  PROJECT_SET_CATEGORY_TAGS,
+  PROJECT_SET_FEATURE_TAGS,
   PROJECT_SET_DESCRIPTION_LIST,
   PROJECT_SET_DESCRIPTION_ELEMENT,
   PROJECT_SELECT_DESCRIPTION,
@@ -9,6 +11,12 @@ import {
 
 export const setTitle = (title) => (dispatch) =>
   dispatch({ type: PROJECT_SET_TITLE, title });
+
+export const setCategoryTags = (categoryTags) => (dispatch) =>
+  dispatch({ type: PROJECT_SET_CATEGORY_TAGS, categoryTags });
+
+export const setFeatureTags = (featureTags) => (dispatch) =>
+  dispatch({ type: PROJECT_SET_FEATURE_TAGS, featureTags });
 
 // 'description' prop - DraftJS EditorState
 export const setDescription = (index, description) => (dispatch) =>

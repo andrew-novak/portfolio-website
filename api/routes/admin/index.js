@@ -110,6 +110,10 @@ const sharedValidation = [
   body("colors").isArray(),
   body("colors.*").isString().custom(isHexColor),
   body("title").isString().isLength({ min: 1, max: 30 }),
+  body("categoryTags").isArray(),
+  body("categoryTags.*").isString().optional(),
+  body("featureTags").isArray(),
+  body("featureTags.*").isString().optional(),
   // TODO: improve descriptionList validation
   body("descriptionList").isArray(),
   body("mediaFilenames").isArray(),
@@ -167,7 +171,11 @@ router.post(
 );
 
 // Set project button files
-router.post("/projects/:projectId/button-files", ongoingDataUpdate.start, setButtonFilesRoute);
+router.post(
+  "/projects/:projectId/button-files",
+  ongoingDataUpdate.start,
+  setButtonFilesRoute
+);
 
 // Remove project
 router.delete(
