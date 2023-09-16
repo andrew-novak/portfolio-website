@@ -21,6 +21,7 @@ const ProjectButtons = ({
           startIcon={!!icon && icon}
           sx={{
             ...styleButton,
+            marginBottom: theme.spacing(1.5),
             marginRight: index < buttons.length - 1 ? theme.spacing(1.5) : 0,
           }}
           onClick={onClick}

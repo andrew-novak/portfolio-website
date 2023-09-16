@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  useTheme,
+  useMediaQuery,
   Grid,
   CircularProgress,
   Card,
@@ -19,9 +21,11 @@ import VideoCoverOverlay from "components/VideoCoverOverlay";
 import CategoryTags from "components/CategoryTags";
 import FeatureTags from "components/FeatureTags";
 
-const ProjectMedia = ({ project, cardHeightPercentRatio }) => {
+const ProjectMedia = ({ project, cardHeightPercentRatio, isSm }) => {
   const [image, setImage] = useState("loading");
   const [isImage, setIsImage] = useState(false);
+
+  const theme = useTheme();
 
   const selectImage = async (project) => {
     // No media:
@@ -55,7 +59,14 @@ const ProjectMedia = ({ project, cardHeightPercentRatio }) => {
         height: 0,
         paddingTop: cardHeightPercentRatio,
         position: "relative",
-        boxShadow: 1,
+        boxShadow: !isSm && 1,
+        ...(isSm
+          ? {
+              borderTop: "1px solid",
+              borderBottom: "1px solid",
+              borderColor: theme.custom.colors.lightBorder,
+            }
+          : {}),
       }}
     >
       {isImage && (
@@ -123,8 +134,10 @@ const ProjectMedia = ({ project, cardHeightPercentRatio }) => {
 
 const ProjectsGrid = ({ isAdmin, projects, cardHeightPercentRatio }) => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isSm = useMediaQuery(theme.breakpoints.down("sm"));
   return (
-    <Grid container spacing={1}>
+    <Grid container spacing={isSm ? 5 : 1}>
       {projects?.length < 1 && (
         <div
           style={{
@@ -162,6 +175,7 @@ const ProjectsGrid = ({ isAdmin, projects, cardHeightPercentRatio }) => {
                   <ProjectMedia
                     project={project}
                     cardHeightPercentRatio={cardHeightPercentRatio}
+                    isSm={isSm}
                   />
                   <CardHeader
                     title={
@@ -177,7 +191,7 @@ const ProjectsGrid = ({ isAdmin, projects, cardHeightPercentRatio }) => {
                       >
                         <CategoryTags
                           tags={project.categoryTags}
-                          fontSize={20}
+                          fontSize={18}
                         />
                         <FeatureTags tags={project.featureTags} />
                       </div>

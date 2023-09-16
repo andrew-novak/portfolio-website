@@ -22,7 +22,13 @@ import ProjectButtons from "components/ProjectButtons";
 import DisplayProjectMedia from "components/DisplayProjectMedia";
 import Footer from "components/Footer";
 
-const Segments = ({ colors, descriptionList, mediaList, dimensionProps }) => {
+const Segments = ({
+  colors,
+  descriptionList,
+  mediaList,
+  dimensionProps,
+  anyButtons,
+}) => {
   const theme = useTheme();
 
   const mediaUrls = !mediaList ? null : mediaList.map((obj) => obj.serverUrl);
@@ -42,7 +48,7 @@ const Segments = ({ colors, descriptionList, mediaList, dimensionProps }) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        marginTop: theme.spacing(7),
+        marginTop: anyButtons ? theme.spacing(5.5) : theme.spacing(7),
       }}
     >
       {/* One Segment */}
@@ -141,6 +147,8 @@ const ProjectViewScreen = ({
     height,
   };
 
+  const anyButtons = isAdminLoggedIn || project.buttons?.length > 0;
+
   return (
     <Screen>
       <NavBar />
@@ -181,7 +189,7 @@ const ProjectViewScreen = ({
                 </div>
               </div>
               {/* All Buttons */}
-              {(isAdminLoggedIn || project.buttons?.length > 0) && (
+              {anyButtons && (
                 <div
                   style={{
                     marginTop: theme.spacing(7),
@@ -219,9 +227,7 @@ const ProjectViewScreen = ({
                     //  project.downloadFiles?.length > 1) && (
                   }
                   <ProjectButtons
-                    styleContainer={{
-                      marginTop: theme.spacing(1),
-                    }}
+                    styleContainer={{}}
                     buttonVariant="outlined"
                     buttons={(project.buttons || []).map((button) => ({
                       icon: icons[button.icon],
@@ -239,6 +245,7 @@ const ProjectViewScreen = ({
             descriptionList={project.descriptionList}
             mediaList={project.mediaList}
             dimensionProps={dimensionProps}
+            anyButtons={anyButtons}
           />
         </div>
       </Content>
