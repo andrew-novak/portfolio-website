@@ -1,3 +1,7 @@
 .video-react .video-react-big-play-button {
   display: none;
 }
+
+.video-js {
+  display: none;
+}

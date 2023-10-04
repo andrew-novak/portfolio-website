@@ -1,5 +1,4 @@
 import { useTheme, Box, Typography } from "@mui/material";
-import { Player } from "video-react";
 import ImageNotSupportedIcon from "@mui/icons-material/ImageNotSupported";
 
 import useWindowDimensions from "hooks/useWindowDimensions";
@@ -67,18 +66,14 @@ const DisplayProjectImage = ({
       {mediaDisplayType === "video" && (
         <Box
           sx={{
-            position: "absolute",
-            height: "100%",
+            // Removed because otherwise there is slightly
+            // more height than width on mobile screen
+            // height: "100%",
             width,
             backgroundColor: "rgb(230, 230, 230)",
             boxShadow: isVeryMobile ? 0 : 6,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            objectFit: "cover",
-            borderTop: "1px solid",
-            borderBottom: "1px solid",
+            borderTop: isVeryMobile ? "1px solid" : 0,
+            borderBottom: isVeryMobile ? "1px solid" : 0,
             borderColor: theme.custom.colors.lightBorder,
           }}
         >
@@ -95,13 +90,13 @@ const DisplayProjectImage = ({
             backgroundImage: `url(${mediaUrl})`,
             backgroundSize: "cover",
             backgroundPosition: "center center",
-            boxShadow: isVeryMobile ? 0 : 6,
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            borderTop: "1px solid",
-            borderBottom: "1px solid",
+            boxShadow: isVeryMobile ? 0 : 6,
+            borderTop: isVeryMobile ? "1px solid" : 0,
+            borderBottom: isVeryMobile ? "1px solid" : 0,
             borderColor: theme.custom.colors.lightBorder,
           }}
         >

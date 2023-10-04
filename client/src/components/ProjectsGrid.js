@@ -59,12 +59,13 @@ const ProjectMedia = ({ project, cardHeightPercentRatio, isSm }) => {
         height: 0,
         paddingTop: cardHeightPercentRatio,
         position: "relative",
-        boxShadow: !isSm && 1,
+        border: "1px solid",
+        borderColor: theme.custom.colors.lightBorder,
+        //boxShadow: !isSm && 1,
         ...(isSm
           ? {
-              borderTop: "1px solid",
-              borderBottom: "1px solid",
-              borderColor: theme.custom.colors.lightBorder,
+              borderLeft: 0,
+              borderRight: 0,
             }
           : {}),
       }}
@@ -230,6 +231,8 @@ const ProjectsGrid = ({ isAdmin, projects, cardHeightPercentRatio }) => {
                         borderBottomRightRadius: 0,
                         opacity: 0.8,
                         background: "white",
+                        border: "1px solid",
+                        borderColor: theme.custom.colors.lightBorder,
                         "&:hover": {
                           opacity: 1,
                           background: "white",

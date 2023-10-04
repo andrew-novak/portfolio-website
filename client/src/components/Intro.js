@@ -153,7 +153,9 @@ const Intro = ({
                     (image.clientLocalUrl && `url(${image.clientLocalUrl})`),
                   backgroundSize: "cover",
                   backgroundPosition: "center",
-                  boxShadow: 3,
+                  //boxShadow: 3,
+                  outline: "3px solid",
+                  outlineColor: colors[0],
                   // just for zIndex:
                   position: "relative",
                   zIndex: 1,

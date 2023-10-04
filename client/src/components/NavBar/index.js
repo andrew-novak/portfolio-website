@@ -31,7 +31,11 @@ const NavBar = ({ isAdminLoggedIn, logout }) => {
   return (
     <Fragment>
       <AppBar sx={{ background: "rgb(255, 255, 255)" }}>
-        <Toolbar>
+        <Toolbar
+          sx={{
+            color: "3E003F",
+          }}
+        >
           <div style={{ marginRight }} />
           <HomeButton min350px={min350px} min450px={min450px} smUp={smUp} />
           <div style={{ flexGrow: 1 }} />
@@ -54,7 +58,7 @@ const NavBar = ({ isAdminLoggedIn, logout }) => {
           {!isLargerThanSm && (
             <IconButton
               disabled={location.pathname === "/contact"}
-              sx={{ color: "black" }}
+              sx={{ color: "#525252" }}
               onClick={() => navigate("/contact")}
             >
               <EmailIcon />
@@ -77,7 +81,7 @@ const NavBar = ({ isAdminLoggedIn, logout }) => {
           )}
           {isAdminLoggedIn && !isLargerThanSm && (
             <IconButton
-              sx={{ color: "black", marginLeft: min350px ? 3 : 0.5 }}
+              sx={{ color: "#525252", marginLeft: min350px ? 3 : 0.5 }}
               onClick={() => logout()}
             >
               <LogoutIcon />
