@@ -15,7 +15,7 @@ export const getProjects = () => async (dispatch) => {
     return dispatch({ type: PROJECTS_SET, projects });
   } catch (err) {
     console.error(err);
-    if (err.message === 'Network Error') {
+    if (err.message === "Network Error") {
       return dispatch(handleNetworkError());
     }
     return dispatch(
@@ -34,7 +34,7 @@ export const getProject = (projectId) => async (dispatch) => {
     return dispatch({ type: PROJECT_SET, project });
   } catch (err) {
     console.error(err);
-    if (err.message === 'Network Error') {
+    if (err.message === "Network Error") {
       return dispatch(handleNetworkError());
     }
     return dispatch(
@@ -119,7 +119,10 @@ export const runProjectButton = (projectId, button) => (dispatch) => {
   // Link
   if (button.behaviour === "redirect") {
     const url = addProtocolPrefixIfNone(button.redirect);
-    return (window.location.href = url);
+    // Previous functionality - redirect:
+    // return (window.location.href = url);
+    // Now - open in a new window:
+    return window.open(url, "_blank");
   }
   // Client-Side File
   if (button.behaviour === "file" && button.file) {

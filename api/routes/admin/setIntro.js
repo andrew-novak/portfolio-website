@@ -2,6 +2,7 @@ const logger = require("../../debug/logger");
 const utf8Chars = require("../../constants/utf8Chars");
 const mediaDirs = require("../../helpers/localFiles/mediaDirs");
 const saveIntroImage = require("../../helpers/localFiles/saveIntroImage");
+const ongoingDataUpdate = require("../../state/ongoingDataUpdate");
 const Intro = require("../../models/Intro");
 
 // server-side logs
@@ -88,12 +89,14 @@ const setIntroRoute = async (req, res, next) => {
     }
     logSuccess();
     res.status(200).json({});
+    return ongoingDataUpdate.end();
   } catch (err) {
     logError(err);
     if (newImageFilename) {
       mediaDirs.removeIntroImage(newImageFilename);
     }
     res.status(500).json({ message: messageError });
+    return ongoingDataUpdate.end();
   }
 };
 

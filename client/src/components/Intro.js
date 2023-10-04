@@ -20,7 +20,14 @@ import Content from "components/Content";
 import GeometryPattern from "components/GeometryPattern";
 import Footer from "components/Footer";
 
-const Intro = ({ hideEditButton, isAdminLoggedIn, isLoaded, colors, image, text }) => {
+const Intro = ({
+  hideEditButton,
+  isAdminLoggedIn,
+  isLoaded,
+  colors,
+  image,
+  text,
+}) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const isSmallerThan1600 = useMediaQuery("(min-width:1600px)");
@@ -34,18 +41,27 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, isLoaded, colors, image, text 
   const mobileTextColor = "#464444";
   if (!isLoaded) {
     return (
-      <div style={{
-        height: 300,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        borderBottom: "solid 1px",
-        borderColor: theme.custom.colors.lightBorder,
-      }}>
+      <div
+        style={{
+          height: 300,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          borderBottom: "solid 1px",
+          borderColor: theme.custom.colors.lightBorder,
+        }}
+      >
         <CircularProgress />
       </div>
-    )
+    );
   }
+  // Font sizes:
+  const fonts = {
+    smallScreen: 22,
+    mediumScreen: 24,
+    largeScreen: 30,
+  };
+
   return (
     <div style={{ position: "relative" }}>
       {/* Edit Button Section (Admin-Accessible) */}
@@ -152,7 +168,9 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, isLoaded, colors, image, text 
                     maxWidth={700}
                     sx={{
                       flex: 1,
-                      fontSize: isLargeScreen ? 40 : 30,
+                      fontSize: isLargeScreen
+                        ? fonts.largeScreen
+                        : fonts.mediumScreen,
                       height: "100%",
                       width: "100%",
                       overflow: "hidden",
@@ -180,7 +198,7 @@ const Intro = ({ hideEditButton, isAdminLoggedIn, isLoaded, colors, image, text 
           <Container maxWidth="xl">
             <Typography
               align="center"
-              sx={{ fontSize: 25, color: mobileTextColor }}
+              sx={{ fontSize: fonts.smallScreen, color: mobileTextColor }}
             >
               {text}
             </Typography>
