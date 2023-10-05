@@ -1,5 +1,7 @@
 # My portfolio website
 
+[Link to the portfolio](https://andrewnovak.co.uk)
+
 Consisting of an API and a client interface complete with an admin panel, this web application is designed to allow visitors to delve into project insights managed by the site's admin and to facilitate direct communication via an integrated email form.
 
 <img src="https://github.com/andrew-novak/portfolio-website/raw/main/forReadme/creating-project.gif" alt="GIF presenting creation of a project in the portfolio web app" width="512" height="512">
