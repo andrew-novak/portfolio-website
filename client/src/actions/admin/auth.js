@@ -22,7 +22,7 @@ export const login =
       new Error("No id token");
     } catch (err) {
       console.error(err);
-      if (err.message === 'Network Error') {
+      if (err.message === "Network Error") {
         return dispatch(handleNetworkError());
       }
       return dispatch(
@@ -62,7 +62,7 @@ export const retrieveIdToken = () => async (dispatch) => {
     return;
   } catch (err) {
     console.error(err);
-    if (err.message === 'Network Error') {
+    if (err.message === "Network Error") {
       return dispatch(handleNetworkError());
     }
     dispatch(

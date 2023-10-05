@@ -84,8 +84,9 @@ json -I -f package.json -e "this.homepage="https://example.com/apps/task-diary"
 9. Build with environment variables, e.g.:
 
 ```
-export REACT_APP_API_URL="https://host.ext/api" \
-export REACT_APP_STATIC_URL="https://host.ext/static" \
+export REACT_APP_API_URL="https://example.com/api"
+export REACT_APP_STATIC_URL="https://example.com/static"
+export REACT_APP_GITHUB_URL="https://github.com/example"
 npm run build
 ```
 
