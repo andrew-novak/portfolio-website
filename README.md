@@ -1,17 +1,17 @@
-<img src="https://github.com/andrew-novak/halloween-chat/raw/main/forReadme/creating-project.gif" alt="GIF presenting creation of a project in the portfolio web app" width="512" height="512">
+<img src="https://github.com/andrew-novak/portfolio-website/raw/main/forReadme/creating-project.gif" alt="GIF presenting creation of a project in the portfolio web app" width="512" height="512">
 
 # My portfolio website
 
 Consisting of an API and a client interface complete with an admin panel, this web application is designed to allow visitors to delve into project insights managed by the site's admin and to facilitate direct communication via an integrated email form.
 
-On the administrative side, this platform offers comprehensive project customization features, allowing administrators to personalize the following elements:
+On the administrative side, this platform offers comprehensive project customization features, with customized elements stored in both a MongoDB database and as static files.
 
-- Title
-- Rich Text Format Description
-- Position: arrange a project in the desired sequence within the project grid.
-- Colors
-- Media: Insert and rearrange images, GIFs, and videos effortlessly using convenient drag-and-drop controls.
-- Interactive Buttons: incorporate buttons for actions such as opening a URL in a new window or file downloads.
+- **Title**
+- **Rich Text Format Description**
+- **Position**: arrangement of a project in the desired sequence within the project grid.
+- **Colors**
+- **Media**: insertion and rearrangement of images, GIFs, and videos effortlessly using convenient drag-and-drop controls.
+- **Interactive Buttons**: designed for actions such as opening a URL in a new window or file downloads.
 
 ## To run in development:
 
