@@ -1,8 +1,17 @@
+<img src="https://github.com/andrew-novak/halloween-chat/raw/main/forReadme/creating-project.gif" alt="GIF presenting creation of a project in the portfolio web app" width="512" height="512">
+
 # My portfolio website
 
-Explore my projects, skills, and expertise in web and mobile app development. Discover how I build robust applications and APIs to power seamless user experiences and unlock innovative features and functionalities.
+Consisting of an API and a client interface complete with an admin panel, this web application is designed to allow visitors to delve into project insights managed by the site's admin and to facilitate direct communication via an integrated email form.
 
-Tested on Linux.
+On the administrative side, this platform offers comprehensive project customization features, allowing administrators to personalize the following elements:
+
+- Title
+- Rich Text Format Description
+- Position: arrange a project in the desired sequence within the project grid.
+- Colors
+- Media: Insert and rearrange images, GIFs, and videos effortlessly using convenient drag-and-drop controls.
+- Interactive Buttons: incorporate buttons for actions such as opening a URL in a new window or file downloads.
 
 ## To run in development:
 
@@ -47,8 +56,7 @@ where `cloned-portfolio-website` represents the name of the destination director
 6. Start server using PM2:
 
 ```
-   NODE_ENV=production pm2 start YOUR_API_DIRECTORY/server.js --name YOUR_PM2_APP_NAME
-
+NODE_ENV=production pm2 start YOUR_API_DIRECTORY/server.js --name YOUR_PM2_APP_NAME
 ```
 
 ### Client:
@@ -76,11 +84,9 @@ json -I -f package.json -e "this.homepage="https://example.com/apps/task-diary"
 9. Build with environment variables, e.g.:
 
 ```
-
 export REACT_APP_API_URL="https://host.ext/api" \
 export REACT_APP_STATIC_URL="https://host.ext/static" \
 npm run build
-
 ```
 
 Note: `REACT_APP_STATIC_URL` does not relate to static files like website's HTML files, but to user-uploaded static files.
@@ -90,7 +96,3 @@ Note: `REACT_APP_STATIC_URL` does not relate to static files like website's HTML
 ### Clean up
 
 8. After excluding both `api` and `client/build` directories, you can remove the rest of cloned project.
-
-```
-
-```
