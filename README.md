@@ -1,8 +1,8 @@
-<img src="https://github.com/andrew-novak/portfolio-website/raw/main/forReadme/creating-project.gif" alt="GIF presenting creation of a project in the portfolio web app" width="512" height="512">
-
 # My portfolio website
 
 Consisting of an API and a client interface complete with an admin panel, this web application is designed to allow visitors to delve into project insights managed by the site's admin and to facilitate direct communication via an integrated email form.
+
+<img src="https://github.com/andrew-novak/portfolio-website/raw/main/forReadme/creating-project.gif" alt="GIF presenting creation of a project in the portfolio web app" width="512" height="512">
 
 On the administrative side, this platform offers comprehensive project customization features, with customized elements stored in both a MongoDB database and as static files.
 
