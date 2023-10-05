@@ -6,7 +6,13 @@ Tested on Linux.
 
 ## To run in development:
 
-1. Clone the project `git clone https://github.com/andrew-novak/portfolio-website cloned-portfolio-website`, where `cloned-portfolio-website` represents the name of the destination directory where the repository will be cloned.
+1. Clone the project:
+
+```
+git clone https://github.com/andrew-novak/portfolio-website cloned-portfolio-website
+```
+
+where `cloned-portfolio-website` represents the name of the destination directory where the repository will be cloned.
 
 2. Navigate to the project root directory `cd ./cloned-portfolio-website`.
 
@@ -20,7 +26,13 @@ Tested on Linux.
 
 Note that the following instructions do not include configuring standalone web servers like Nginx, Apache, etc.
 
-1. Clone the project `git clone https://github.com/andrew-novak/portfolio-website cloned-portfolio-website`, where `cloned-portfolio-website` represents the name of the destination directory where the repository will be cloned.
+1. Clone the project:
+
+```
+git clone https://github.com/andrew-novak/portfolio-website cloned-portfolio-website
+```
+
+where `cloned-portfolio-website` represents the name of the destination directory where the repository will be cloned.
 
 2. Navigate to the project root directory `cd ./cloned-portfolio-website`.
 
@@ -32,21 +44,43 @@ Note that the following instructions do not include configuring standalone web s
 
 5. Rename and move `api` subdirectory to a desired location.
 
-6. Start server using PM2: `NODE_ENV=production pm2 start YOUR_API_DIRECTORY/server.js --name YOUR_PM2_APP_NAME`
+6. Start server using PM2:
+
+```
+   NODE_ENV=production pm2 start YOUR_API_DIRECTORY/server.js --name YOUR_PM2_APP_NAME
+
+```
 
 ### Client:
 
 7. Navigate back to the project's root directory and then go to the `/client` subdirectory.
 
-8. To set the homepage, use the command `npm set homepage <YourHomepageHere>`. If the website is located in the root location, you can set it as the current directory with `npm set homepage .`. For websites in sublocations, specify the full URL like `npm set homepage "https://example.com/apps/task-diary"`.
+8. To set the homepage, use the command:
+
+```
+json -I -f package.json -e "this.homepage="<your-homepage-here>"
+```
+
+If the website is located in the root location, you can set it as the current directory with:
+
+```
+json -I -f package.json -e "this.homepage="."
+```
+
+For websites in sublocations, specify the full URL like:
+
+```
+json -I -f package.json -e "this.homepage="https://example.com/apps/task-diary"
+```
 
 9. Build with environment variables, e.g.:
 
 ```
-npm run
-  REACT_APP_API_URL="https://host.ext/api" \
-  REACT_APP_STATIC_URL="https://host.ext/static" \
-  npm run build
+
+export REACT_APP_API_URL="https://host.ext/api" \
+export REACT_APP_STATIC_URL="https://host.ext/static" \
+npm run build
+
 ```
 
 Note: `REACT_APP_STATIC_URL` does not relate to static files like website's HTML files, but to user-uploaded static files.
@@ -56,3 +90,7 @@ Note: `REACT_APP_STATIC_URL` does not relate to static files like website's HTML
 ### Clean up
 
 8. After excluding both `api` and `client/build` directories, you can remove the rest of cloned project.
+
+```
+
+```
