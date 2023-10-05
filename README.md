@@ -96,4 +96,4 @@ Note: `REACT_APP_STATIC_URL` does not relate to static files like website's HTML
 
 ### Clean up
 
-8. After excluding both `api` and `client/build` directories, you can remove the rest of cloned project.
+8. After excluding both `api` and `client/build` directories, you can remove the rest of the cloned project.
